@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>Zenivora</title>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 *{
@@ -13,27 +11,30 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-body{
+html,body{
   margin:0;
-  font-family:Arial,sans-serif;
-  background:
-    radial-gradient(circle at 80% 10%,#12365a55,transparent 30%),
-    linear-gradient(180deg,#06101f,#071426 55%,#040c17);
-  color:#fff;
+  padding:0;
+  background:#03101e;
+  color:#f4f8ff;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
   min-height:100vh;
   padding-bottom:95px;
 }
 
 button{
   border:0;
-  font-family:inherit;
   cursor:pointer;
+  font-family:inherit;
 }
 
 .container{
+  width:100%;
   max-width:900px;
   margin:auto;
-  padding:14px;
+  padding:14px 14px 30px;
 }
 
 /* HEADER */
@@ -52,27 +53,36 @@ button{
 }
 
 .avatar{
-  width:48px;
-  height:48px;
+  width:58px;
+  height:58px;
   border-radius:50%;
-  background:linear-gradient(135deg,#15e9ff,#1854ff);
+  border:2px solid #20aaff;
+  background:linear-gradient(145deg,#143d72,#07152a);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
-  border:2px solid #24e7ff;
-  box-shadow:0 0 18px #00c8ff66;
+  font-size:30px;
+  box-shadow:0 0 15px #007dff55;
 }
 
 .username{
-  font-size:17px;
+  font-size:19px;
   font-weight:800;
+  white-space:nowrap;
+  max-width:140px;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .level{
-  margin-top:3px;
-  font-size:11px;
-  color:#ffd83d;
+  display:inline-block;
+  margin-top:4px;
+  padding:5px 10px;
+  border-radius:15px;
+  background:#17233a;
+  color:#ffd52a;
+  font-size:13px;
+  font-weight:800;
 }
 
 .header-actions{
@@ -81,13 +91,13 @@ button{
 }
 
 .header-btn{
-  width:42px;
-  height:42px;
-  border-radius:13px;
-  background:#0b1c31;
-  border:1px solid #193b60;
+  width:50px;
+  height:50px;
+  border-radius:15px;
+  border:1px solid #16395c;
+  background:#07182b;
   color:white;
-  font-size:19px;
+  font-size:23px;
 }
 
 /* BALANCE */
@@ -95,34 +105,52 @@ button{
 .balance-card{
   position:relative;
   overflow:hidden;
-  border-radius:22px;
-  padding:20px;
+  border:1px solid #2366a3;
+  border-radius:20px;
+  padding:16px;
   background:
-    radial-gradient(circle at 80% 50%,#0b75c955,transparent 35%),
-    linear-gradient(135deg,#0b2850,#07182d);
-  border:1px solid #2368a2;
-  box-shadow:0 15px 35px #0006;
+    radial-gradient(circle at 90% 40%,#00d9ff22,transparent 35%),
+    linear-gradient(135deg,#0b2340,#061425);
+  box-shadow:0 0 25px #006eff15;
+}
+
+.balance-card:after{
+  content:"₮";
+  position:absolute;
+  right:22px;
+  top:45px;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:72px;
+  font-weight:900;
+  color:#37ffbd;
+  background:radial-gradient(circle,#073e42,#021a25);
+  border:7px solid #00e5c0;
+  box-shadow:0 0 35px #00e5c066;
+  transform:rotate(-8deg);
 }
 
 .balance-label{
-  color:#a8bdd7;
-  font-size:14px;
+  color:#aabfe0;
+  font-size:17px;
+  font-weight:700;
 }
 
 .balance{
-  font-size:39px;
+  font-size:42px;
   font-weight:900;
-  margin-top:4px;
-}
-
-.balance span{
-  font-size:21px;
-  color:#c9d8ea;
+  margin-top:5px;
+  position:relative;
+  z-index:2;
 }
 
 .usd{
-  color:#35f38c;
-  font-size:20px;
+  color:#13e887;
+  font-size:22px;
   font-weight:800;
   margin-top:2px;
 }
@@ -130,50 +158,48 @@ button{
 .mining-status{
   position:absolute;
   right:16px;
-  top:17px;
-  padding:9px 13px;
+  top:15px;
+  z-index:3;
+  padding:8px 12px;
   border-radius:12px;
-  background:#073b2a;
-  color:#36ef91;
-  border:1px solid #149e65;
-  font-size:12px;
+  background:#063d32;
+  border:1px solid #087b61;
+  color:#1eff8b;
+  font-size:13px;
   font-weight:800;
-}
-
-.dot{
-  display:inline-block;
-  width:8px;
-  height:8px;
-  background:#20ef80;
-  border-radius:50%;
-  margin-right:5px;
-  box-shadow:0 0 8px #20ef80;
 }
 
 .profit-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:7px;
-  margin-top:18px;
+  margin-top:15px;
+  position:relative;
+  z-index:3;
 }
 
 .profit-box{
-  background:#09203a;
-  border:1px solid #174568;
-  border-radius:13px;
-  padding:11px 7px;
+  padding:9px 6px;
+  border-radius:12px;
+  background:#09233d;
+  border:1px solid #174d78;
   text-align:center;
 }
 
+.profit-box .icon{
+  font-size:17px;
+}
+
 .profit-box .value{
+  display:block;
+  margin-top:4px;
   font-size:16px;
   font-weight:800;
 }
 
-.profit-box .label{
-  color:#91a7c0;
+.profit-box small{
+  color:#9eb3cf;
   font-size:11px;
-  margin-top:5px;
 }
 
 /* ACTION NAV */
@@ -181,215 +207,244 @@ button{
 .action-nav{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:5px;
+  gap:4px;
+  padding:4px;
   margin:14px 0;
-  background:#0b1b30;
-  padding:5px;
-  border-radius:19px;
-  border:1px solid #183754;
+  border-radius:18px;
+  background:#071b30;
+  border:1px solid #183a5b;
 }
 
 .action-btn{
-  padding:14px 4px;
+  padding:13px 5px;
   border-radius:14px;
   background:transparent;
-  color:#9eb0c7;
+  color:#aabbd3;
+  font-size:14px;
   font-weight:800;
-  font-size:12px;
 }
 
 .action-btn.active{
   color:white;
-  background:linear-gradient(135deg,#12bfa0,#0b735d);
-  box-shadow:0 0 15px #00dca044;
-}
-
-/* CARD */
-
-.card{
-  background:linear-gradient(145deg,#0b1c30,#071426);
-  border:1px solid #173653;
-  border-radius:20px;
-  padding:17px;
-  margin-bottom:14px;
-}
-
-.card-title{
-  font-size:22px;
-  font-weight:900;
-  margin:0;
-}
-
-.muted{
-  color:#8fa5bd;
-  font-size:13px;
+  background:linear-gradient(135deg,#087c76,#063c46);
+  box-shadow:0 0 15px #00e5b522;
 }
 
 /* FREE MINING */
 
 .free-card{
-  border:1px solid #37ed65;
+  border:1px solid #20ed6a;
+  border-radius:20px;
+  padding:14px;
   background:
-    radial-gradient(circle at 0 100%,#0c6b3e44,transparent 40%),
-    linear-gradient(135deg,#092c29,#061c20);
+    radial-gradient(circle at 0 100%,#0b704144,transparent 40%),
+    linear-gradient(135deg,#082c2a,#041b20);
   box-shadow:0 0 20px #20e87522;
 }
 
 .free-top{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 125px;
+  gap:9px;
+  align-items:center;
+}
+
+.free-info{
+  display:grid;
+  grid-template-columns:46px minmax(0,1fr);
+  gap:9px;
+  min-width:0;
 }
 
 .free-icon{
-  width:54px;
-  height:54px;
-  border-radius:15px;
-  background:#1b7d35;
+  width:46px;
+  height:46px;
+  border-radius:13px;
+  background:linear-gradient(145deg,#31a53c,#087327);
   display:flex;
-  justify-content:center;
   align-items:center;
-  font-size:27px;
+  justify-content:center;
+  font-size:25px;
+  box-shadow:0 0 15px #28ff5c33;
+}
+
+.free-title{
+  font-size:21px;
+  font-weight:900;
+  margin:0;
+}
+
+.free-desc{
+  color:#9db5ca;
+  font-size:13px;
+  line-height:1.25;
+  margin-top:3px;
 }
 
 .reward{
-  color:#35f58b;
-  font-size:28px;
+  color:#18f38b;
+  font-size:25px;
   font-weight:900;
-  margin-top:10px;
+  line-height:1;
+  margin-top:7px;
+}
+
+.reward span{
+  font-size:14px;
+}
+
+.free-note{
+  color:#a5b9c9;
+  font-size:12px;
+  margin-top:7px;
 }
 
 .claim-box{
-  min-width:130px;
-  padding:10px;
-  border-radius:14px;
-  background:#103e2c;
-  border:1px solid #227a52;
+  padding:10px 5px;
+  border-radius:13px;
+  background:#0a382d;
+  border:1px solid #087e55;
   text-align:center;
 }
 
+.claim-box small{
+  color:#9bbcac;
+  font-size:12px;
+}
+
 .claim-time{
-  color:#34ed8a;
-  font-size:18px;
+  color:#19f38a;
+  font-size:17px;
   font-weight:900;
+  margin-top:4px;
 }
 
 .claim-btn{
   width:100%;
-  margin-top:13px;
-  padding:15px;
+  margin-top:10px;
+  padding:12px;
   border-radius:14px;
-  background:linear-gradient(135deg,#a8ff00,#39f21a);
-  color:#07120a;
+  background:linear-gradient(135deg,#a8ff00,#36ed1a);
+  color:#061506;
   font-size:16px;
   font-weight:900;
-  box-shadow:0 0 20px #6aff0044;
+  box-shadow:0 5px 18px #51ff001f;
 }
 
-.claim-btn:disabled{
-  opacity:.45;
+/* SECTION */
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:19px 0 4px;
 }
 
-/* MINING TIERS */
+.section-icon{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#08264c;
+  border:1px solid #1668c1;
+  font-size:19px;
+}
+
+.section-title h2{
+  margin:0;
+  font-size:22px;
+}
+
+.section-sub{
+  color:#91a8c2;
+  margin:0 0 12px 47px;
+  font-size:13px;
+}
+
+/* TIERS */
 
 .tiers{
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  gap:8px;
-  margin-top:13px;
+  gap:6px;
 }
 
 .tier{
-  min-height:145px;
-  border-radius:15px;
-  padding:12px 5px;
+  min-width:0;
+  padding:10px 4px;
   text-align:center;
-  background:#0b1d32;
-  border:1px solid #1c4261;
+  border-radius:15px;
+  background:#081d32;
+  border:1px solid #17658e;
 }
 
+.tier:nth-child(2){border-color:#007cff}
+.tier:nth-child(3){border-color:#9b31ff}
+.tier:nth-child(4){border-color:#d99a12}
+.tier:nth-child(5){border-color:#ff2860}
+
 .tier-icon{
-  font-size:24px;
+  font-size:25px;
 }
 
 .tier-name{
+  font-size:13px;
   font-weight:800;
-  margin-top:7px;
-  font-size:14px;
+  margin-top:4px;
 }
 
 .tier-amount{
-  margin-top:3px;
-  font-size:12px;
-  color:#b7c9dd;
+  color:#c4d2e4;
+  font-size:13px;
+  margin-top:5px;
 }
 
 .rate{
-  margin-top:10px;
-  font-size:23px;
+  color:#19ef89;
+  font-size:22px;
   font-weight:900;
-  color:#38ef91;
+  margin-top:8px;
 }
+
+.tier:nth-child(2) .rate{color:#00a7ff}
+.tier:nth-child(3) .rate{color:#d05bff}
+.tier:nth-child(4) .rate{color:#ffc21d}
+.tier:nth-child(5) .rate{color:#ff4d79}
 
 .daily{
-  color:#a7b9cd;
-  font-size:11px;
+  color:#aabbd0;
+  font-size:12px;
   margin-top:3px;
-}
-
-.tier:nth-child(2){
-  border-color:#167cff;
-}
-.tier:nth-child(2) .rate{
-  color:#20a8ff;
-}
-
-.tier:nth-child(3){
-  border-color:#8d35ff;
-}
-.tier:nth-child(3) .rate{
-  color:#c276ff;
-}
-
-.tier:nth-child(4){
-  border-color:#c48a19;
-}
-.tier:nth-child(4) .rate{
-  color:#ffc52f;
-}
-
-.tier:nth-child(5){
-  border-color:#ef304f;
-}
-.tier:nth-child(5) .rate{
-  color:#ff5270;
 }
 
 /* BUTTONS */
 
 .two-buttons{
   display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:10px;
-  margin-top:14px;
+  grid-template-columns:1.25fr 1fr;
+  gap:9px;
+  margin-top:12px;
 }
 
 .big-btn{
-  padding:15px;
+  padding:15px 8px;
   border-radius:15px;
   font-size:15px;
   font-weight:900;
 }
 
 .deposit-btn{
-  background:linear-gradient(135deg,#087dff,#1262f5);
+  background:linear-gradient(135deg,#087eff,#0062e8);
   color:white;
+  box-shadow:0 5px 20px #0077ff22;
 }
 
 .calc-btn{
-  background:#12243c;
+  background:#102842;
+  border:1px solid #245275;
   color:white;
-  border:1px solid #274663;
 }
 
 /* ACTIVE MINING */
@@ -398,269 +453,317 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
-}
-
-.view-btn{
-  background:#102944;
-  border:1px solid #245074;
-  color:#bcd0e6;
-  padding:9px 13px;
-  border-radius:13px;
-  font-size:12px;
-}
-
-.active-mining{
-  margin-top:13px;
-  padding:15px;
-  border-radius:17px;
-  background:#08192b;
-  border:1px solid #16405d;
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.coin{
-  width:47px;
-  height:47px;
-  border-radius:50%;
-  background:#0dbb9a;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:22px;
-}
-
-.active-info{
-  flex:1;
+  margin:20px 0 9px;
 }
 
 .active-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:21px;
   font-weight:900;
+}
+
+.view-btn{
+  padding:9px 13px;
+  border-radius:14px;
+  background:#0c2945;
+  border:1px solid #245a82;
+  color:#cbd9ea;
+}
+
+.active-mining{
+  display:grid;
+  grid-template-columns:52px 1fr 1fr 105px;
+  align-items:center;
+  gap:9px;
+  padding:13px;
+  border-radius:17px;
+  border:1px solid #123c57;
+  background:#061a2b;
+}
+
+.coin{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#11a98b;
+  font-size:28px;
+}
+
+.active-info strong{
+  display:block;
   font-size:16px;
 }
 
 .active-reward{
-  color:#35ef8b;
+  color:#13ed87;
+  font-size:17px;
   font-weight:900;
-  margin-top:4px;
-}
-
-.active-date{
-  color:#8ca2ba;
-  font-size:12px;
   margin-top:5px;
 }
 
-.next{
-  color:#8fa6bf;
+.active-date{
+  color:#8fa7c1;
   font-size:12px;
+  margin-top:4px;
+}
+
+.next{
+  color:#91a8c1;
+  font-size:13px;
 }
 
 .next-time{
-  color:#27ed8b;
+  color:#16ed88;
   font-size:19px;
   font-weight:900;
   margin-top:5px;
 }
 
-/* INFO */
+.active-claim{
+  padding:13px 5px;
+  border-radius:13px;
+  background:#537c25;
+  color:#b7c4ae;
+  font-size:15px;
+  font-weight:900;
+}
+
+/* INFO CARDS */
 
 .info-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
+  margin-top:12px;
 }
 
-.info-btn{
-  padding:17px;
-  text-align:left;
-  background:#091a30;
-  border:1px solid #1d4a76;
+.info-card{
+  padding:14px;
   border-radius:16px;
-  color:white;
+  background:#081c31;
+  border:1px solid #164a76;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.info-left{
+  display:flex;
+  align-items:center;
+  gap:9px;
 }
 
 .info-icon{
-  font-size:22px;
-}
-
-.info-title{
-  font-size:15px;
-  font-weight:900;
-  margin-top:8px;
-}
-
-.info-sub{
-  color:#8fa5bd;
-  font-size:11px;
-  margin-top:4px;
-}
-
-/* PAGES */
-
-.page{
-  display:none;
-}
-
-.page.active{
-  display:block;
-}
-
-/* MODAL */
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:#000b;
-  display:none;
-  align-items:flex-end;
-  z-index:100;
-}
-
-.modal-box{
-  width:100%;
-  max-height:90vh;
-  overflow:auto;
-  background:#0a192b;
-  border-radius:24px 24px 0 0;
-  padding:22px;
-  border-top:1px solid #245174;
-}
-
-.close{
-  float:right;
   width:38px;
   height:38px;
-  border-radius:12px;
-  background:#172b42;
-  color:white;
-  font-size:18px;
+  border-radius:50%;
+  background:#0a3973;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
 }
 
-.modal h2{
-  margin-top:5px;
+.info-card strong{
+  display:block;
+  font-size:14px;
 }
 
-input{
-  width:100%;
-  padding:15px;
-  margin:7px 0 14px;
-  border-radius:12px;
-  border:1px solid #274865;
-  background:#061323;
-  color:white;
-  outline:none;
-}
-
-textarea{
-  width:100%;
-  padding:15px;
-  border-radius:12px;
-  background:#061323;
-  color:white;
-  border:1px solid #274865;
-}
-
-.warning{
-  padding:13px;
-  border-radius:13px;
-  background:#30260d;
-  border:1px solid #765d1b;
-  color:#ffd866;
-  font-size:12px;
-  margin:13px 0;
-}
-
-.address{
-  word-break:break-all;
-  padding:13px;
-  background:#061323;
-  border-radius:12px;
-  color:#a9bdd1;
-  font-size:12px;
+.info-card small{
+  display:block;
+  color:#8ea6c0;
+  margin-top:4px;
+  font-size:11px;
 }
 
 /* BOTTOM NAV */
 
 .bottom-nav{
   position:fixed;
-  left:10px;
-  right:10px;
-  bottom:9px;
-  height:76px;
-  background:#101d30ee;
-  backdrop-filter:blur(15px);
-  border:1px solid #233b55;
-  border-radius:25px;
+  left:12px;
+  right:12px;
+  bottom:10px;
+  height:78px;
+  z-index:99;
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  z-index:50;
-  box-shadow:0 10px 35px #0009;
+  padding:6px;
+  border-radius:28px;
+  background:#101f33ee;
+  border:1px solid #28445e;
+  backdrop-filter:blur(14px);
+  box-shadow:0 10px 35px #00000055;
 }
 
 .bottom-btn{
-  background:none;
-  color:#91a4bc;
-  font-size:11px;
+  position:relative;
+  border-radius:21px;
+  background:transparent;
+  color:#8da0b8;
+  font-size:12px;
   font-weight:700;
-  border-radius:20px;
 }
 
-.bottom-btn .nav-icon{
+.nav-icon{
   display:block;
-  font-size:23px;
-  margin-bottom:5px;
+  font-size:25px;
+  margin-bottom:4px;
 }
 
 .bottom-btn.active{
-  color:#07100a;
-  background:linear-gradient(145deg,#b1ff00,#40ed19);
-  margin:5px;
-  box-shadow:0 0 25px #6cff0055;
+  background:linear-gradient(145deg,#aaff00,#42ed16);
+  color:#071207;
+  box-shadow:0 0 25px #61ff0055;
+  transform:translateY(-9px);
+  height:78px;
 }
 
-/* TOAST */
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:100px;
-  transform:translateX(-50%);
-  background:#152b43;
-  border:1px solid #31516e;
-  padding:12px 18px;
-  border-radius:13px;
-  display:none;
-  z-index:200;
-  font-size:13px;
-}
-
-/* RESPONSIVE */
+/* MOBILE */
 
 @media(max-width:600px){
 
   .container{
-    padding:12px;
+    padding:10px 12px 25px;
+  }
+
+  .header{
+    margin-bottom:10px;
+  }
+
+  .avatar{
+    width:52px;
+    height:52px;
+    font-size:26px;
+  }
+
+  .username{
+    font-size:17px;
+  }
+
+  .header-btn{
+    width:43px;
+    height:43px;
+    font-size:19px;
+  }
+
+  .balance-card{
+    padding:14px;
+  }
+
+  .balance-card:after{
+    right:8px;
+    top:60px;
+    width:82px;
+    height:82px;
+    font-size:52px;
   }
 
   .balance{
-    font-size:35px;
+    font-size:34px;
+  }
+
+  .usd{
+    font-size:18px;
+  }
+
+  .mining-status{
+    font-size:11px;
+    padding:7px 8px;
+    right:10px;
+  }
+
+  .profit-box{
+    padding:8px 3px;
   }
 
   .profit-box .value{
+    font-size:13px;
+  }
+
+  .profit-box small{
+    font-size:9px;
+  }
+
+  .action-btn{
+    font-size:12px;
+    padding:11px 3px;
+  }
+
+  .free-top{
+    grid-template-columns:minmax(0,1fr) 112px;
+  }
+
+  .free-info{
+    grid-template-columns:42px minmax(0,1fr);
+    gap:7px;
+  }
+
+  .free-icon{
+    width:42px;
+    height:42px;
+    font-size:22px;
+  }
+
+  .free-title{
+    font-size:18px;
+  }
+
+  .free-desc{
+    font-size:11px;
+  }
+
+  .reward{
+    font-size:22px;
+  }
+
+  .reward span{
+    font-size:12px;
+  }
+
+  .free-note{
+    font-size:10px;
+  }
+
+  .claim-box{
+    padding:8px 3px;
+  }
+
+  .claim-time{
+    font-size:15px;
+  }
+
+  .claim-btn{
+    padding:11px;
     font-size:14px;
   }
 
-  .tiers{
-    grid-template-columns:repeat(5,minmax(0,1fr));
+  .section-title h2{
+    font-size:20px;
+  }
+
+  .section-sub{
+    font-size:12px;
+    margin-left:45px;
   }
 
   .tier{
-    min-height:135px;
+    padding:9px 2px;
+  }
+
+  .tier-icon{
+    font-size:22px;
   }
 
   .tier-name{
+    font-size:11px;
+  }
+
+  .tier-amount{
     font-size:11px;
   }
 
@@ -668,196 +771,49 @@ textarea{
     font-size:18px;
   }
 
-  .tier-amount{
+  .daily{
     font-size:10px;
+  }
+
+  .big-btn{
+    padding:13px 5px;
+    font-size:14px;
   }
 
   .active-mining{
-    flex-wrap:wrap;
+    grid-template-columns:45px 1fr;
   }
 
-  .claim-box{
-    width:100%;
-  }
-}/* ===== COMPACT MOBILE LAYOUT ===== */
-
-@media (max-width:600px){
-
-  body{
-    padding-bottom:72px;
+  .active-mining .next{
+    grid-column:2;
   }
 
-  header{
-    padding:12px 16px;
+  .active-claim{
+    display:none;
   }
 
-  .logo{
-    font-size:20px;
+  .info-grid{
+    grid-template-columns:1fr 1fr;
   }
 
-  .page{
-    padding:12px;
+  .info-card{
+    padding:11px 8px;
   }
 
-  .card{
-    padding:14px;
-    margin-bottom:10px;
-    border-radius:16px;
+  .info-card strong{
+    font-size:12px;
   }
 
-  .balance{
-    font-size:30px;
-    margin:5px 0;
+  .info-card small{
+    font-size:9px;
   }
 
-  .grid{
-    gap:8px;
+  .bottom-nav{
+    height:72px;
   }
 
-  .stat{
-    padding:11px;
-  }
-
-  .stat b{
-    font-size:17px;
-  }
-
-  h2{
-    font-size:22px;
-    margin:6px 0 8px;
-  }
-
-  h3{
-    font-size:17px;
-    margin:5px 0 8px;
-  }
-
-  p{
-    margin:6px 0;
-  }
-
-  button{
-    padding:10px 13px;
-  }
-
-  input{
-    padding:11px;
-    margin:5px 0 9px;
-  }
-
-  .address{
-    padding:10px;
-  }
-
-  nav{
-    height:68px;
-  }
-
-  nav button{
-    padding:5px 2px;
-    font-size:10px;
-  }
-
-  .icon{
-    font-size:18px;
-    margin-bottom:1px;
-  }
-}/* FIX FREE MINING MOBILE */
-@media (max-width:600px){
-
-  .free-card{
-    padding:14px !important;
-  }
-
-  .free-top{
-    display:flex !important;
-    align-items:center !important;
-    gap:10px !important;
-  }
-
-  .free-top > div:first-child{
-    flex:1 !important;
-    min-width:0 !important;
-  }
-
-  .free-top .claim-box{
-    width:auto !important;
-    min-width:125px !important;
-    flex:0 0 125px !important;
-    height:auto !important;
-  }
-
-  .free-card .card-title{
-    font-size:20px !important;
-  }
-
-  .free-card .reward{
-    font-size:25px !important;
-    margin-top:7px !important;
-  }
-
-  .free-card .claim-btn{
-    margin-top:10px !important;
-    padding:12px !important;
-  }
-} /* FINAL COMPACT FREE MINING */
-@media (max-width:600px){
-
-  .free-card{
-    padding:12px !important;
-  }
-
-  .free-top{
-    gap:6px !important;
-    align-items:flex-start !important;
-  }
-
-  .free-top > div:first-child{
-    gap:7px !important;
-  }
-
-  .free-icon{
-    width:44px !important;
-    height:44px !important;
-    min-width:44px !important;
-    border-radius:12px !important;
-    font-size:22px !important;
-  }
-
-  .free-card .card-title{
-    font-size:18px !important;
-    margin:0 !important;
-  }
-
-  .free-card .muted{
-    font-size:12px !important;
-    line-height:1.25 !important;
-  }
-
-  .free-card .reward{
-    font-size:22px !important;
-    margin-top:5px !important;
-  }
-
-  .free-card .reward span{
-    font-size:13px !important;
-  }
-
-  .free-top .claim-box{
-    min-width:110px !important;
-    flex:0 0 110px !important;
-    padding:8px !important;
-    border-radius:12px !important;
-  }
-
-  .free-top .claim-time{
-    font-size:15px !important;
-  }
-
-  .free-card .claim-btn{
-    margin-top:8px !important;
-    padding:10px !important;
-    font-size:14px !important;
+  .bottom-btn.active{
+    height:72px;
   }
 }
 </style>
@@ -867,170 +823,130 @@ textarea{
 
 <div class="container">
 
-<!-- HEADER -->
+  <!-- HEADER -->
+  <div class="header">
 
-<div class="header">
-
-  <div class="profile">
-    <div class="avatar">👤</div>
-
-    <div>
-      <div class="username" id="username">
-        Zenivora Member
-      </div>
-
-      <div class="level">
-        👑 Level 1
-      </div>
-    </div>
-  </div>
-
-  <div class="header-actions">
-    <button class="header-btn">🔔</button>
-    <button class="header-btn">⚙️</button>
-  </div>
-
-</div>
-
-
-<!-- FARM PAGE -->
-
-<section id="farm" class="page active">
-
-<!-- BALANCE -->
-
-<div class="balance-card">
-
-  <div class="balance-label">
-    Total Balance 👁
-  </div>
-
-  <div class="balance">
-    <span>$</span><span id="balance">0.00</span>
-    <span>USDT</span>
-  </div>
-
-  <div class="usd" id="usdBalance">
-    ≈ $0.00
-  </div>
-
-  <div class="mining-status">
-    <span class="dot"></span>
-    Mining Active
-  </div>
-
-  <div class="profit-grid">
-
-    <div class="profit-box">
-      <div class="value" id="hourlyProfit">$0.00</div>
-      <div class="label">Hourly Profit</div>
-    </div>
-
-    <div class="profit-box">
-      <div class="value" id="dailyProfit">$0.00</div>
-      <div class="label">Daily Profit</div>
-    </div>
-
-    <div class="profit-box">
-      <div class="value" id="monthlyProfit">$0.00</div>
-      <div class="label">Monthly Profit</div>
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ACTIONS -->
-
-<div class="action-nav">
-
-  <button class="action-btn active">
-    ⛏️ Mine
-  </button>
-
-  <button class="action-btn" onclick="openDeposit()">
-    💳 Deposit
-  </button>
-
-  <button class="action-btn" onclick="openWithdraw()">
-    ⬆️ Withdraw
-  </button>
-
-  <button class="action-btn" onclick="openHistory()">
-    📋 History
-  </button>
-
-</div>
-
-
-<!-- FREE MINING -->
-
-<div class="card free-card">
-
-  <div class="free-top">
-
-    <div style="display:flex;gap:12px">
-
-      <div class="free-icon">
-        ⛏️
-      </div>
+    <div class="profile">
+      <div class="avatar">👨‍💻</div>
 
       <div>
-        <h2 class="card-title">
-          Free Mining
-        </h2>
-
-        <div class="muted" style="margin-top:5px">
-          Login daily and earn free USDT
-        </div>
-
-        <div class="reward">
-          $0.01 <span style="font-size:16px">/ day</span>
-        </div>
-
-        <div class="muted" style="margin-top:4px">
-          🎁 Claim once every 24 hours
-        </div>
+        <div class="username" id="username">Hridoy Bro..</div>
+        <div class="level">👑 Level 1 ›</div>
       </div>
-
     </div>
 
-    <div class="claim-box">
+    <div class="header-actions">
+      <button class="header-btn">🔔</button>
+      <button class="header-btn">⚙️</button>
+    </div>
 
-      <div class="muted">
-        24h Reward
+  </div>
+
+
+  <!-- BALANCE -->
+  <div class="balance-card">
+
+    <div class="balance-label">Total Balance 👁</div>
+
+    <div class="mining-status">🟢 Mining Active ›</div>
+
+    <div class="balance">
+      <span>$</span><span id="balance">0.00</span>
+      <span style="font-size:22px">USDT</span>
+    </div>
+
+    <div class="usd">≈ $<span id="usdBalance">0.00</span></div>
+
+    <div class="profit-grid">
+
+      <div class="profit-box">
+        <div class="icon">◷</div>
+        <span class="value">$0.00</span>
+        <small>Hourly Profit</small>
       </div>
 
-      <div class="claim-time" id="freeTimer">
-        READY
+      <div class="profit-box">
+        <div class="icon">▣</div>
+        <span class="value">$0.01</span>
+        <small>Daily Profit</small>
+      </div>
+
+      <div class="profit-box">
+        <div class="icon">▣</div>
+        <span class="value">$0.30</span>
+        <small>Monthly Profit</small>
       </div>
 
     </div>
 
   </div>
 
-  <button
-    class="claim-btn"
-    id="claimBtn"
-    onclick="claimFreeMining()">
-    ✨ Claim Now
-  </button>
 
-</div>
+  <!-- ACTION -->
+  <div class="action-nav">
 
+    <button class="action-btn active">⛏️ Mine</button>
+    <button class="action-btn" onclick="topUp()">💳 Deposit</button>
+    <button class="action-btn" onclick="withdraw()">↥ Withdraw</button>
+    <button class="action-btn" onclick="historyPage()">▤ History</button>
 
-<!-- DEPOSIT MINING -->
-
-<div class="card">
-
-  <h2 class="card-title">
-    Deposit Mining
-  </h2>
-
-  <div class="muted" style="margin-top:5px">
-    Top up and earn according to the configured daily reward rate
   </div>
+
+
+  <!-- FREE MINING -->
+  <div class="free-card">
+
+    <div class="free-top">
+
+      <div class="free-info">
+
+        <div class="free-icon">⛏️</div>
+
+        <div>
+
+          <div class="free-title">Free Mining</div>
+
+          <div class="free-desc">
+            Login daily and earn free USDT
+          </div>
+
+          <div class="reward">
+            $0.01 <span>/ day</span>
+          </div>
+
+          <div class="free-note">
+            🎁 Claim once every 24 hours
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="claim-box">
+        <small>24h Reward</small>
+        <div class="claim-time" id="freeTimer">READY</div>
+      </div>
+
+    </div>
+
+    <button class="claim-btn" onclick="claimFreeMining()">
+      ✨ Claim Now
+    </button>
+
+  </div>
+
+
+  <!-- DEPOSIT MINING -->
+  <div class="section-title">
+    <div class="section-icon">💎</div>
+    <h2>Deposit Mining</h2>
+  </div>
+
+  <p class="section-sub">
+    Top up and earn higher daily rewards
+  </p>
+
 
   <div class="tiers">
 
@@ -1078,1235 +994,170 @@ textarea{
 
 
   <div class="two-buttons">
-
-    <button
-      class="big-btn deposit-btn"
-      onclick="openDeposit()">
+    <button class="big-btn deposit-btn" onclick="topUp()">
       ⊕ &nbsp; Top Up Now
     </button>
 
-    <button
-      class="big-btn calc-btn"
-      onclick="openCalculator()">
+    <button class="big-btn calc-btn" onclick="calculator()">
       🧮 &nbsp; Mining Calculator
     </button>
-
   </div>
 
-</div>
 
-
-<!-- ACTIVE MINING -->
-
-<div class="card">
-
+  <!-- ACTIVE MINING -->
   <div class="active-head">
 
-    <h2 class="card-title">
-      📊 &nbsp; Your Active Mining
-    </h2>
+    <div class="active-title">
+      📊 Your Active Mining
+    </div>
 
-    <button
-      class="view-btn"
-      onclick="showAllMining()">
-      View All &nbsp;›
-    </button>
+    <button class="view-btn">View All ›</button>
 
   </div>
+
 
   <div class="active-mining">
 
-    <div class="coin">
-      ₮
-    </div>
+    <div class="coin">₮</div>
 
     <div class="active-info">
-
-      <div class="active-title">
-        Free Mining
-        <span style="
-          background:#075c43;
-          color:#36ef91;
-          padding:5px 8px;
-          border-radius:8px;
-          font-size:10px;
-          margin-left:5px;">
-          ACTIVE
-        </span>
-      </div>
-
-      <div class="active-reward">
-        $0.01 / day
-      </div>
-
-      <div class="active-date" id="startedDate">
-        Started: —
-      </div>
-
+      <strong>Free Mining <span style="color:#14ef88">ACTIVE</span></strong>
+      <div class="active-reward">$0.01 / day</div>
+      <div class="active-date">Started: 15 Sep 2025, 03:28</div>
     </div>
 
-    <div>
-
-      <div class="next">
-        Next claim in
-      </div>
-
-      <div class="next-time" id="nextClaim">
-        READY
-      </div>
-
+    <div class="next">
+      Next claim in
+      <div class="next-time" id="nextTimer">24:00:00</div>
     </div>
 
-    <button
-      class="claim-btn"
-      style="
-        width:auto;
-        min-width:90px;
-        margin:0;
-        padding:12px;"
-      id="smallClaim"
-      onclick="claimFreeMining()">
-      Claim
-    </button>
+    <button class="active-claim">Claim</button>
 
   </div>
 
-</div>
 
+  <!-- INFO -->
+  <div class="info-grid">
 
-<!-- INFORMATION -->
-
-<div class="info-grid">
-
-  <button class="info-btn" onclick="openEarn()">
-    <div class="info-icon">❓</div>
-    <div class="info-title">How to Earn?</div>
-    <div class="info-sub">Learn how mining works</div>
-  </button>
-
-  <button class="info-btn" onclick="openRules()">
-    <div class="info-icon">📄</div>
-    <div class="info-title">Rules & FAQs</div>
-    <div class="info-sub">Read important information</div>
-  </button>
-
-</div>
-
-</section>
-
-
-<!-- TRADE -->
-
-<section id="trade" class="page">
-
-  <div class="card">
-    <h2 class="card-title">Trade</h2>
-    <p class="muted">
-      Your USDT account overview.
-    </p>
-
-    <div class="balance" style="margin-top:20px">
-      $<span id="tradeBalance">0.00</span>
-    </div>
-
-    <button
-      class="big-btn deposit-btn"
-      style="width:100%;margin-top:15px"
-      onclick="openDeposit()">
-      Deposit USDT
-    </button>
-
-    <button
-      class="big-btn calc-btn"
-      style="width:100%;margin-top:10px"
-      onclick="openWithdraw()">
-      Withdraw
-    </button>
-  </div>
-
-</section>
-
-
-<!-- FRIENDS -->
-
-<section id="friends" class="page">
-
-  <div class="card">
-
-    <h2 class="card-title">
-      Friends
-    </h2>
-
-    <p class="muted">
-      Invite friends and receive referral rewards according to the active referral program.
-    </p>
-
-    <div class="address">
-      ZENITH-REF-001
-    </div>
-
-    <button
-      class="big-btn deposit-btn"
-      style="width:100%;margin-top:12px"
-      onclick="copyText('ZENITH-REF-001')">
-      Copy Referral Code
-    </button>
-
-  </div>
-
-  <div class="card">
-
-    <h3>Referral Program</h3>
-
-    <p>Level 1 — 10%</p>
-    <p>Level 2 — 3%</p>
-    <p>Level 3 — 2%</p>
-    <p>Level 4 — 1%</p>
-    <p>Level 5 — 1%</p>
-
-  </div>
-
-</section>
-
-
-<!-- TASKS -->
-
-<section id="tasks" class="page">
-
-  <div class="card">
-
-    <h2 class="card-title">
-      Tasks
-    </h2>
-
-    <p class="muted">
-      Complete available tasks and check your reward status.
-    </p>
-
-    <div class="active-mining">
-      <div class="coin">✓</div>
-
-      <div class="active-info">
-        <div class="active-title">
-          Daily Login
-        </div>
-        <div class="active-date">
-          Open the app daily
+    <div class="info-card">
+      <div class="info-left">
+        <div class="info-icon">?</div>
+        <div>
+          <strong>How to Earn?</strong>
+          <small>Learn how mining works</small>
         </div>
       </div>
+      <b>›</b>
+    </div>
 
-      <button
-        class="view-btn"
-        onclick="toast('Task completed')">
-        Open
-      </button>
+    <div class="info-card">
+      <div class="info-left">
+        <div class="info-icon">▤</div>
+        <div>
+          <strong>Rules & FAQs</strong>
+          <small>Read important information</small>
+        </div>
+      </div>
+      <b>›</b>
     </div>
 
   </div>
-
-</section>
-
-
-<!-- ACCOUNT -->
-
-<section id="account" class="page">
-
-  <div class="card">
-
-    <h2 class="card-title">
-      Account
-    </h2>
-
-    <p class="muted">
-      Telegram account
-    </p>
-
-    <div class="address" id="telegramInfo">
-      Connecting...
-    </div>
-
-  </div>
-
-  <div class="card">
-
-    <h3>Receiving Wallet</h3>
-
-    <div class="address">
-      0x59f0037c56Cb27499c9C5432545A57b035A1031d
-    </div>
-
-    <button
-      class="big-btn deposit-btn"
-      style="width:100%;margin-top:12px"
-      onclick="copyText(RECEIVING_WALLET)">
-      Copy Address
-    </button>
-
-  </div>
-
-</section>
-
 
 </div>
 
 
 <!-- BOTTOM NAV -->
 
-<nav class="bottom-nav">
+<div class="bottom-nav">
 
-  <button
-    class="bottom-btn"
-    onclick="showPage('trade',this)">
-    <span class="nav-icon">📈</span>
+  <button class="bottom-btn">
+    <span class="nav-icon">▱</span>
     Trade
   </button>
 
-  <button
-    class="bottom-btn"
-    onclick="showPage('friends',this)">
+  <button class="bottom-btn">
     <span class="nav-icon">👥</span>
     Friends
   </button>
 
-  <button
-    class="bottom-btn active"
-    onclick="showPage('farm',this)">
+  <button class="bottom-btn active">
     <span class="nav-icon">⛏️</span>
     Farm
   </button>
 
-  <button
-    class="bottom-btn"
-    onclick="showPage('tasks',this)">
+  <button class="bottom-btn">
     <span class="nav-icon">☑️</span>
     Tasks
   </button>
 
-  <button
-    class="bottom-btn"
-    onclick="showPage('account',this)">
+  <button class="bottom-btn">
     <span class="nav-icon">👤</span>
     Account
   </button>
 
-</nav>
-
-
-<!-- DEPOSIT MODAL -->
-
-<div class="modal" id="depositModal">
-
-  <div class="modal-box">
-
-    <button
-      class="close"
-      onclick="closeModal('depositModal')">
-      ✕
-    </button>
-
-    <h2>Deposit USDT</h2>
-
-    <div class="warning">
-      ⚠️ BEP20 ONLY<br>
-      Send USDT through BNB Smart Chain.
-      Sending through another network may result in permanent loss.
-    </div>
-
-    <p class="muted">
-      BEP20 Receiving Address
-    </p>
-
-    <div class="address">
-      0x59f0037c56Cb27499c9C5432545A57b035A1031d
-    </div>
-
-    <button
-      class="big-btn deposit-btn"
-      style="width:100%;margin-top:12px"
-      onclick="copyText(RECEIVING_WALLET)">
-      Copy Address
-    </button>
-
-    <h3 style="margin-top:25px">
-      Payment Proof
-    </h3>
-
-    <p class="muted">
-      After sending your USDT, submit the transaction hash for verification.
-    </p>
-
-    <input
-      id="depositAmount"
-      type="number"
-      min="0"
-      placeholder="Deposit amount in USDT">
-
-    <input
-      id="depositTxid"
-      type="text"
-      placeholder="Transaction Hash (0x...)">
-
-    <button
-      class="big-btn deposit-btn"
-      style="width:100%"
-      onclick="submitDeposit()">
-      Submit Payment Proof
-    </button>
-
-  </div>
-
 </div>
-
-
-<!-- WITHDRAW MODAL -->
-
-<div class="modal" id="withdrawModal">
-
-  <div class="modal-box">
-
-    <button
-      class="close"
-      onclick="closeModal('withdrawModal')">
-      ✕
-    </button>
-
-    <h2>Withdraw USDT</h2>
-
-    <div class="warning">
-      BEP20 USDT only. Make sure the destination wallet supports BNB Smart Chain.
-    </div>
-
-    <label class="muted">
-      Amount
-    </label>
-
-    <input
-      id="withdrawAmount"
-      type="number"
-      min="1"
-      placeholder="Amount in USDT">
-
-    <label class="muted">
-      BEP20 Wallet Address
-    </label>
-
-    <input
-      id="withdrawAddress"
-      type="text"
-      placeholder="0x...">
-
-    <button
-      class="big-btn deposit-btn"
-      style="width:100%"
-      onclick="submitWithdraw()">
-      Submit Withdrawal
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- CALCULATOR -->
-
-<div class="modal" id="calculatorModal">
-
-  <div class="modal-box">
-
-    <button
-      class="close"
-      onclick="closeModal('calculatorModal')">
-      ✕
-    </button>
-
-    <h2>Mining Calculator</h2>
-
-    <p class="muted">
-      Calculate the configured daily reward rate.
-    </p>
-
-    <input
-      id="calcAmount"
-      type="number"
-      placeholder="Enter deposit amount">
-
-    <button
-      class="big-btn deposit-btn"
-      style="width:100%"
-      onclick="calculateMining()">
-      Calculate
-    </button>
-
-    <div
-      class="card"
-      style="margin-top:15px">
-
-      <div class="muted">
-        Daily Reward
-      </div>
-
-      <div
-        class="reward"
-        id="calcResult">
-        $0.00
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- INFO MODAL -->
-
-<div class="modal" id="infoModal">
-
-  <div class="modal-box">
-
-    <button
-      class="close"
-      onclick="closeModal('infoModal')">
-      ✕
-    </button>
-
-    <div id="infoContent"></div>
-
-  </div>
-
-</div>
-
-
-<div class="toast" id="toast"></div>
 
 
 <script>
 
-const tg = window.Telegram.WebApp;
+let remaining = 24 * 60 * 60;
 
-tg.ready();
-tg.expand();
+function updateTimer(){
 
-const telegramUser =
-  tg.initDataUnsafe?.user || null;
+  const h = String(Math.floor(remaining / 3600)).padStart(2,"0");
+  const m = String(Math.floor((remaining % 3600) / 60)).padStart(2,"0");
+  const s = String(remaining % 60).padStart(2,"0");
 
-const RECEIVING_WALLET =
-  "0x59f0037c56Cb27499c9C5432545A57b035A1031d";
+  const time = h + ":" + m + ":" + s;
 
-const API_BASE =
-  "https://zenith-backend.hamidalipq.workers.dev";
+  document.getElementById("freeTimer").textContent = time;
+  document.getElementById("nextTimer").textContent = time;
 
-let accountToken =
-  localStorage.getItem("zenithAccountToken") || "";
-
-let freeMiningStart =
-  Number(localStorage.getItem("freeMiningStart") || 0);
-
-
-async function api(path, options = {}) {
-
-  const headers = {
-    "Content-Type":"application/json",
-    ...(options.headers || {})
-  };
-
-  if(accountToken){
-    headers["Authorization"] =
-      "Bearer " + accountToken;
+  if(remaining > 0){
+    remaining--;
   }
 
-  const response =
-    await fetch(API_BASE + path,{
-      ...options,
-      headers
-    });
-
-  const data =
-    await response.json().catch(()=>({}));
-
-  if(!response.ok){
-    throw new Error(
-      data.error || "Backend request failed"
-    );
-  }
-
-  return data;
 }
 
-
-/* PAGE */
-
-function showPage(id,btn){
-
-  document
-    .querySelectorAll(".page")
-    .forEach(page =>
-      page.classList.remove("active")
-    );
-
-  document
-    .getElementById(id)
-    .classList.add("active");
-
-  document
-    .querySelectorAll(".bottom-btn")
-    .forEach(button =>
-      button.classList.remove("active")
-    );
-
-  if(btn){
-    btn.classList.add("active");
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-}
-
-
-/* MODAL */
-
-function openModal(id){
-  document.getElementById(id).style.display="flex";
-}
-
-function closeModal(id){
-  document.getElementById(id).style.display="none";
-}
-
-function openDeposit(){
-  openModal("depositModal");
-}
-
-function openWithdraw(){
-  openModal("withdrawModal");
-}
-
-function openCalculator(){
-  openModal("calculatorModal");
-}
-
-function openHistory(){
-  toast("History will be connected to the backend.");
-}
-
-function showAllMining(){
-  toast("Mining details will be connected to the backend.");
-}
-
-
-/* TOAST */
-
-function toast(message){
-
-  const box =
-    document.getElementById("toast");
-
-  box.innerText = message;
-  box.style.display = "block";
-
-  setTimeout(()=>{
-    box.style.display = "none";
-  },2500);
-}
-
-
-/* COPY */
-
-function copyText(text){
-
-  navigator.clipboard
-    .writeText(text)
-    .then(()=>{
-      toast("Copied successfully");
-    })
-    .catch(()=>{
-      toast("Copy failed");
-    });
-}
-
-
-/* TELEGRAM USER */
-
-function loadTelegramUser(){
-
-  if(!telegramUser){
-    document.getElementById("telegramInfo").innerText =
-      "Open this app from Telegram";
-    return;
-  }
-
-  const name =
-    telegramUser.first_name ||
-    telegramUser.username ||
-    "Zenivora Member";
-
-  document.getElementById("username").innerText =
-    name;
-
-  document.getElementById("telegramInfo").innerText =
-    "Telegram ID: " + telegramUser.id;
-}
-
-
-/* BACKEND LOGIN */
-
-async function telegramLogin(){
-
-  if(!tg.initData){
-    return;
-  }
-
-  try{
-
-    const data =
-      await api(
-        "/api/telegram/auth",
-        {
-          method:"POST",
-          body:JSON.stringify({
-            initData:tg.initData
-          })
-        }
-      );
-
-    if(data.account_token){
-
-      accountToken =
-        data.account_token;
-
-      localStorage.setItem(
-        "zenithAccountToken",
-        accountToken
-      );
-    }
-
-    if(typeof data.balance !== "undefined"){
-      updateBalance(data.balance);
-    }
-
-  }catch(error){
-
-    console.error(
-      "Telegram login:",
-      error
-    );
-
-  }
-}
-
-
-/* LOAD ACCOUNT */
-
-async function loadAccount(){
-
-  if(!accountToken){
-    return;
-  }
-
-  try{
-
-    const data =
-      await api("/api/user/me");
-
-    if(typeof data.balance !== "undefined"){
-      updateBalance(data.balance);
-    }
-
-  }catch(error){
-
-    console.error(
-      "Account:",
-      error
-    );
-
-  }
-}
-
-
-/* BALANCE */
-
-function updateBalance(balance){
-
-  const amount =
-    Number(balance || 0);
-
-  document.getElementById("balance")
-    .innerText =
-    amount.toFixed(2);
-
-  document.getElementById("tradeBalance")
-    .innerText =
-    amount.toFixed(2);
-
-  document.getElementById("usdBalance")
-    .innerText =
-    "≈ $" + amount.toFixed(2);
-
-  updateProfit(amount);
-}
-
-
-/* PROFIT */
-
-function updateProfit(balance){
-
-  let daily = 0;
-
-  if(balance >= 100){
-    daily = balance * 0.045;
-  }else if(balance >= 50){
-    daily = balance * 0.04;
-  }else if(balance >= 25){
-    daily = balance * 0.035;
-  }else if(balance >= 15){
-    daily = balance * 0.03;
-  }else if(balance >= 3){
-    daily = balance * 0.025;
-  }
-
-  document.getElementById("dailyProfit")
-    .innerText =
-    "$" + daily.toFixed(2);
-
-  document.getElementById("hourlyProfit")
-    .innerText =
-    "$" + (daily/24).toFixed(4);
-
-  document.getElementById("monthlyProfit")
-    .innerText =
-    "$" + (daily*30).toFixed(2);
-}
-
-
-/* FREE MINING */
-
-function startFreeMining(){
-
-  if(!freeMiningStart){
-
-    freeMiningStart =
-      Date.now();
-
-    localStorage.setItem(
-      "freeMiningStart",
-      String(freeMiningStart)
-    );
-  }
-
-  updateMiningTimer();
-}
-
-
-function updateMiningTimer(){
-
-  if(!freeMiningStart){
-
-    document.getElementById("freeTimer")
-      .innerText = "READY";
-
-    document.getElementById("nextClaim")
-      .innerText = "READY";
-
-    return;
-  }
-
-  const cycle =
-    24 * 60 * 60 * 1000;
-
-  const elapsed =
-    Date.now() - freeMiningStart;
-
-  const remaining =
-    cycle - (elapsed % cycle);
-
-  if(elapsed >= cycle){
-
-    document.getElementById("freeTimer")
-      .innerText = "READY";
-
-    document.getElementById("nextClaim")
-      .innerText = "READY";
-
-    document.getElementById("claimBtn")
-      .disabled = false;
-
-    document.getElementById("smallClaim")
-      .disabled = false;
-
-    return;
-  }
-
-  const hours =
-    Math.floor(remaining / 3600000);
-
-  const minutes =
-    Math.floor(
-      (remaining % 3600000) / 60000
-    );
-
-  const seconds =
-    Math.floor(
-      (remaining % 60000) / 1000
-    );
-
-  const time =
-    String(hours).padStart(2,"0") + ":" +
-    String(minutes).padStart(2,"0") + ":" +
-    String(seconds).padStart(2,"0");
-
-  document.getElementById("freeTimer")
-    .innerText = time;
-
-  document.getElementById("nextClaim")
-    .innerText = time;
-
-  document.getElementById("claimBtn")
-    .disabled = true;
-
-  document.getElementById("smallClaim")
-    .disabled = true;
-}
+setInterval(updateTimer,1000);
+updateTimer();
 
 
 function claimFreeMining(){
 
-  if(!accountToken){
+  if(remaining > 0){
 
-    toast("Account is not connected yet.");
+    alert("Your free mining reward is still running.");
+
     return;
+
   }
 
-  if(
-    freeMiningStart &&
-    Date.now() - freeMiningStart <
-    24*60*60*1000
-  ){
+  remaining = 24 * 60 * 60;
 
-    toast("Next claim is not ready yet.");
-    return;
-  }
+  alert("Free mining reward claimed successfully!");
 
-  /*
-    This is only the frontend timer.
-    The actual $0.01 credit must be
-    validated by the backend.
-  */
-
-  freeMiningStart =
-    Date.now();
-
-  localStorage.setItem(
-    "freeMiningStart",
-    String(freeMiningStart)
-  );
-
-  toast(
-    "Mining cycle started. Backend claim will be connected next."
-  );
-
-  updateMiningTimer();
 }
 
 
-/* CALCULATOR */
-
-function calculateMining(){
-
-  const amount =
-    Number(
-      document.getElementById("calcAmount").value
-    );
-
-  if(!amount || amount <= 0){
-
-    toast("Enter a valid amount.");
-    return;
-  }
-
-  let rate = 0;
-
-  if(amount >= 100){
-    rate = 0.045;
-  }else if(amount >= 50){
-    rate = 0.04;
-  }else if(amount >= 25){
-    rate = 0.035;
-  }else if(amount >= 15){
-    rate = 0.03;
-  }else if(amount >= 3){
-    rate = 0.025;
-  }else{
-
-    document.getElementById("calcResult")
-      .innerText = "$0.00";
-
-    toast("Minimum deposit mining amount is $3.");
-    return;
-  }
-
-  const reward =
-    amount * rate;
-
-  document.getElementById("calcResult")
-    .innerText =
-    "$" + reward.toFixed(2) + " / day";
+function topUp(){
+  alert("Deposit page will be connected to the backend.");
 }
 
 
-/* DEPOSIT */
-
-async function submitDeposit(){
-
-  const amount =
-    Number(
-      document.getElementById("depositAmount").value
-    );
-
-  const txid =
-    document.getElementById("depositTxid")
-      .value.trim();
-
-  if(!amount || amount <= 0){
-
-    toast("Enter a valid deposit amount.");
-    return;
-  }
-
-  if(!txid){
-
-    toast("Enter transaction hash.");
-    return;
-  }
-
-  if(!accountToken){
-
-    toast("Account is not connected.");
-    return;
-  }
-
-  try{
-
-    const data =
-      await api(
-        "/api/deposit/submit",
-        {
-          method:"POST",
-          body:JSON.stringify({
-            amount,
-            txid
-          })
-        }
-      );
-
-    toast(
-      data.message ||
-      "Payment proof submitted."
-    );
-
-    document.getElementById("depositAmount")
-      .value="";
-
-    document.getElementById("depositTxid")
-      .value="";
-
-  }catch(error){
-
-    toast(error.message);
-
-  }
+function withdraw(){
+  alert("Withdrawal page will be connected to the backend.");
 }
 
 
-/* WITHDRAW */
-
-async function submitWithdraw(){
-
-  const amount =
-    Number(
-      document.getElementById("withdrawAmount").value
-    );
-
-  const address =
-    document.getElementById("withdrawAddress")
-      .value.trim();
-
-  if(!amount || amount <= 0){
-
-    toast("Enter a valid amount.");
-    return;
-  }
-
-  if(!/^0x[a-fA-F0-9]{40}$/.test(address)){
-
-    toast("Invalid BEP20 wallet address.");
-    return;
-  }
-
-  if(!accountToken){
-
-    toast("Account is not connected.");
-    return;
-  }
-
-  try{
-
-    const data =
-      await api(
-        "/api/withdraw",
-        {
-          method:"POST",
-          body:JSON.stringify({
-            amount,
-            address
-          })
-        }
-      );
-
-    toast(
-      data.message ||
-      "Withdrawal request submitted."
-    );
-
-    closeModal("withdrawModal");
-
-  }catch(error){
-
-    toast(
-      error.message ||
-      "Withdrawal endpoint is not connected yet."
-    );
-
-  }
+function historyPage(){
+  alert("Transaction history will be connected to the backend.");
 }
 
 
-/* HOW TO EARN */
-
-function openEarn(){
-
-  document.getElementById("infoContent")
-    .innerHTML = `
-
-      <h2>How to Earn?</h2>
-
-      <div class="card">
-        <h3>1. Free Mining</h3>
-        <p class="muted">
-          Start the available free mining cycle
-          and check the claim timer every 24 hours.
-        </p>
-        <b class="reward">$0.01 / day</b>
-      </div>
-
-      <div class="card">
-        <h3>2. Deposit Mining</h3>
-
-        <p>$3+ → 2.5% daily configured rate</p>
-        <p>$15+ → 3% daily configured rate</p>
-        <p>$25+ → 3.5% daily configured rate</p>
-        <p>$50+ → 4% daily configured rate</p>
-        <p>$100+ → 4.5% daily configured rate</p>
-
-        <p class="muted">
-          Rates shown here are platform configuration
-          settings and are not a guarantee of profit.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>3. Referrals</h3>
-
-        <p>Level 1 — 10%</p>
-        <p>Level 2 — 3%</p>
-        <p>Level 3 — 2%</p>
-        <p>Level 4 — 1%</p>
-        <p>Level 5 — 1%</p>
-      </div>
-
-    `;
-
-  openModal("infoModal");
+function calculator(){
+  alert("Mining Calculator");
 }
-
-
-/* RULES */
-
-function openRules(){
-
-  document.getElementById("infoContent")
-    .innerHTML = `
-
-      <h2>Rules & FAQs</h2>
-
-      <div class="card">
-
-        <h3>Network</h3>
-
-        <p class="muted">
-          Deposits and withdrawals use BEP20
-          on BNB Smart Chain.
-        </p>
-
-      </div>
-
-      <div class="card">
-
-        <h3>Deposit</h3>
-
-        <p class="muted">
-          Always verify the receiving address
-          and network before sending USDT.
-        </p>
-
-      </div>
-
-      <div class="card">
-
-        <h3>Withdrawal</h3>
-
-        <p class="muted">
-          Withdrawal requests are subject to
-          account balance checks and backend
-          processing.
-        </p>
-
-      </div>
-
-      <div class="card">
-
-        <h3>Mining</h3>
-
-        <p class="muted">
-          Mining rewards and rates are platform
-          configuration settings. They can be
-          changed according to the platform rules.
-        </p>
-
-      </div>
-
-    `;
-
-  openModal("infoModal");
-}
-
-
-/* START */
-
-loadTelegramUser();
-
-startFreeMining();
-
-telegramLogin()
-  .then(()=>{
-    loadAccount();
-  });
-
-setInterval(
-  updateMiningTimer,
-  1000
-);
 
 </script>
 
