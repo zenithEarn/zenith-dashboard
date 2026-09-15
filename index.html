@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Zenith Dashboard</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+
+    .navbar {
+      background: #111827;
+      color: white;
+      padding: 18px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .profile {
+      background: #374151;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .welcome {
+      margin-bottom: 25px;
+    }
+
+    .welcome h1 {
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #6b7280;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .card h3 {
+      color: #6b7280;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    .number {
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    .green {
+      color: #16a34a;
+    }
+
+    .blue {
+      color: #2563eb;
+    }
+
+    .purple {
+      color: #7c3aed;
+    }
+
+    .orange {
+      color: #ea580c;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    .box {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .box h2 {
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .activity {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .activity:last-child {
+      border-bottom: none;
+    }
+
+    .status {
+      background: #dcfce7;
+      color: #15803d;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    button {
+      border: none;
+      padding: 13px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 15px;
+      background: #111827;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 900px) {
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 550px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .navbar {
+        padding: 15px 18px;
+      }
+
+      .welcome h1 {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="logo">🚀 Zenith Dashboard</div>
+    <div class="profile">Admin</div>
+  </nav>
+
+  <main class="container">
+
+    <section class="welcome">
+      <h1>Welcome to Zenith 👋</h1>
+      <p>Here is your dashboard overview.</p>
+    </section>
+
+    <section class="cards">
+
+      <div class="card">
+        <h3>Total Users</h3>
+        <div class="number blue">1,248</div>
+      </div>
+
+      <div class="card">
+        <h3>Revenue</h3>
+        <div class="number green">$8,540</div>
+      </div>
+
+      <div class="card">
+        <h3>Orders</h3>
+        <div class="number purple">356</div>
+      </div>
+
+      <div class="card">
+        <h3>Growth</h3>
+        <div class="number orange">+24%</div>
+      </div>
+
+    </section>
+
+    <section class="content">
+
+      <div class="box">
+        <h2>Recent Activity</h2>
+
+        <div class="activity">
+          <span>New user registered</span>
+          <span class="status">Completed</span>
+        </div>
+
+        <div class="activity">
+          <span>New order received</span>
+          <span class="status">Completed</span>
+        </div>
+
+        <div class="activity">
+          <span>Payment received</span>
+          <span class="status">Completed</span>
+        </div>
+
+        <div class="activity">
+          <span>Account updated</span>
+          <span class="status">Completed</span>
+        </div>
+
+      </div>
+
+      <div class="box">
+        <h2>Quick Actions</h2>
+
+        <div class="buttons">
+          <button onclick="alert('Add User clicked!')">
+            ➕ Add User
+          </button>
+
+          <button onclick="alert('New Order clicked!')">
+            🛒 New Order
+          </button>
+
+          <button onclick="alert('Settings clicked!')">
+            ⚙️ Settings
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 Zenith Dashboard. All rights reserved.
+  </footer>
+
+</body>
+</html>
