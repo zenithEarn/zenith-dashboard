@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Zenith USDT</title>
-
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 *{box-sizing:border-box}
 body{
@@ -349,6 +349,14 @@ nav button.active{color:#35e68b}
 <div class="toast" id="toast"></div>
 
 <script>
+ const tg = window.Telegram.WebApp;
+
+tg.ready();
+tg.expand();
+
+const telegramUser = tg.initDataUnsafe?.user || null;
+
+console.log("Telegram User:", telegramUser);
 const RECEIVING_WALLET =
 "0x59f0037c56Cb27499c9C5432545A57b035A1031d";
 const API_BASE =
