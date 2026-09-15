@@ -351,7 +351,35 @@ nav button.active{color:#35e68b}
 <script>
 const RECEIVING_WALLET =
 "0x59f0037c56Cb27499c9C5432545A57b035A1031d";
+const API_BASE =
+"https://zenith-backend.hamidalipq.workers.dev";
 
+let accountToken =
+localStorage.getItem("zenithAccountToken") || "";
+
+async function api(path, options = {}) {
+  const headers = {
+    "Content-Type": "application/json",
+    ...(options.headers || {})
+  };
+
+  if (accountToken) {
+    headers["Authorization"] = "Bearer " + accountToken;
+  }
+
+  const response = await fetch(API_BASE + path, {
+    ...options,
+    headers
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(data.error || "Backend request failed");
+  }
+
+  return data;
+}
 function showPage(id,btn){
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
   document.getElementById(id).classList.add("active");
