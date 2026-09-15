@@ -3,323 +3,1292 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Zenith USDT</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-*{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#07111f;
- color:#fff;
- min-height:100vh;
- padding-bottom:85px
-}
-header{
- padding:20px 18px;
- display:flex;
- justify-content:space-between;
- align-items:center;
- border-bottom:1px solid #18283d
-}
-.logo{font-size:25px;font-weight:800}
-.badge{
- background:#10283b;
- color:#35e68b;
- padding:7px 10px;
- border-radius:20px;
- font-size:12px
-}
-.page{display:none;padding:18px}
-.page.active{display:block}
+<title>Zenivora</title>
 
-.card{
- background:#0d1b2c;
- border:1px solid #1a3048;
- border-radius:18px;
- padding:18px;
- margin-bottom:15px;
- box-shadow:0 10px 30px #0003
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
-.balance{
- font-size:34px;
- font-weight:800;
- margin:8px 0
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:
+    radial-gradient(circle at 80% 10%,#12365a55,transparent 30%),
+    linear-gradient(180deg,#06101f,#071426 55%,#040c17);
+  color:#fff;
+  min-height:100vh;
+  padding-bottom:95px;
 }
-.green{color:#35e68b}
-.muted{color:#91a4b8;font-size:13px}
 
 button{
- border:0;
- border-radius:12px;
- padding:13px 16px;
- font-weight:700;
- cursor:pointer
+  border:0;
+  font-family:inherit;
+  cursor:pointer;
 }
-.primary{background:#35e68b;color:#06120c}
-.secondary{background:#17283b;color:#fff}
-.danger{background:#5b2028;color:#fff}
 
-.grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:14px;
 }
-.stat{
- background:#0a1726;
- border-radius:14px;
- padding:15px
+
+/* HEADER */
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
 }
-.stat b{font-size:20px}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#15e9ff,#1854ff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  border:2px solid #24e7ff;
+  box-shadow:0 0 18px #00c8ff66;
+}
+
+.username{
+  font-size:17px;
+  font-weight:800;
+}
+
+.level{
+  margin-top:3px;
+  font-size:11px;
+  color:#ffd83d;
+}
+
+.header-actions{
+  display:flex;
+  gap:8px;
+}
+
+.header-btn{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:#0b1c31;
+  border:1px solid #193b60;
+  color:white;
+  font-size:19px;
+}
+
+/* BALANCE */
+
+.balance-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  padding:20px;
+  background:
+    radial-gradient(circle at 80% 50%,#0b75c955,transparent 35%),
+    linear-gradient(135deg,#0b2850,#07182d);
+  border:1px solid #2368a2;
+  box-shadow:0 15px 35px #0006;
+}
+
+.balance-label{
+  color:#a8bdd7;
+  font-size:14px;
+}
+
+.balance{
+  font-size:39px;
+  font-weight:900;
+  margin-top:4px;
+}
+
+.balance span{
+  font-size:21px;
+  color:#c9d8ea;
+}
+
+.usd{
+  color:#35f38c;
+  font-size:20px;
+  font-weight:800;
+  margin-top:2px;
+}
+
+.mining-status{
+  position:absolute;
+  right:16px;
+  top:17px;
+  padding:9px 13px;
+  border-radius:12px;
+  background:#073b2a;
+  color:#36ef91;
+  border:1px solid #149e65;
+  font-size:12px;
+  font-weight:800;
+}
+
+.dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  background:#20ef80;
+  border-radius:50%;
+  margin-right:5px;
+  box-shadow:0 0 8px #20ef80;
+}
+
+.profit-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-top:18px;
+}
+
+.profit-box{
+  background:#09203a;
+  border:1px solid #174568;
+  border-radius:13px;
+  padding:11px 7px;
+  text-align:center;
+}
+
+.profit-box .value{
+  font-size:16px;
+  font-weight:800;
+}
+
+.profit-box .label{
+  color:#91a7c0;
+  font-size:11px;
+  margin-top:5px;
+}
+
+/* ACTION NAV */
+
+.action-nav{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+  margin:14px 0;
+  background:#0b1b30;
+  padding:5px;
+  border-radius:19px;
+  border:1px solid #183754;
+}
+
+.action-btn{
+  padding:14px 4px;
+  border-radius:14px;
+  background:transparent;
+  color:#9eb0c7;
+  font-weight:800;
+  font-size:12px;
+}
+
+.action-btn.active{
+  color:white;
+  background:linear-gradient(135deg,#12bfa0,#0b735d);
+  box-shadow:0 0 15px #00dca044;
+}
+
+/* CARD */
+
+.card{
+  background:linear-gradient(145deg,#0b1c30,#071426);
+  border:1px solid #173653;
+  border-radius:20px;
+  padding:17px;
+  margin-bottom:14px;
+}
+
+.card-title{
+  font-size:22px;
+  font-weight:900;
+  margin:0;
+}
+
+.muted{
+  color:#8fa5bd;
+  font-size:13px;
+}
+
+/* FREE MINING */
+
+.free-card{
+  border:1px solid #37ed65;
+  background:
+    radial-gradient(circle at 0 100%,#0c6b3e44,transparent 40%),
+    linear-gradient(135deg,#092c29,#061c20);
+  box-shadow:0 0 20px #20e87522;
+}
+
+.free-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.free-icon{
+  width:54px;
+  height:54px;
+  border-radius:15px;
+  background:#1b7d35;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:27px;
+}
+
+.reward{
+  color:#35f58b;
+  font-size:28px;
+  font-weight:900;
+  margin-top:10px;
+}
+
+.claim-box{
+  min-width:130px;
+  padding:10px;
+  border-radius:14px;
+  background:#103e2c;
+  border:1px solid #227a52;
+  text-align:center;
+}
+
+.claim-time{
+  color:#34ed8a;
+  font-size:18px;
+  font-weight:900;
+}
+
+.claim-btn{
+  width:100%;
+  margin-top:13px;
+  padding:15px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#a8ff00,#39f21a);
+  color:#07120a;
+  font-size:16px;
+  font-weight:900;
+  box-shadow:0 0 20px #6aff0044;
+}
+
+.claim-btn:disabled{
+  opacity:.45;
+}
+
+/* MINING TIERS */
+
+.tiers{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  margin-top:13px;
+}
+
+.tier{
+  min-height:145px;
+  border-radius:15px;
+  padding:12px 5px;
+  text-align:center;
+  background:#0b1d32;
+  border:1px solid #1c4261;
+}
+
+.tier-icon{
+  font-size:24px;
+}
+
+.tier-name{
+  font-weight:800;
+  margin-top:7px;
+  font-size:14px;
+}
+
+.tier-amount{
+  margin-top:3px;
+  font-size:12px;
+  color:#b7c9dd;
+}
+
+.rate{
+  margin-top:10px;
+  font-size:23px;
+  font-weight:900;
+  color:#38ef91;
+}
+
+.daily{
+  color:#a7b9cd;
+  font-size:11px;
+  margin-top:3px;
+}
+
+.tier:nth-child(2){
+  border-color:#167cff;
+}
+.tier:nth-child(2) .rate{
+  color:#20a8ff;
+}
+
+.tier:nth-child(3){
+  border-color:#8d35ff;
+}
+.tier:nth-child(3) .rate{
+  color:#c276ff;
+}
+
+.tier:nth-child(4){
+  border-color:#c48a19;
+}
+.tier:nth-child(4) .rate{
+  color:#ffc52f;
+}
+
+.tier:nth-child(5){
+  border-color:#ef304f;
+}
+.tier:nth-child(5) .rate{
+  color:#ff5270;
+}
+
+/* BUTTONS */
+
+.two-buttons{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+
+.big-btn{
+  padding:15px;
+  border-radius:15px;
+  font-size:15px;
+  font-weight:900;
+}
+
+.deposit-btn{
+  background:linear-gradient(135deg,#087dff,#1262f5);
+  color:white;
+}
+
+.calc-btn{
+  background:#12243c;
+  color:white;
+  border:1px solid #274663;
+}
+
+/* ACTIVE MINING */
+
+.active-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.view-btn{
+  background:#102944;
+  border:1px solid #245074;
+  color:#bcd0e6;
+  padding:9px 13px;
+  border-radius:13px;
+  font-size:12px;
+}
+
+.active-mining{
+  margin-top:13px;
+  padding:15px;
+  border-radius:17px;
+  background:#08192b;
+  border:1px solid #16405d;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.coin{
+  width:47px;
+  height:47px;
+  border-radius:50%;
+  background:#0dbb9a;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:22px;
+}
+
+.active-info{
+  flex:1;
+}
+
+.active-title{
+  font-weight:900;
+  font-size:16px;
+}
+
+.active-reward{
+  color:#35ef8b;
+  font-weight:900;
+  margin-top:4px;
+}
+
+.active-date{
+  color:#8ca2ba;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.next{
+  color:#8fa6bf;
+  font-size:12px;
+}
+
+.next-time{
+  color:#27ed8b;
+  font-size:19px;
+  font-weight:900;
+  margin-top:5px;
+}
+
+/* INFO */
+
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.info-btn{
+  padding:17px;
+  text-align:left;
+  background:#091a30;
+  border:1px solid #1d4a76;
+  border-radius:16px;
+  color:white;
+}
+
+.info-icon{
+  font-size:22px;
+}
+
+.info-title{
+  font-size:15px;
+  font-weight:900;
+  margin-top:8px;
+}
+
+.info-sub{
+  color:#8fa5bd;
+  font-size:11px;
+  margin-top:4px;
+}
+
+/* PAGES */
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+/* MODAL */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:#000b;
+  display:none;
+  align-items:flex-end;
+  z-index:100;
+}
+
+.modal-box{
+  width:100%;
+  max-height:90vh;
+  overflow:auto;
+  background:#0a192b;
+  border-radius:24px 24px 0 0;
+  padding:22px;
+  border-top:1px solid #245174;
+}
+
+.close{
+  float:right;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:#172b42;
+  color:white;
+  font-size:18px;
+}
+
+.modal h2{
+  margin-top:5px;
+}
 
 input{
- width:100%;
- padding:14px;
- margin:8px 0 12px;
- border-radius:11px;
- border:1px solid #294158;
- background:#07111f;
- color:#fff;
- outline:none
+  width:100%;
+  padding:15px;
+  margin:7px 0 14px;
+  border-radius:12px;
+  border:1px solid #274865;
+  background:#061323;
+  color:white;
+  outline:none;
+}
+
+textarea{
+  width:100%;
+  padding:15px;
+  border-radius:12px;
+  background:#061323;
+  color:white;
+  border:1px solid #274865;
+}
+
+.warning{
+  padding:13px;
+  border-radius:13px;
+  background:#30260d;
+  border:1px solid #765d1b;
+  color:#ffd866;
+  font-size:12px;
+  margin:13px 0;
 }
 
 .address{
- word-break:break-all;
- background:#07111f;
- padding:13px;
- border-radius:10px;
- font-size:12px;
- color:#b9c9d8
+  word-break:break-all;
+  padding:13px;
+  background:#061323;
+  border-radius:12px;
+  color:#a9bdd1;
+  font-size:12px;
 }
 
-nav{
- position:fixed;
- bottom:0;
- left:0;
- right:0;
- height:72px;
- background:#091625;
- border-top:1px solid #1b3046;
- display:grid;
- grid-template-columns:repeat(5,1fr);
- z-index:10
+/* BOTTOM NAV */
+
+.bottom-nav{
+  position:fixed;
+  left:10px;
+  right:10px;
+  bottom:9px;
+  height:76px;
+  background:#101d30ee;
+  backdrop-filter:blur(15px);
+  border:1px solid #233b55;
+  border-radius:25px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  z-index:50;
+  box-shadow:0 10px 35px #0009;
 }
-nav button{
- background:none;
- color:#8195aa;
- border-radius:0;
- padding:8px 2px;
- font-size:11px
+
+.bottom-btn{
+  background:none;
+  color:#91a4bc;
+  font-size:11px;
+  font-weight:700;
+  border-radius:20px;
 }
-nav button.active{color:#35e68b}
-.icon{font-size:20px;display:block;margin-bottom:3px}
+
+.bottom-btn .nav-icon{
+  display:block;
+  font-size:23px;
+  margin-bottom:5px;
+}
+
+.bottom-btn.active{
+  color:#07100a;
+  background:linear-gradient(145deg,#b1ff00,#40ed19);
+  margin:5px;
+  box-shadow:0 0 25px #6cff0055;
+}
+
+/* TOAST */
 
 .toast{
- position:fixed;
- left:50%;
- bottom:90px;
- transform:translateX(-50%);
- background:#13283c;
- padding:12px 18px;
- border-radius:12px;
- display:none;
- z-index:30;
- font-size:13px
+  position:fixed;
+  left:50%;
+  bottom:100px;
+  transform:translateX(-50%);
+  background:#152b43;
+  border:1px solid #31516e;
+  padding:12px 18px;
+  border-radius:13px;
+  display:none;
+  z-index:200;
+  font-size:13px;
 }
 
-.modal{
- position:fixed;
- inset:0;
- background:#000b;
- display:none;
- align-items:flex-end;
- z-index:20
-}
-.modalbox{
- width:100%;
- background:#0d1b2c;
- border-radius:22px 22px 0 0;
- padding:22px
-}
-.close{
- float:right;
- background:#17283b;
- color:white
-}
-.warning{
- background:#392c12;
- color:#ffd66b;
- border:1px solid #725a20;
- padding:12px;
- border-radius:12px;
- font-size:12px;
- margin-bottom:14px
+/* RESPONSIVE */
+
+@media(max-width:600px){
+
+  .container{
+    padding:12px;
+  }
+
+  .balance{
+    font-size:35px;
+  }
+
+  .profit-box .value{
+    font-size:14px;
+  }
+
+  .tiers{
+    grid-template-columns:repeat(5,minmax(0,1fr));
+  }
+
+  .tier{
+    min-height:135px;
+  }
+
+  .tier-name{
+    font-size:11px;
+  }
+
+  .rate{
+    font-size:18px;
+  }
+
+  .tier-amount{
+    font-size:10px;
+  }
+
+  .active-mining{
+    flex-wrap:wrap;
+  }
+
+  .claim-box{
+    width:100%;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="logo">ZENITH</div>
-  <div class="badge">BEP20 • LIVE</div>
-</header>
+<div class="container">
 
-<!-- TRADE -->
-<section id="trade" class="page active">
-  <div class="card">
-    <div class="muted">Available Balance</div>
-    <div class="balance">$<span id="balance">0.00</span></div>
-    <div class="muted">USDT • BNB Smart Chain</div>
-  </div>
+<!-- HEADER -->
 
-  <div class="grid">
-    <div class="stat">
-      <div class="muted">Deposits</div>
-      <b id="depositTotal">0.00</b> USDT
-    </div>
-    <div class="stat">
-      <div class="muted">Withdrawals</div>
-      <b id="withdrawTotal">0.00</b> USDT
+<div class="header">
+
+  <div class="profile">
+    <div class="avatar">👤</div>
+
+    <div>
+      <div class="username" id="username">
+        Zenivora Member
+      </div>
+
+      <div class="level">
+        👑 Level 1
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <h3>Quick Actions</h3>
-    <button class="primary" onclick="openDeposit()">Deposit USDT</button>
-    <button class="secondary" onclick="openWithdraw()">Withdraw</button>
+  <div class="header-actions">
+    <button class="header-btn">🔔</button>
+    <button class="header-btn">⚙️</button>
   </div>
 
-  <div class="card">
-    <h3>BEP20 Network</h3>
-    <p class="muted">
-      Only USDT on BNB Smart Chain is accepted.
-      Do not send ERC20, TRC20 or other networks.
-    </p>
+</div>
+
+
+<!-- FARM PAGE -->
+
+<section id="farm" class="page active">
+
+<!-- BALANCE -->
+
+<div class="balance-card">
+
+  <div class="balance-label">
+    Total Balance 👁
   </div>
+
+  <div class="balance">
+    <span>$</span><span id="balance">0.00</span>
+    <span>USDT</span>
+  </div>
+
+  <div class="usd" id="usdBalance">
+    ≈ $0.00
+  </div>
+
+  <div class="mining-status">
+    <span class="dot"></span>
+    Mining Active
+  </div>
+
+  <div class="profit-grid">
+
+    <div class="profit-box">
+      <div class="value" id="hourlyProfit">$0.00</div>
+      <div class="label">Hourly Profit</div>
+    </div>
+
+    <div class="profit-box">
+      <div class="value" id="dailyProfit">$0.00</div>
+      <div class="label">Daily Profit</div>
+    </div>
+
+    <div class="profit-box">
+      <div class="value" id="monthlyProfit">$0.00</div>
+      <div class="label">Monthly Profit</div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ACTIONS -->
+
+<div class="action-nav">
+
+  <button class="action-btn active">
+    ⛏️ Mine
+  </button>
+
+  <button class="action-btn" onclick="openDeposit()">
+    💳 Deposit
+  </button>
+
+  <button class="action-btn" onclick="openWithdraw()">
+    ⬆️ Withdraw
+  </button>
+
+  <button class="action-btn" onclick="openHistory()">
+    📋 History
+  </button>
+
+</div>
+
+
+<!-- FREE MINING -->
+
+<div class="card free-card">
+
+  <div class="free-top">
+
+    <div style="display:flex;gap:12px">
+
+      <div class="free-icon">
+        ⛏️
+      </div>
+
+      <div>
+        <h2 class="card-title">
+          Free Mining
+        </h2>
+
+        <div class="muted" style="margin-top:5px">
+          Login daily and earn free USDT
+        </div>
+
+        <div class="reward">
+          $0.01 <span style="font-size:16px">/ day</span>
+        </div>
+
+        <div class="muted" style="margin-top:4px">
+          🎁 Claim once every 24 hours
+        </div>
+      </div>
+
+    </div>
+
+    <div class="claim-box">
+
+      <div class="muted">
+        24h Reward
+      </div>
+
+      <div class="claim-time" id="freeTimer">
+        READY
+      </div>
+
+    </div>
+
+  </div>
+
+  <button
+    class="claim-btn"
+    id="claimBtn"
+    onclick="claimFreeMining()">
+    ✨ Claim Now
+  </button>
+
+</div>
+
+
+<!-- DEPOSIT MINING -->
+
+<div class="card">
+
+  <h2 class="card-title">
+    Deposit Mining
+  </h2>
+
+  <div class="muted" style="margin-top:5px">
+    Top up and earn according to the configured daily reward rate
+  </div>
+
+  <div class="tiers">
+
+    <div class="tier">
+      <div class="tier-icon">🟢</div>
+      <div class="tier-name">Starter</div>
+      <div class="tier-amount">$3+</div>
+      <div class="rate">2.5%</div>
+      <div class="daily">Daily</div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-icon">🔵</div>
+      <div class="tier-name">Bronze</div>
+      <div class="tier-amount">$15+</div>
+      <div class="rate">3%</div>
+      <div class="daily">Daily</div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-icon">🟣</div>
+      <div class="tier-name">Silver</div>
+      <div class="tier-amount">$25+</div>
+      <div class="rate">3.5%</div>
+      <div class="daily">Daily</div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-icon">🟡</div>
+      <div class="tier-name">Gold</div>
+      <div class="tier-amount">$50+</div>
+      <div class="rate">4%</div>
+      <div class="daily">Daily</div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-icon">🔴</div>
+      <div class="tier-name">VIP</div>
+      <div class="tier-amount">$100+</div>
+      <div class="rate">4.5%</div>
+      <div class="daily">Daily</div>
+    </div>
+
+  </div>
+
+
+  <div class="two-buttons">
+
+    <button
+      class="big-btn deposit-btn"
+      onclick="openDeposit()">
+      ⊕ &nbsp; Top Up Now
+    </button>
+
+    <button
+      class="big-btn calc-btn"
+      onclick="openCalculator()">
+      🧮 &nbsp; Mining Calculator
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- ACTIVE MINING -->
+
+<div class="card">
+
+  <div class="active-head">
+
+    <h2 class="card-title">
+      📊 &nbsp; Your Active Mining
+    </h2>
+
+    <button
+      class="view-btn"
+      onclick="showAllMining()">
+      View All &nbsp;›
+    </button>
+
+  </div>
+
+  <div class="active-mining">
+
+    <div class="coin">
+      ₮
+    </div>
+
+    <div class="active-info">
+
+      <div class="active-title">
+        Free Mining
+        <span style="
+          background:#075c43;
+          color:#36ef91;
+          padding:5px 8px;
+          border-radius:8px;
+          font-size:10px;
+          margin-left:5px;">
+          ACTIVE
+        </span>
+      </div>
+
+      <div class="active-reward">
+        $0.01 / day
+      </div>
+
+      <div class="active-date" id="startedDate">
+        Started: —
+      </div>
+
+    </div>
+
+    <div>
+
+      <div class="next">
+        Next claim in
+      </div>
+
+      <div class="next-time" id="nextClaim">
+        READY
+      </div>
+
+    </div>
+
+    <button
+      class="claim-btn"
+      style="
+        width:auto;
+        min-width:90px;
+        margin:0;
+        padding:12px;"
+      id="smallClaim"
+      onclick="claimFreeMining()">
+      Claim
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- INFORMATION -->
+
+<div class="info-grid">
+
+  <button class="info-btn" onclick="openEarn()">
+    <div class="info-icon">❓</div>
+    <div class="info-title">How to Earn?</div>
+    <div class="info-sub">Learn how mining works</div>
+  </button>
+
+  <button class="info-btn" onclick="openRules()">
+    <div class="info-icon">📄</div>
+    <div class="info-title">Rules & FAQs</div>
+    <div class="info-sub">Read important information</div>
+  </button>
+
+</div>
+
 </section>
 
-<!-- FRIENDS -->
-<section id="friends" class="page">
+
+<!-- TRADE -->
+
+<section id="trade" class="page">
+
   <div class="card">
-    <h2>Invite Friends</h2>
-    <p class="muted">Share your referral code.</p>
-    <div class="address">ZENITH-REF-001</div>
-    <br>
-    <button class="primary" onclick="copyText('ZENITH-REF-001')">Copy Code</button>
+    <h2 class="card-title">Trade</h2>
+    <p class="muted">
+      Your USDT account overview.
+    </p>
+
+    <div class="balance" style="margin-top:20px">
+      $<span id="tradeBalance">0.00</span>
+    </div>
+
+    <button
+      class="big-btn deposit-btn"
+      style="width:100%;margin-top:15px"
+      onclick="openDeposit()">
+      Deposit USDT
+    </button>
+
+    <button
+      class="big-btn calc-btn"
+      style="width:100%;margin-top:10px"
+      onclick="openWithdraw()">
+      Withdraw
+    </button>
+  </div>
+
+</section>
+
+
+<!-- FRIENDS -->
+
+<section id="friends" class="page">
+
+  <div class="card">
+
+    <h2 class="card-title">
+      Friends
+    </h2>
+
+    <p class="muted">
+      Invite friends and receive referral rewards according to the active referral program.
+    </p>
+
+    <div class="address">
+      ZENITH-REF-001
+    </div>
+
+    <button
+      class="big-btn deposit-btn"
+      style="width:100%;margin-top:12px"
+      onclick="copyText('ZENITH-REF-001')">
+      Copy Referral Code
+    </button>
+
   </div>
 
   <div class="card">
+
     <h3>Referral Program</h3>
+
     <p>Level 1 — 10%</p>
     <p>Level 2 — 3%</p>
     <p>Level 3 — 2%</p>
     <p>Level 4 — 1%</p>
     <p>Level 5 — 1%</p>
+
   </div>
+
 </section>
 
-<!-- FARM -->
-<section id="farm" class="page">
+
+<!-- TASKS -->
+
+<section id="tasks" class="page">
+
   <div class="card">
-    <h2>Farm</h2>
-    <p class="muted">Your farming dashboard.</p>
+
+    <h2 class="card-title">
+      Tasks
+    </h2>
+
+    <p class="muted">
+      Complete available tasks and check your reward status.
+    </p>
+
+    <div class="active-mining">
+      <div class="coin">✓</div>
+
+      <div class="active-info">
+        <div class="active-title">
+          Daily Login
+        </div>
+        <div class="active-date">
+          Open the app daily
+        </div>
+      </div>
+
+      <button
+        class="view-btn"
+        onclick="toast('Task completed')">
+        Open
+      </button>
+    </div>
+
   </div>
-  <div class="grid">
-    <div class="stat"><div class="muted">Active</div><b>0</b></div>
-    <div class="stat"><div class="muted">Earned</div><b>0 USDT</b></div>
-  </div>
+
 </section>
 
-<!-- GIFTS -->
-<section id="gifts" class="page">
-  <div class="card">
-    <h2>Gifts</h2>
-    <p class="muted">Available rewards will appear here.</p>
-  </div>
-</section>
 
 <!-- ACCOUNT -->
+
 <section id="account" class="page">
+
   <div class="card">
-    <h2>Account</h2>
-    <p class="muted">Zenith Member</p>
+
+    <h2 class="card-title">
+      Account
+    </h2>
+
+    <p class="muted">
+      Telegram account
+    </p>
+
+    <div class="address" id="telegramInfo">
+      Connecting...
+    </div>
+
   </div>
 
   <div class="card">
+
     <h3>Receiving Wallet</h3>
-    <div class="address" id="receiveAddress">
-      0x59f0037c56Cb27499c9C5432545A57b035A1031d
-    </div>
-    <br>
-    <button class="primary"
-      onclick="copyText('0x59f0037c56Cb27499c9C5432545A57b035A1031d')">
-      Copy Address
-    </button>
-  </div>
-
-  <div class="card">
-    <h3>Network</h3>
-    <p class="muted">BNB Smart Chain Mainnet</p>
-    <p class="muted">Chain ID: 56</p>
-  </div>
-</section>
-
-<!-- NAV -->
-<nav>
-  <button class="active" onclick="showPage('trade',this)">
-    <span class="icon">📊</span>Trade
-  </button>
-  <button onclick="showPage('friends',this)">
-    <span class="icon">👥</span>Friends
-  </button>
-  <button onclick="showPage('farm',this)">
-    <span class="icon">⚡</span>Farm
-  </button>
-  <button onclick="showPage('gifts',this)">
-    <span class="icon">🎁</span>Gifts
-  </button>
-  <button onclick="showPage('account',this)">
-    <span class="icon">👤</span>Account
-  </button>
-</nav>
-
-<!-- DEPOSIT MODAL -->
-<div class="modal" id="depositModal">
-  <div class="modalbox">
-    <button class="close" onclick="closeModal('depositModal')">✕</button>
-    <h2>Deposit USDT</h2>
-
-    <div class="warning">
-      ⚠️ BEP20 ONLY<br>
-      Send USDT through BNB Smart Chain.
-      Sending another network can permanently lose funds.
-    </div>
-
-    <p class="muted">Your BEP20 receiving address:</p>
 
     <div class="address">
       0x59f0037c56Cb27499c9C5432545A57b035A1031d
     </div>
 
-    <br>
-
-    <button class="primary"
-      onclick="copyText('0x59f0037c56Cb27499c9C5432545A57b035A1031d')">
+    <button
+      class="big-btn deposit-btn"
+      style="width:100%;margin-top:12px"
+      onclick="copyText(RECEIVING_WALLET)">
       Copy Address
     </button>
 
-    <p class="muted" style="margin-top:18px">
-      After sending, keep your transaction hash.
-      Automatic blockchain verification will be connected through the backend.
-    </p>
   </div>
+
+</section>
+
+
 </div>
 
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+  <button
+    class="bottom-btn"
+    onclick="showPage('trade',this)">
+    <span class="nav-icon">📈</span>
+    Trade
+  </button>
+
+  <button
+    class="bottom-btn"
+    onclick="showPage('friends',this)">
+    <span class="nav-icon">👥</span>
+    Friends
+  </button>
+
+  <button
+    class="bottom-btn active"
+    onclick="showPage('farm',this)">
+    <span class="nav-icon">⛏️</span>
+    Farm
+  </button>
+
+  <button
+    class="bottom-btn"
+    onclick="showPage('tasks',this)">
+    <span class="nav-icon">☑️</span>
+    Tasks
+  </button>
+
+  <button
+    class="bottom-btn"
+    onclick="showPage('account',this)">
+    <span class="nav-icon">👤</span>
+    Account
+  </button>
+
+</nav>
+
+
+<!-- DEPOSIT MODAL -->
+
+<div class="modal" id="depositModal">
+
+  <div class="modal-box">
+
+    <button
+      class="close"
+      onclick="closeModal('depositModal')">
+      ✕
+    </button>
+
+    <h2>Deposit USDT</h2>
+
+    <div class="warning">
+      ⚠️ BEP20 ONLY<br>
+      Send USDT through BNB Smart Chain.
+      Sending through another network may result in permanent loss.
+    </div>
+
+    <p class="muted">
+      BEP20 Receiving Address
+    </p>
+
+    <div class="address">
+      0x59f0037c56Cb27499c9C5432545A57b035A1031d
+    </div>
+
+    <button
+      class="big-btn deposit-btn"
+      style="width:100%;margin-top:12px"
+      onclick="copyText(RECEIVING_WALLET)">
+      Copy Address
+    </button>
+
+    <h3 style="margin-top:25px">
+      Payment Proof
+    </h3>
+
+    <p class="muted">
+      After sending your USDT, submit the transaction hash for verification.
+    </p>
+
+    <input
+      id="depositAmount"
+      type="number"
+      min="0"
+      placeholder="Deposit amount in USDT">
+
+    <input
+      id="depositTxid"
+      type="text"
+      placeholder="Transaction Hash (0x...)">
+
+    <button
+      class="big-btn deposit-btn"
+      style="width:100%"
+      onclick="submitDeposit()">
+      Submit Payment Proof
+    </button>
+
+  </div>
+
+</div>
+
+
 <!-- WITHDRAW MODAL -->
+
 <div class="modal" id="withdrawModal">
-  <div class="modalbox">
-    <button class="close" onclick="closeModal('withdrawModal')">✕</button>
+
+  <div class="modal-box">
+
+    <button
+      class="close"
+      onclick="closeModal('withdrawModal')">
+      ✕
+    </button>
 
     <h2>Withdraw USDT</h2>
 
@@ -327,154 +1296,837 @@ nav button.active{color:#35e68b}
       BEP20 USDT only. Make sure the destination wallet supports BNB Smart Chain.
     </div>
 
-    <label class="muted">Amount</label>
-    <input id="withdrawAmount" type="number" min="1"
-           placeholder="Amount in USDT">
+    <label class="muted">
+      Amount
+    </label>
 
-    <label class="muted">BEP20 Wallet Address</label>
-    <input id="withdrawAddress" type="text"
-           placeholder="0x...">
+    <input
+      id="withdrawAmount"
+      type="number"
+      min="1"
+      placeholder="Amount in USDT">
 
-    <button class="primary" style="width:100%"
+    <label class="muted">
+      BEP20 Wallet Address
+    </label>
+
+    <input
+      id="withdrawAddress"
+      type="text"
+      placeholder="0x...">
+
+    <button
+      class="big-btn deposit-btn"
+      style="width:100%"
       onclick="submitWithdraw()">
       Submit Withdrawal
     </button>
 
-    <p class="muted" style="margin-top:15px">
-      Status: PENDING → ADMIN REVIEW → BLOCKCHAIN CONFIRMED
-    </p>
   </div>
+
 </div>
+
+
+<!-- CALCULATOR -->
+
+<div class="modal" id="calculatorModal">
+
+  <div class="modal-box">
+
+    <button
+      class="close"
+      onclick="closeModal('calculatorModal')">
+      ✕
+    </button>
+
+    <h2>Mining Calculator</h2>
+
+    <p class="muted">
+      Calculate the configured daily reward rate.
+    </p>
+
+    <input
+      id="calcAmount"
+      type="number"
+      placeholder="Enter deposit amount">
+
+    <button
+      class="big-btn deposit-btn"
+      style="width:100%"
+      onclick="calculateMining()">
+      Calculate
+    </button>
+
+    <div
+      class="card"
+      style="margin-top:15px">
+
+      <div class="muted">
+        Daily Reward
+      </div>
+
+      <div
+        class="reward"
+        id="calcResult">
+        $0.00
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- INFO MODAL -->
+
+<div class="modal" id="infoModal">
+
+  <div class="modal-box">
+
+    <button
+      class="close"
+      onclick="closeModal('infoModal')">
+      ✕
+    </button>
+
+    <div id="infoContent"></div>
+
+  </div>
+
+</div>
+
 
 <div class="toast" id="toast"></div>
 
+
 <script>
- const tg = window.Telegram.WebApp;
+
+const tg = window.Telegram.WebApp;
 
 tg.ready();
 tg.expand();
 
-const telegramUser = tg.initDataUnsafe?.user || null;
+const telegramUser =
+  tg.initDataUnsafe?.user || null;
 
-console.log("Telegram User:", telegramUser);
 const RECEIVING_WALLET =
-"0x59f0037c56Cb27499c9C5432545A57b035A1031d";
+  "0x59f0037c56Cb27499c9C5432545A57b035A1031d";
+
 const API_BASE =
-"https://zenith-backend.hamidalipq.workers.dev";
+  "https://zenith-backend.hamidalipq.workers.dev";
 
 let accountToken =
-localStorage.getItem("zenithAccountToken") || "";
+  localStorage.getItem("zenithAccountToken") || "";
+
+let freeMiningStart =
+  Number(localStorage.getItem("freeMiningStart") || 0);
+
 
 async function api(path, options = {}) {
+
   const headers = {
-    "Content-Type": "application/json",
+    "Content-Type":"application/json",
     ...(options.headers || {})
   };
 
-  if (accountToken) {
-    headers["Authorization"] = "Bearer " + accountToken;
+  if(accountToken){
+    headers["Authorization"] =
+      "Bearer " + accountToken;
   }
 
-  const response = await fetch(API_BASE + path, {
-    ...options,
-    headers
-  });
+  const response =
+    await fetch(API_BASE + path,{
+      ...options,
+      headers
+    });
 
-  const data = await response.json().catch(() => ({}));
+  const data =
+    await response.json().catch(()=>({}));
 
-  if (!response.ok) {
-    throw new Error(data.error || "Backend request failed");
+  if(!response.ok){
+    throw new Error(
+      data.error || "Backend request failed"
+    );
   }
 
   return data;
 }
+
+
+/* PAGE */
+
 function showPage(id,btn){
-  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
 
-  document.querySelectorAll("nav button")
-    .forEach(x=>x.classList.remove("active"));
+  document
+    .querySelectorAll(".page")
+    .forEach(page =>
+      page.classList.remove("active")
+    );
 
-  btn.classList.add("active");
+  document
+    .getElementById(id)
+    .classList.add("active");
+
+  document
+    .querySelectorAll(".bottom-btn")
+    .forEach(button =>
+      button.classList.remove("active")
+    );
+
+  if(btn){
+    btn.classList.add("active");
+  }
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
-function openDeposit(){
-  document.getElementById("depositModal").style.display="flex";
-}
 
-function openWithdraw(){
-  document.getElementById("withdrawModal").style.display="flex";
+/* MODAL */
+
+function openModal(id){
+  document.getElementById(id).style.display="flex";
 }
 
 function closeModal(id){
   document.getElementById(id).style.display="none";
 }
 
-function copyText(text){
-  navigator.clipboard.writeText(text).then(()=>{
-    toast("Copied successfully");
-  });
+function openDeposit(){
+  openModal("depositModal");
 }
+
+function openWithdraw(){
+  openModal("withdrawModal");
+}
+
+function openCalculator(){
+  openModal("calculatorModal");
+}
+
+function openHistory(){
+  toast("History will be connected to the backend.");
+}
+
+function showAllMining(){
+  toast("Mining details will be connected to the backend.");
+}
+
+
+/* TOAST */
 
 function toast(message){
-  const t=document.getElementById("toast");
-  t.innerText=message;
-  t.style.display="block";
+
+  const box =
+    document.getElementById("toast");
+
+  box.innerText = message;
+  box.style.display = "block";
 
   setTimeout(()=>{
-    t.style.display="none";
-  },2200);
+    box.style.display = "none";
+  },2500);
 }
 
-function submitWithdraw(){
 
-  const amount=parseFloat(
-    document.getElementById("withdrawAmount").value
-  );
+/* COPY */
 
-  const address=
-    document.getElementById("withdrawAddress").value.trim();
+function copyText(text){
 
-  if(!amount || amount<=0){
-    toast("Enter a valid amount");
+  navigator.clipboard
+    .writeText(text)
+    .then(()=>{
+      toast("Copied successfully");
+    })
+    .catch(()=>{
+      toast("Copy failed");
+    });
+}
+
+
+/* TELEGRAM USER */
+
+function loadTelegramUser(){
+
+  if(!telegramUser){
+    document.getElementById("telegramInfo").innerText =
+      "Open this app from Telegram";
     return;
   }
 
-  if(!/^0x[a-fA-F0-9]{40}$/.test(address)){
-    toast("Invalid BEP20 address");
+  const name =
+    telegramUser.first_name ||
+    telegramUser.username ||
+    "Zenivora Member";
+
+  document.getElementById("username").innerText =
+    name;
+
+  document.getElementById("telegramInfo").innerText =
+    "Telegram ID: " + telegramUser.id;
+}
+
+
+/* BACKEND LOGIN */
+
+async function telegramLogin(){
+
+  if(!tg.initData){
+    return;
+  }
+
+  try{
+
+    const data =
+      await api(
+        "/api/telegram/auth",
+        {
+          method:"POST",
+          body:JSON.stringify({
+            initData:tg.initData
+          })
+        }
+      );
+
+    if(data.account_token){
+
+      accountToken =
+        data.account_token;
+
+      localStorage.setItem(
+        "zenithAccountToken",
+        accountToken
+      );
+    }
+
+    if(typeof data.balance !== "undefined"){
+      updateBalance(data.balance);
+    }
+
+  }catch(error){
+
+    console.error(
+      "Telegram login:",
+      error
+    );
+
+  }
+}
+
+
+/* LOAD ACCOUNT */
+
+async function loadAccount(){
+
+  if(!accountToken){
+    return;
+  }
+
+  try{
+
+    const data =
+      await api("/api/user/me");
+
+    if(typeof data.balance !== "undefined"){
+      updateBalance(data.balance);
+    }
+
+  }catch(error){
+
+    console.error(
+      "Account:",
+      error
+    );
+
+  }
+}
+
+
+/* BALANCE */
+
+function updateBalance(balance){
+
+  const amount =
+    Number(balance || 0);
+
+  document.getElementById("balance")
+    .innerText =
+    amount.toFixed(2);
+
+  document.getElementById("tradeBalance")
+    .innerText =
+    amount.toFixed(2);
+
+  document.getElementById("usdBalance")
+    .innerText =
+    "≈ $" + amount.toFixed(2);
+
+  updateProfit(amount);
+}
+
+
+/* PROFIT */
+
+function updateProfit(balance){
+
+  let daily = 0;
+
+  if(balance >= 100){
+    daily = balance * 0.045;
+  }else if(balance >= 50){
+    daily = balance * 0.04;
+  }else if(balance >= 25){
+    daily = balance * 0.035;
+  }else if(balance >= 15){
+    daily = balance * 0.03;
+  }else if(balance >= 3){
+    daily = balance * 0.025;
+  }
+
+  document.getElementById("dailyProfit")
+    .innerText =
+    "$" + daily.toFixed(2);
+
+  document.getElementById("hourlyProfit")
+    .innerText =
+    "$" + (daily/24).toFixed(4);
+
+  document.getElementById("monthlyProfit")
+    .innerText =
+    "$" + (daily*30).toFixed(2);
+}
+
+
+/* FREE MINING */
+
+function startFreeMining(){
+
+  if(!freeMiningStart){
+
+    freeMiningStart =
+      Date.now();
+
+    localStorage.setItem(
+      "freeMiningStart",
+      String(freeMiningStart)
+    );
+  }
+
+  updateMiningTimer();
+}
+
+
+function updateMiningTimer(){
+
+  if(!freeMiningStart){
+
+    document.getElementById("freeTimer")
+      .innerText = "READY";
+
+    document.getElementById("nextClaim")
+      .innerText = "READY";
+
+    return;
+  }
+
+  const cycle =
+    24 * 60 * 60 * 1000;
+
+  const elapsed =
+    Date.now() - freeMiningStart;
+
+  const remaining =
+    cycle - (elapsed % cycle);
+
+  if(elapsed >= cycle){
+
+    document.getElementById("freeTimer")
+      .innerText = "READY";
+
+    document.getElementById("nextClaim")
+      .innerText = "READY";
+
+    document.getElementById("claimBtn")
+      .disabled = false;
+
+    document.getElementById("smallClaim")
+      .disabled = false;
+
+    return;
+  }
+
+  const hours =
+    Math.floor(remaining / 3600000);
+
+  const minutes =
+    Math.floor(
+      (remaining % 3600000) / 60000
+    );
+
+  const seconds =
+    Math.floor(
+      (remaining % 60000) / 1000
+    );
+
+  const time =
+    String(hours).padStart(2,"0") + ":" +
+    String(minutes).padStart(2,"0") + ":" +
+    String(seconds).padStart(2,"0");
+
+  document.getElementById("freeTimer")
+    .innerText = time;
+
+  document.getElementById("nextClaim")
+    .innerText = time;
+
+  document.getElementById("claimBtn")
+    .disabled = true;
+
+  document.getElementById("smallClaim")
+    .disabled = true;
+}
+
+
+function claimFreeMining(){
+
+  if(!accountToken){
+
+    toast("Account is not connected yet.");
+    return;
+  }
+
+  if(
+    freeMiningStart &&
+    Date.now() - freeMiningStart <
+    24*60*60*1000
+  ){
+
+    toast("Next claim is not ready yet.");
     return;
   }
 
   /*
-    IMPORTANT:
-    This frontend DOES NOT send USDT.
-    The real withdrawal request must be sent
-    to your secure backend.
-
-    Example API:
-    POST /api/withdraw
-    {
-      amount: amount,
-      address: address
-    }
-
-    Backend will:
-    1. Check user balance
-    2. Create PENDING withdrawal
-    3. Notify Telegram admin group
-    4. Wait for admin approval
-    5. Send actual BEP20 USDT
-    6. Verify blockchain transaction
-    7. Return TXID
+    This is only the frontend timer.
+    The actual $0.01 credit must be
+    validated by the backend.
   */
 
-  toast("Withdrawal request created: PENDING");
+  freeMiningStart =
+    Date.now();
 
-  closeModal("withdrawModal");
+  localStorage.setItem(
+    "freeMiningStart",
+    String(freeMiningStart)
+  );
 
-  document.getElementById("withdrawAmount").value="";
-  document.getElementById("withdrawAddress").value="";
+  toast(
+    "Mining cycle started. Backend claim will be connected next."
+  );
+
+  updateMiningTimer();
 }
+
+
+/* CALCULATOR */
+
+function calculateMining(){
+
+  const amount =
+    Number(
+      document.getElementById("calcAmount").value
+    );
+
+  if(!amount || amount <= 0){
+
+    toast("Enter a valid amount.");
+    return;
+  }
+
+  let rate = 0;
+
+  if(amount >= 100){
+    rate = 0.045;
+  }else if(amount >= 50){
+    rate = 0.04;
+  }else if(amount >= 25){
+    rate = 0.035;
+  }else if(amount >= 15){
+    rate = 0.03;
+  }else if(amount >= 3){
+    rate = 0.025;
+  }else{
+
+    document.getElementById("calcResult")
+      .innerText = "$0.00";
+
+    toast("Minimum deposit mining amount is $3.");
+    return;
+  }
+
+  const reward =
+    amount * rate;
+
+  document.getElementById("calcResult")
+    .innerText =
+    "$" + reward.toFixed(2) + " / day";
+}
+
+
+/* DEPOSIT */
+
+async function submitDeposit(){
+
+  const amount =
+    Number(
+      document.getElementById("depositAmount").value
+    );
+
+  const txid =
+    document.getElementById("depositTxid")
+      .value.trim();
+
+  if(!amount || amount <= 0){
+
+    toast("Enter a valid deposit amount.");
+    return;
+  }
+
+  if(!txid){
+
+    toast("Enter transaction hash.");
+    return;
+  }
+
+  if(!accountToken){
+
+    toast("Account is not connected.");
+    return;
+  }
+
+  try{
+
+    const data =
+      await api(
+        "/api/deposit/submit",
+        {
+          method:"POST",
+          body:JSON.stringify({
+            amount,
+            txid
+          })
+        }
+      );
+
+    toast(
+      data.message ||
+      "Payment proof submitted."
+    );
+
+    document.getElementById("depositAmount")
+      .value="";
+
+    document.getElementById("depositTxid")
+      .value="";
+
+  }catch(error){
+
+    toast(error.message);
+
+  }
+}
+
+
+/* WITHDRAW */
+
+async function submitWithdraw(){
+
+  const amount =
+    Number(
+      document.getElementById("withdrawAmount").value
+    );
+
+  const address =
+    document.getElementById("withdrawAddress")
+      .value.trim();
+
+  if(!amount || amount <= 0){
+
+    toast("Enter a valid amount.");
+    return;
+  }
+
+  if(!/^0x[a-fA-F0-9]{40}$/.test(address)){
+
+    toast("Invalid BEP20 wallet address.");
+    return;
+  }
+
+  if(!accountToken){
+
+    toast("Account is not connected.");
+    return;
+  }
+
+  try{
+
+    const data =
+      await api(
+        "/api/withdraw",
+        {
+          method:"POST",
+          body:JSON.stringify({
+            amount,
+            address
+          })
+        }
+      );
+
+    toast(
+      data.message ||
+      "Withdrawal request submitted."
+    );
+
+    closeModal("withdrawModal");
+
+  }catch(error){
+
+    toast(
+      error.message ||
+      "Withdrawal endpoint is not connected yet."
+    );
+
+  }
+}
+
+
+/* HOW TO EARN */
+
+function openEarn(){
+
+  document.getElementById("infoContent")
+    .innerHTML = `
+
+      <h2>How to Earn?</h2>
+
+      <div class="card">
+        <h3>1. Free Mining</h3>
+        <p class="muted">
+          Start the available free mining cycle
+          and check the claim timer every 24 hours.
+        </p>
+        <b class="reward">$0.01 / day</b>
+      </div>
+
+      <div class="card">
+        <h3>2. Deposit Mining</h3>
+
+        <p>$3+ → 2.5% daily configured rate</p>
+        <p>$15+ → 3% daily configured rate</p>
+        <p>$25+ → 3.5% daily configured rate</p>
+        <p>$50+ → 4% daily configured rate</p>
+        <p>$100+ → 4.5% daily configured rate</p>
+
+        <p class="muted">
+          Rates shown here are platform configuration
+          settings and are not a guarantee of profit.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>3. Referrals</h3>
+
+        <p>Level 1 — 10%</p>
+        <p>Level 2 — 3%</p>
+        <p>Level 3 — 2%</p>
+        <p>Level 4 — 1%</p>
+        <p>Level 5 — 1%</p>
+      </div>
+
+    `;
+
+  openModal("infoModal");
+}
+
+
+/* RULES */
+
+function openRules(){
+
+  document.getElementById("infoContent")
+    .innerHTML = `
+
+      <h2>Rules & FAQs</h2>
+
+      <div class="card">
+
+        <h3>Network</h3>
+
+        <p class="muted">
+          Deposits and withdrawals use BEP20
+          on BNB Smart Chain.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Deposit</h3>
+
+        <p class="muted">
+          Always verify the receiving address
+          and network before sending USDT.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Withdrawal</h3>
+
+        <p class="muted">
+          Withdrawal requests are subject to
+          account balance checks and backend
+          processing.
+        </p>
+
+      </div>
+
+      <div class="card">
+
+        <h3>Mining</h3>
+
+        <p class="muted">
+          Mining rewards and rates are platform
+          configuration settings. They can be
+          changed according to the platform rules.
+        </p>
+
+      </div>
+
+    `;
+
+  openModal("infoModal");
+}
+
+
+/* START */
+
+loadTelegramUser();
+
+startFreeMining();
+
+telegramLogin()
+  .then(()=>{
+    loadAccount();
+  });
+
+setInterval(
+  updateMiningTimer,
+  1000
+);
 
 </script>
 
