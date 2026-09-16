@@ -1142,7 +1142,408 @@ body{
   </div>
 
 </div>
+<!-- DEX PAGE -->
+<section id="dexPage" style="display:none;">
 
+  <div style="padding:20px 14px 110px;">
+
+    <h1 style="font-size:28px;margin:5px 0 8px;">
+      DEX
+    </h1>
+
+    <p style="color:#8ea6c8;margin-top:0;">
+      Platform activity & transaction overview
+    </p>
+
+
+    <!-- TOTAL BALANCE -->
+    <div style="
+      background:linear-gradient(135deg,#0755e8,#1677ff);
+      border-radius:28px;
+      padding:22px;
+      margin-top:20px;
+      box-shadow:0 10px 30px #001a55;
+    ">
+
+      <div style="color:#bcd3ff;font-size:15px;">
+        Total Platform Balance
+      </div>
+
+      <div style="
+        font-size:38px;
+        font-weight:800;
+        margin-top:8px;
+      ">
+        $0.00
+        <span style="font-size:20px;">USDT</span>
+      </div>
+
+      <div style="
+        color:#00ff9d;
+        font-size:16px;
+        margin-top:8px;
+      ">
+        ● LIVE DATA
+      </div>
+
+    </div>
+
+
+    <!-- STAT CARDS -->
+    <div style="
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:18px;
+    ">
+
+      <!-- USERS -->
+      <div style="
+        background:#0b263d;
+        border:1px solid #164c75;
+        border-radius:20px;
+        padding:18px;
+      ">
+        <div style="color:#8ea6c8;font-size:13px;">
+          Total Users
+        </div>
+
+        <div id="dexUsers" style="
+          font-size:25px;
+          font-weight:800;
+          margin-top:7px;
+        ">
+          0
+        </div>
+      </div>
+
+
+      <!-- DEPOSIT -->
+      <div style="
+        background:#0b263d;
+        border:1px solid #164c75;
+        border-radius:20px;
+        padding:18px;
+      ">
+        <div style="color:#8ea6c8;font-size:13px;">
+          Total Deposit
+        </div>
+
+        <div id="dexDeposit" style="
+          font-size:25px;
+          font-weight:800;
+          margin-top:7px;
+        ">
+          $0.00
+        </div>
+      </div>
+
+
+      <!-- WITHDRAW -->
+      <div style="
+        background:#0b263d;
+        border:1px solid #164c75;
+        border-radius:20px;
+        padding:18px;
+      ">
+        <div style="color:#8ea6c8;font-size:13px;">
+          Total Withdraw
+        </div>
+
+        <div id="dexWithdraw" style="
+          font-size:25px;
+          font-weight:800;
+          margin-top:7px;
+        ">
+          $0.00
+        </div>
+      </div>
+
+
+      <!-- ACTIVE -->
+      <div style="
+        background:#0b263d;
+        border:1px solid #164c75;
+        border-radius:20px;
+        padding:18px;
+      ">
+        <div style="color:#8ea6c8;font-size:13px;">
+          Active Users
+        </div>
+
+        <div id="dexActive" style="
+          font-size:25px;
+          font-weight:800;
+          margin-top:7px;
+        ">
+          0
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- DEPOSIT / WITHDRAW CHART -->
+    <div style="
+      background:#071a2c;
+      border:1px solid #164c75;
+      border-radius:24px;
+      padding:20px;
+      margin-top:18px;
+    ">
+
+      <h2 style="margin-top:0;">
+        Deposit & Withdraw
+      </h2>
+
+      <p style="
+        color:#8ea6c8;
+        font-size:13px;
+      ">
+        Platform transaction overview
+      </p>
+
+
+      <!-- CHART -->
+      <div style="
+        height:210px;
+        display:flex;
+        align-items:flex-end;
+        justify-content:space-around;
+        gap:8px;
+        margin-top:20px;
+        border-bottom:1px solid #31516f;
+        padding:0 5px;
+      ">
+
+        <!-- DAY 1 -->
+        <div style="
+          height:100%;
+          display:flex;
+          align-items:flex-end;
+          gap:3px;
+        ">
+          <div style="
+            width:12px;
+            height:10px;
+            background:#00e676;
+            border-radius:5px 5px 0 0;
+          "></div>
+
+          <div style="
+            width:12px;
+            height:10px;
+            background:#ff5252;
+            border-radius:5px 5px 0 0;
+          "></div>
+        </div>
+
+
+        <!-- DAY 2 -->
+        <div style="
+          height:100%;
+          display:flex;
+          align-items:flex-end;
+          gap:3px;
+        ">
+          <div style="
+            width:12px;
+            height:10px;
+            background:#00e676;
+            border-radius:5px 5px 0 0;
+          "></div>
+
+          <div style="
+            width:12px;
+            height:10px;
+            background:#ff5252;
+            border-radius:5px 5px 0 0;
+          "></div>
+        </div>
+
+
+        <!-- DAY 3 -->
+        <div style="
+          height:100%;
+          display:flex;
+          align-items:flex-end;
+          gap:3px;
+        ">
+          <div style="
+            width:12px;
+            height:10px;
+            background:#00e676;
+            border-radius:5px 5px 0 0;
+          "></div>
+
+          <div style="
+            width:12px;
+            height:10px;
+            background:#ff5252;
+            border-radius:5px 5px 0 0;
+          "></div>
+        </div>
+
+
+        <!-- DAY 4 -->
+        <div style="
+          height:100%;
+          display:flex;
+          align-items:flex-end;
+          gap:3px;
+        ">
+          <div style="
+            width:12px;
+            height:10px;
+            background:#00e676;
+            border-radius:5px 5px 0 0;
+          "></div>
+
+          <div style="
+            width:12px;
+            height:10px;
+            background:#ff5252;
+            border-radius:5px 5px 0 0;
+          "></div>
+        </div>
+
+
+        <!-- DAY 5 -->
+        <div style="
+          height:100%;
+          display:flex;
+          align-items:flex-end;
+          gap:3px;
+        ">
+          <div style="
+            width:12px;
+            height:10px;
+            background:#00e676;
+            border-radius:5px 5px 0 0;
+          "></div>
+
+          <div style="
+            width:12px;
+            height:10px;
+            background:#ff5252;
+            border-radius:5px 5px 0 0;
+          "></div>
+        </div>
+
+
+        <!-- DAY 6 -->
+        <div style="
+          height:100%;
+          display:flex;
+          align-items:flex-end;
+          gap:3px;
+        ">
+          <div style="
+            width:12px;
+            height:10px;
+            background:#00e676;
+            border-radius:5px 5px 0 0;
+          "></div>
+
+          <div style="
+            width:12px;
+            height:10px;
+            background:#ff5252;
+            border-radius:5px 5px 0 0;
+          "></div>
+        </div>
+
+
+        <!-- DAY 7 -->
+        <div style="
+          height:100%;
+          display:flex;
+          align-items:flex-end;
+          gap:3px;
+        ">
+          <div style="
+            width:12px;
+            height:10px;
+            background:#00e676;
+            border-radius:5px 5px 0 0;
+          "></div>
+
+          <div style="
+            width:12px;
+            height:10px;
+            background:#ff5252;
+            border-radius:5px 5px 0 0;
+          "></div>
+        </div>
+
+      </div>
+
+
+      <!-- LEGEND -->
+      <div style="
+        display:flex;
+        justify-content:center;
+        gap:25px;
+        margin-top:15px;
+        font-size:13px;
+      ">
+
+        <span>
+          <span style="color:#00e676;">●</span>
+          Deposit
+        </span>
+
+        <span>
+          <span style="color:#ff5252;">●</span>
+          Withdraw
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- RECENT TRANSACTIONS -->
+    <div style="
+      background:#071a2c;
+      border:1px solid #164c75;
+      border-radius:24px;
+      padding:18px;
+      margin-top:18px;
+    ">
+
+      <h3 style="margin-top:0;">
+        Recent Transactions
+      </h3>
+
+      <p style="
+        color:#8ea6c8;
+        text-align:center;
+        padding:20px 0;
+      ">
+        No transactions yet
+      </p>
+
+    </div>
+
+
+    <!-- NOTICE -->
+    <div style="
+      background:#0b263d;
+      border-radius:18px;
+      padding:15px;
+      margin-top:15px;
+      color:#8ea6c8;
+      font-size:12px;
+      text-align:center;
+    ">
+      Transaction statistics will update automatically
+      when connected to the backend.
+    </div>
+
+  </div>
+
+</section>
 <div class="bottom-nav">
 
   <button class="bottom-btn">
