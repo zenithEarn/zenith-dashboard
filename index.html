@@ -1237,7 +1237,7 @@ function historyPage(){
 function calculator(){
   alert("Mining Calculator");
 }
-if(window.Telegram && window.Telegram.WebApp){document.body.classList.add('telegram-app');}
+if(/Telegram/i.test(navigator.userAgent)){document.body.classList.add('telegram-app');}
 </script>
 
 </body>
