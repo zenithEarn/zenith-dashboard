@@ -1634,19 +1634,24 @@ function historyPage(){
 function calculator(){
   alert("Mining Calculator");
 }
-// DEX PAGE NAVIGATION
+/* DEX PAGE NAVIGATION */
 
-const dexButton = document.querySelector(".bottom-nav .bottom-btn");
+const bottomButtons = document.querySelectorAll(".bottom-nav .bottom-btn");
 
-dexButton.addEventListener("click", function () {
+bottomButtons[0].addEventListener("click", function () {
 
     document.querySelectorAll("body > section").forEach(function(section) {
         section.style.display = "none";
     });
 
-    document.getElementById("dexPage").style.display = "block";
+    const dexPage = document.getElementById("dexPage");
 
-});</script>
+    if (dexPage) {
+        dexPage.style.display = "block";
+    }
+
+});
+</script>
 
 </body>
 </html>
