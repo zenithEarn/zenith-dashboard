@@ -1636,22 +1636,28 @@ function calculator(){
 }
 /* DEX PAGE NAVIGATION */
 
-const bottomButtons = document.querySelectorAll(".bottom-nav .bottom-btn");
+document.querySelectorAll(".bottom-nav .bottom-btn").forEach(function(button) {
 
-bottomButtons[0].addEventListener("click", function () {
+    if (button.textContent.trim().includes("Dex")) {
 
-    document.querySelectorAll("body > section").forEach(function(section) {
-        section.style.display = "none";
-    });
+        button.addEventListener("click", function() {
 
-    const dexPage = document.getElementById("dexPage");
+            document.querySelectorAll("body > section").forEach(function(section) {
+                section.style.display = "none";
+            });
 
-    if (dexPage) {
-        dexPage.style.display = "block";
+            const dexPage = document.getElementById("dexPage");
+
+            if (dexPage) {
+                dexPage.style.display = "block";
+            }
+
+        });
+
     }
 
 });
-</script>
-
+  </script>
+  
 </body>
 </html>
