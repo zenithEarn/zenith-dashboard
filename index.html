@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Zenivora</title>
 
 <style>
@@ -890,6 +890,12 @@ body{
   text-size-adjust:100%;
 }
 </style>
+  <style>
+body.telegram-app{
+  zoom:0.65;
+  width:153.85%;
+}
+  </style>
 </head>
 
 <body>
@@ -1231,7 +1237,7 @@ function historyPage(){
 function calculator(){
   alert("Mining Calculator");
 }
-
+if(window.Telegram && window.Telegram.WebApp){document.body.classList.add('telegram-app');}
 </script>
 
 </body>
