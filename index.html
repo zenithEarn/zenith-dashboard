@@ -587,7 +587,7 @@ button{
   position:fixed;
   left:12px;
   right:12px;
-  bottom:10px;
+  bottom:calc(10px + env(safe-area-inset-bottom));
   height:78px;
   z-index:99;
   display:grid;
@@ -874,6 +874,20 @@ button{
     font-size:14px !important;
   }
 
+}html{
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  width:100%;
+  min-width:100%;
+  overflow-x:hidden;
+}
+
+body{
+  width:100%;
+  min-width:100%;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
 }
 </style>
 </head>
