@@ -2,1450 +2,2540 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Zenivora</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+:root {
+  --bg-primary: #f4f8fd;
+  --bg-card: #ffffff;
+  --bg-card-soft: #f0f7ff;
+  --border-subtle: #e1edfb;
+  --border-accent: #bae6fd;
+  --accent-blue: #0066ff;
+  --accent-sky: #0099ff;
+  --accent-cyan: #0ea5e9;
+  --accent-teal: #00b894;
+  --accent-green: #00b074;
+  --accent-purple: #8e44ad;
+  --accent-gold: #f39c12;
+  --accent-pink: #e84393;
+  --text-navy: #092244;
+  --text-secondary: #627d98;
+  --text-muted: #8097b0;
+  --text-dark-blue: #334e68;
+  --glass-blur: blur(16px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --blue-neon-border: rgba(56, 189, 248, 0.6);
+  --blue-neon-border-strong: rgba(14, 165, 233, 0.8);
+  --blue-neon-glow: 0 0 14px rgba(56, 189, 248, 0.32), 0 0 2px rgba(14, 165, 233, 0.55);
+  --blue-neon-glow-strong: 0 0 20px rgba(56, 189, 248, 0.42), 0 0 3px rgba(14, 165, 233, 0.7);
+  --blue-neon-glow-subtle: 0 0 9px rgba(56, 189, 248, 0.25), 0 0 1.5px rgba(56, 189, 248, 0.5);
 }
 
-html,body{
-  margin:0;
-  padding:0;
-  background:#03101e;
-  color:#f4f8ff;
-  font-family:Arial,Helvetica,sans-serif;
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
-body{
-  min-height:100vh;
-  padding-bottom:95px;
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-primary);
+  color: var(--text-navy);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-button{
-  border:0;
-  cursor:pointer;
-  font-family:inherit;
+body {
+  background: 
+    radial-gradient(ellipse 110% 45% at 50% -8%, rgba(56, 189, 248, 0.38) 0%, rgba(186, 230, 253, 0.22) 38%, transparent 75%),
+    radial-gradient(ellipse 85% 45% at 100% 22%, rgba(14, 165, 233, 0.16) 0%, transparent 60%),
+    radial-gradient(ellipse 75% 40% at -5% 60%, rgba(56, 189, 248, 0.16) 0%, transparent 55%),
+    #f4f8fd;
+  background-attachment: fixed;
+  padding-bottom: calc(96px + var(--safe-bottom));
+  position: relative;
 }
 
-.container{
-  width:100%;
-  max-width:900px;
-  margin:auto;
-  padding:14px 14px 30px;
+/* FLOWING BACKGROUND WAVES */
+.bg-waves {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-waves-svg {
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+
+.container {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 12px 14px 20px;
+  position: relative;
+  z-index: 1;
 }
 
 /* HEADER */
-
-.header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:14px;
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
 
-.profile{
-  display:flex;
-  align-items:center;
-  gap:10px;
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.avatar{
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  border:2px solid #20aaff;
-  background:linear-gradient(145deg,#143d72,#07152a);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  box-shadow:0 0 15px #007dff55;
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00a2ff 0%, #0066ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.28);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.username{
-  font-size:19px;
-  font-weight:800;
-  white-space:nowrap;
-  max-width:140px;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.avatar svg {
+  width: 24px;
+  height: 24px;
 }
 
-.level{
-  display:inline-block;
-  margin-top:4px;
-  padding:5px 10px;
-  border-radius:15px;
-  background:#17233a;
-  color:#ffd52a;
-  font-size:13px;
-  font-weight:800;
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.header-actions{
-  display:flex;
-  gap:8px;
+.username {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-navy);
+  letter-spacing: -0.3px;
+  line-height: 1.15;
 }
 
-.header-btn{
-  width:50px;
-  height:50px;
-  border-radius:15px;
-  border:1px solid #16395c;
-  background:#07182b;
-  color:white;
-  font-size:23px;
+.user-subtitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: -0.1px;
 }
 
-/* BALANCE */
-
-.balance-card{
-  position:relative;
-  overflow:hidden;
-  border:1px solid #2366a3;
-  border-radius:20px;
-  padding:16px;
-  background:
-    radial-gradient(circle at 90% 40%,#00d9ff22,transparent 35%),
-    linear-gradient(135deg,#0b2340,#061425);
-  box-shadow:0 0 25px #006eff15;
+.level {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  background: rgba(0, 102, 255, 0.08);
+  border: 1px solid rgba(0, 102, 255, 0.2);
+  color: var(--accent-blue);
+  font-size: 10.5px;
+  font-weight: 700;
+  width: fit-content;
+  margin-top: 1px;
 }
 
-.balance-card:after{
-  content:"₮";
-  position:absolute;
-  right:22px;
-  top:45px;
-  width:110px;
-  height:110px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:72px;
-  font-weight:900;
-  color:#37ffbd;
-  background:radial-gradient(circle,#073e42,#021a25);
-  border:7px solid #00e5c0;
-  box-shadow:0 0 35px #00e5c066;
-  transform:rotate(-8deg);
+.level svg {
+  width: 11px;
+  height: 11px;
 }
 
-.balance-label{
-  color:#aabfe0;
-  font-size:17px;
-  font-weight:700;
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.balance{
-  font-size:42px;
-  font-weight:900;
-  margin-top:5px;
-  position:relative;
-  z-index:2;
+.header-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1.2px solid var(--blue-neon-border);
+  background: #ffffff;
+  color: #334e68;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.06), var(--blue-neon-glow-subtle);
+  position: relative;
+  transition: all 0.2s;
 }
 
-.usd{
-  color:#13e887;
-  font-size:22px;
-  font-weight:800;
-  margin-top:2px;
+.header-btn:active {
+  background: #f0f7ff;
 }
 
-.mining-status{
-  position:absolute;
-  right:16px;
-  top:15px;
-  z-index:3;
-  padding:8px 12px;
-  border-radius:12px;
-  background:#063d32;
-  border:1px solid #087b61;
-  color:#1eff8b;
-  font-size:13px;
-  font-weight:800;
+.header-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
-.profit-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:7px;
-  margin-top:15px;
-  position:relative;
-  z-index:3;
+.notif-dot {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  border: 2px solid #ffffff;
 }
 
-.profit-box{
-  padding:9px 6px;
-  border-radius:12px;
-  background:#09233d;
-  border:1px solid #174d78;
-  text-align:center;
+/* BALANCE CARD */
+.balance-card {
+  position: relative;
+  overflow: hidden;
+  border: 1.5px solid var(--blue-neon-border-strong);
+  border-radius: 24px;
+  padding: 18px 18px 16px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
 }
 
-.profit-box .icon{
-  font-size:17px;
+.balance-card-watermark {
+  position: absolute;
+  right: -10px;
+  top: 15px;
+  width: 110px;
+  height: 110px;
+  opacity: 0.04;
+  pointer-events: none;
 }
 
-.profit-box .value{
-  display:block;
-  margin-top:4px;
-  font-size:16px;
-  font-weight:800;
+.balance-card-watermark svg {
+  width: 100%;
+  height: 100%;
+  fill: var(--accent-blue);
 }
 
-.profit-box small{
-  color:#9eb3cf;
-  font-size:11px;
+.balance-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
-/* ACTION NAV */
-
-.action-nav{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:4px;
-  padding:4px;
-  margin:14px 0;
-  border-radius:18px;
-  background:#071b30;
-  border:1px solid #183a5b;
+.balance-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #1f385c;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
 }
 
-.action-btn{
-  padding:13px 5px;
-  border-radius:14px;
-  background:transparent;
-  color:#aabbd3;
-  font-size:14px;
-  font-weight:800;
+.balance-label svg {
+  width: 17px;
+  height: 17px;
+  cursor: pointer;
+  color: #627d98;
+  transition: color 0.2s;
 }
 
-.action-btn.active{
-  color:white;
-  background:linear-gradient(135deg,#087c76,#063c46);
-  box-shadow:0 0 15px #00e5b522;
+.balance-label svg:hover {
+  color: var(--accent-blue);
 }
 
-/* FREE MINING */
-
-.free-card{
-  border:1px solid #20ed6a;
-  border-radius:20px;
-  padding:14px;
-  background:
-    radial-gradient(circle at 0 100%,#0b704144,transparent 40%),
-    linear-gradient(135deg,#082c2a,#041b20);
-  box-shadow:0 0 20px #20e87522;
+.wallet-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1.2px solid var(--blue-neon-border);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-.free-top{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) 125px;
-  gap:9px;
-  align-items:center;
+.wallet-badge:active {
+  background: #f0f7ff;
 }
 
-.free-info{
-  display:grid;
-  grid-template-columns:46px minmax(0,1fr);
-  gap:9px;
-  min-width:0;
+.wallet-badge-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
 }
 
-.free-icon{
-  width:46px;
-  height:46px;
-  border-radius:13px;
-  background:linear-gradient(145deg,#31a53c,#087327);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:25px;
-  box-shadow:0 0 15px #28ff5c33;
+.wallet-badge-icon svg {
+  width: 13px;
+  height: 13px;
 }
 
-.free-title{
-  font-size:21px;
-  font-weight:900;
-  margin:0;
+.wallet-badge-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.1;
 }
 
-.free-desc{
-  color:#9db5ca;
-  font-size:13px;
-  line-height:1.25;
-  margin-top:3px;
+.wallet-badge-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--text-navy);
 }
 
-.reward{
-  color:#18f38b;
-  font-size:25px;
-  font-weight:900;
-  line-height:1;
-  margin-top:7px;
+.wallet-badge-chain {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--text-secondary);
 }
 
-.reward span{
-  font-size:14px;
+.wallet-badge-arrow {
+  width: 12px;
+  height: 12px;
+  color: #8097b0;
+  margin-left: 2px;
 }
 
-.free-note{
-  color:#a5b9c9;
-  font-size:12px;
-  margin-top:7px;
+.mining-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: rgba(0, 102, 255, 0.08);
+  border: 1px solid rgba(0, 102, 255, 0.2);
+  color: var(--accent-blue);
+  font-size: 11px;
+  font-weight: 700;
 }
 
-.claim-box{
-  padding:10px 5px;
-  border-radius:13px;
-  background:#0a382d;
-  border:1px solid #087e55;
-  text-align:center;
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  box-shadow: 0 0 8px var(--accent-blue);
+  animation: pulse-glow 2s infinite;
 }
 
-.claim-box small{
-  color:#9bbcac;
-  font-size:12px;
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
 }
 
-.claim-time{
-  color:#19f38a;
-  font-size:17px;
-  font-weight:900;
-  margin-top:4px;
+.balance {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+  color: var(--accent-blue);
+  margin-top: 2px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  line-height: 1.1;
+  position: relative;
+  z-index: 2;
 }
 
-.claim-btn{
-  width:100%;
-  margin-top:10px;
-  padding:12px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#a8ff00,#36ed1a);
-  color:#061506;
-  font-size:16px;
-  font-weight:900;
-  box-shadow:0 5px 18px #51ff001f;
+.balance-symbol {
+  font-weight: 800;
+  color: var(--accent-blue);
+  margin-right: 1px;
+}
+
+.balance .currency {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--accent-blue);
+  margin-left: 2px;
+}
+
+.usd {
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-top: 2px;
+  margin-bottom: 14px;
+}
+
+.profit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  position: relative;
+  z-index: 2;
+  margin-top: 14px;
+}
+
+.profit-box {
+  padding: 10px 6px;
+  border-radius: 16px;
+  background: #f0f7ff;
+  border: 1.2px solid var(--blue-neon-border);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+}
+
+.profit-box .icon-wrap {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profit-box .icon-wrap svg {
+  width: 17px;
+  height: 17px;
+}
+
+.profit-box .value {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-navy);
+  letter-spacing: -0.2px;
+}
+
+.profit-box small {
+  color: #6885a5;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* ACTION NAVIGATION */
+.action-nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  padding: 5px;
+  margin: 14px 0;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1.5px solid var(--blue-neon-border-strong);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.06), var(--blue-neon-glow);
+}
+
+.action-btn {
+  padding: 10px 4px;
+  border-radius: 15px;
+  background: transparent;
+  color: var(--text-dark-blue);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid transparent;
+}
+
+.action-btn svg {
+  width: 19px;
+  height: 19px;
+  stroke-width: 2.2px;
+}
+
+.action-btn:active {
+  background: #f0f7ff;
+}
+
+.action-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.35);
+}
+
+.action-btn.active svg {
+  color: #ffffff;
+}
+
+/* FREE MINING CARD */
+.free-card {
+  border: 1.5px solid var(--blue-neon-border-strong);
+  border-radius: 24px;
+  padding: 16px;
+  background: 
+    radial-gradient(circle at 95% 95%, rgba(56, 189, 248, 0.18) 0%, transparent 45%),
+    #ffffff;
+  box-shadow: 0 8px 26px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
+  position: relative;
+  overflow: hidden;
+}
+
+.free-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.free-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.free-icon {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.28);
+}
+
+.free-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.free-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-navy);
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.free-desc {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.35;
+  margin-top: 2px;
+}
+
+.reward {
+  color: var(--accent-blue);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  margin-top: 7px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.reward span {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.free-note {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  margin-top: 6px;
+}
+
+.free-note svg {
+  width: 13px;
+  height: 13px;
+  color: #f59e0b;
+}
+
+.claim-box {
+  padding: 6px 12px;
+  border-radius: 14px;
+  background: #e6f3fe;
+  border: 1.2px solid var(--blue-neon-border);
+  text-align: center;
+  min-width: 96px;
+  box-shadow: var(--blue-neon-glow-subtle);
+}
+
+.claim-box small {
+  color: #0070f3;
+  font-size: 9.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.claim-time {
+  color: var(--accent-blue);
+  font-size: 16px;
+  font-weight: 800;
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+
+.claim-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 13px 18px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #0099ff 0%, #0066ff 100%);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 800;
+  box-shadow: 0 6px 20px rgba(0, 102, 255, 0.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}
+
+.claim-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* DEPOSIT MINING CONTAINER */
+.deposit-card {
+  border: 1.5px solid var(--blue-neon-border-strong);
+  border-radius: 24px;
+  padding: 16px 14px 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 26px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
+  margin-top: 14px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.deposit-card .section-title {
+  margin-top: 0;
 }
 
 /* SECTION */
-
-.section-title{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  margin:19px 0 4px;
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 2px;
 }
 
-.section-icon{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#08264c;
-  border:1px solid #1668c1;
-  font-size:19px;
+.section-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0088ff;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 136, 255, 0.25);
 }
 
-.section-title h2{
-  margin:0;
-  font-size:22px;
+.section-icon svg {
+  width: 18px;
+  height: 18px;
 }
 
-.section-sub{
-  color:#91a8c2;
-  margin:0 0 12px 47px;
-  font-size:13px;
+.section-title h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--text-navy);
+}
+
+.section-sub {
+  color: var(--text-secondary);
+  margin: 0 0 12px 44px;
+  font-size: 12px;
 }
 
 /* TIERS */
-
-.tiers{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:6px;
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
 }
 
-.tier{
-  min-width:0;
-  padding:10px 4px;
-  text-align:center;
-  border-radius:15px;
-  background:#081d32;
-  border:1px solid #17658e;
+.tier {
+  min-width: 0;
+  padding: 12px 3px;
+  text-align: center;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1.2px solid var(--blue-neon-border);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+  cursor: pointer;
 }
 
-.tier:nth-child(2){border-color:#007cff}
-.tier:nth-child(3){border-color:#9b31ff}
-.tier:nth-child(4){border-color:#d99a12}
-.tier:nth-child(5){border-color:#ff2860}
-
-.tier-icon{
-  font-size:25px;
+.tier:hover {
+  transform: translateY(-2px);
+  border-color: var(--blue-neon-border-strong);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.08), var(--blue-neon-glow);
 }
 
-.tier-name{
-  font-size:13px;
-  font-weight:800;
-  margin-top:4px;
+.tier-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
 }
 
-.tier-amount{
-  color:#c4d2e4;
-  font-size:13px;
-  margin-top:5px;
+.tier:nth-child(1) .tier-badge { background: #00b074; color: #ffffff; box-shadow: 0 2px 6px rgba(0, 176, 116, 0.25); }
+.tier:nth-child(2) .tier-badge { background: #0070f3; color: #ffffff; box-shadow: 0 2px 6px rgba(0, 112, 243, 0.25); }
+.tier:nth-child(3) .tier-badge { background: #8e44ad; color: #ffffff; box-shadow: 0 2px 6px rgba(142, 68, 173, 0.25); }
+.tier:nth-child(4) .tier-badge { background: #f39c12; color: #ffffff; box-shadow: 0 2px 6px rgba(243, 156, 18, 0.25); }
+.tier:nth-child(5) .tier-badge { background: #e84393; color: #ffffff; box-shadow: 0 2px 6px rgba(232, 67, 147, 0.25); }
+
+.tier-badge svg {
+  width: 15px;
+  height: 15px;
 }
 
-.rate{
-  color:#19ef89;
-  font-size:22px;
-  font-weight:900;
-  margin-top:8px;
+.tier-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #486581;
+  margin-top: 2px;
 }
 
-.tier:nth-child(2) .rate{color:#00a7ff}
-.tier:nth-child(3) .rate{color:#d05bff}
-.tier:nth-child(4) .rate{color:#ffc21d}
-.tier:nth-child(5) .rate{color:#ff4d79}
+.tier-amount {
+  color: #8097b0;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 3px;
+}
 
-.daily{
-  color:#aabbd0;
-  font-size:12px;
-  margin-top:3px;
+.rate {
+  font-size: 15.5px;
+  font-weight: 800;
+  margin-top: 5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tier:nth-child(1) .rate { color: #00b894; }
+.tier:nth-child(2) .rate { color: #0070f3; }
+.tier:nth-child(3) .rate { color: #8e44ad; }
+.tier:nth-child(4) .rate { color: #f39c12; }
+.tier:nth-child(5) .rate { color: #e84393; }
+
+.daily {
+  color: #8097b0;
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 /* BUTTONS */
-
-.two-buttons{
-  display:grid;
-  grid-template-columns:1.25fr 1fr;
-  gap:9px;
-  margin-top:12px;
+.two-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
 }
 
-.big-btn{
-  padding:15px 8px;
-  border-radius:15px;
-  font-size:15px;
-  font-weight:900;
+.big-btn {
+  padding: 13px 12px;
+  border-radius: 16px;
+  font-size: 13.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
-.deposit-btn{
-  background:linear-gradient(135deg,#087eff,#0062e8);
-  color:white;
-  box-shadow:0 5px 20px #0077ff22;
+.big-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
-.calc-btn{
-  background:#102842;
-  border:1px solid #245275;
-  color:white;
+.deposit-btn {
+  flex: 1.1;
+  background: linear-gradient(90deg, #0099ff 0%, #0066ff 100%);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 102, 255, 0.28);
+}
+
+.calc-btn {
+  flex: 1;
+  background: #ffffff;
+  border: 1.2px solid var(--blue-neon-border);
+  color: var(--text-navy);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+}
+
+.calc-btn svg {
+  color: var(--accent-blue);
+}
+
+.calc-btn:active {
+  background: #f0f7ff;
 }
 
 /* ACTIVE MINING */
-
-.active-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin:20px 0 9px;
+.active-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 22px 0 10px;
 }
 
-.active-title{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  font-size:21px;
-  font-weight:900;
+.active-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: var(--text-navy);
 }
 
-.view-btn{
-  padding:9px 13px;
-  border-radius:14px;
-  background:#0c2945;
-  border:1px solid #245a82;
-  color:#cbd9ea;
+.active-title svg {
+  width: 20px;
+  height: 20px;
+  color: var(--accent-blue);
 }
 
-.active-mining{
-  display:grid;
-  grid-template-columns:52px 1fr 1fr 105px;
-  align-items:center;
-  gap:9px;
-  padding:13px;
-  border-radius:17px;
-  border:1px solid #123c57;
-  background:#061a2b;
+.view-btn {
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1.2px solid var(--blue-neon-border);
+  color: var(--accent-blue);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
 }
 
-.coin{
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#11a98b;
-  font-size:28px;
+.view-btn:active {
+  background: #f0f7ff;
 }
 
-.active-info strong{
-  display:block;
-  font-size:16px;
+.active-mining {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  border: 1.5px solid var(--blue-neon-border-strong);
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.05), var(--blue-neon-glow);
 }
 
-.active-reward{
-  color:#13ed87;
-  font-size:17px;
-  font-weight:900;
-  margin-top:5px;
+.coin-badge {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #00a2ff 0%, #0066ff 100%);
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 900;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.25);
 }
 
-.active-date{
-  color:#8fa7c1;
-  font-size:12px;
-  margin-top:4px;
+.active-info {
+  flex: 1;
+  min-width: 0;
 }
 
-.next{
-  color:#91a8c1;
-  font-size:13px;
+.active-info strong {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-navy);
 }
 
-.next-time{
-  color:#16ed88;
-  font-size:19px;
-  font-weight:900;
-  margin-top:5px;
+.active-tag {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #e6f9f0;
+  color: #00b074;
+  font-weight: 800;
 }
 
-.active-claim{
-  padding:13px 5px;
-  border-radius:13px;
-  background:#537c25;
-  color:#b7c4ae;
-  font-size:15px;
-  font-weight:900;
+.active-reward {
+  color: #00b074;
+  font-size: 14.5px;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.active-date {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.next-wrap {
+  text-align: right;
+  min-width: 90px;
+}
+
+.next-label {
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.next-time {
+  color: var(--accent-blue);
+  font-size: 15.5px;
+  font-weight: 800;
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.4px;
 }
 
 /* INFO CARDS */
-
-.info-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:12px;
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 2px;
+  margin-bottom: 12px;
 }
 
-.info-card{
-  padding:14px;
-  border-radius:16px;
-  background:#081c31;
-  border:1px solid #164a76;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.info-card {
+  padding: 14px 12px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1.2px solid var(--blue-neon-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.05), var(--blue-neon-glow);
+  transition: all 0.2s;
 }
 
-.info-left{
-  display:flex;
-  align-items:center;
-  gap:9px;
+.info-card:active {
+  background: #f0f7ff;
+  border-color: var(--blue-neon-border-strong);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
 }
 
-.info-icon{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  background:#0a3973;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
+/* REFERRAL PROMO CARD */
+.referral-card {
+  position: relative;
+  background: #ffffff;
+  border: 1.5px solid var(--blue-neon-border-strong);
+  border-radius: 22px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
+  margin-top: 2px;
+  margin-bottom: 10px;
+  transition: all 0.2s;
 }
 
-.info-card strong{
-  display:block;
-  font-size:14px;
+.referral-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
 }
 
-.info-card small{
-  display:block;
-  color:#8ea6c0;
-  margin-top:4px;
-  font-size:11px;
+.referral-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
 }
 
-/* BOTTOM NAV */
-
-.bottom-nav{
-  position:fixed;
-  left:12px;
-  right:12px;
-  bottom:calc(10px + env(safe-area-inset-bottom));
-  height:78px;
-  z-index:99;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  padding:6px;
-  border-radius:28px;
-  background:#101f33ee;
-  border:1px solid #28445e;
-  backdrop-filter:blur(14px);
-  box-shadow:0 10px 35px #00000055;
+.referral-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
-.bottom-btn{
-  position:relative;
-  border-radius:21px;
-  background:transparent;
-  color:#8da0b8;
-  font-size:12px;
-  font-weight:700;
+.referral-text-wrap {
+  flex: 1;
+  min-width: 0;
 }
 
-.nav-icon{
-  display:block;
-  font-size:25px;
-  margin-bottom:4px;
+.referral-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #0a2540;
+  letter-spacing: -0.2px;
+  line-height: 1.3;
 }
 
-.bottom-btn.active{
-  background:linear-gradient(145deg,#aaff00,#42ed16);
-  color:#071207;
-  box-shadow:0 0 25px #61ff0055;
-  transform:translateY(-9px);
-  height:78px;
+.referral-title .ref-highlight {
+  color: #0284c7;
+  font-weight: 900;
 }
 
-/* MOBILE */
-
-@media(max-width:900px){.telegram-scale{
-  transform:scale(0.85);
-  transform-origin:top center;
-  width:117.65%;
-  margin-left:-8.825%;
-  margin-bottom:120px;
-}
-.container{
-    padding:8px 10px 22px;
-  }
-
-  .header{
-    margin-bottom:10px;
-  }
-
-  .avatar{
-    width:52px;
-    height:52px;
-    font-size:26px;
-  }
-
-  .username{
-    font-size:17px;
-  }
-
-  .header-btn{
-    width:43px;
-    height:43px;
-    font-size:19px;
-  }
-
-  .balance-card{
-    padding:8px 10px;
-  }
-
-  .balance-card:after{
-    right:8px;
-    top:48px;
-    width:72px;
-    height:72px;
-    font-size:46px;
-  }
-
-  .balance{
-    font-size:26px;
-  }
-
-  .usd{
-    font-size:17px;
-  }
-
-  .mining-status{
-    font-size:11px;
-    padding:7px 8px;
-    right:10px;
-  }
-
-  .profit-box{
-    padding:6px 3px;
-  }
-
-  .profit-box .value{
-    font-size:13px;
-  }
-
-  .profit-box small{
-    font-size:9px;
-  }
-
-  .action-btn{
-    font-size:12px;
-    padding:11px 3px;
-  }
-
-  .free-top{
-    grid-template-columns:minmax(0,1fr) 112px;
-  }
-
-  .free-info{
-    grid-template-columns:42px minmax(0,1fr);
-    gap:7px;
-  }
-
-  .free-icon{
-    width:42px;
-    height:42px;
-    font-size:22px;
-  }
-
-  .free-title{
-    font-size:18px;
-  }
-
-  .free-desc{
-    font-size:11px;
-  }
-
-  .reward{
-    font-size:22px;
-  }
-
-  .reward span{
-    font-size:12px;
-  }
-
-  .free-note{
-    font-size:10px;
-  }
-
-  .claim-box{
-    padding:8px 3px;
-  }
-
-  .claim-time{
-    font-size:15px;
-  }
-
-  .claim-btn{
-    padding:11px;
-    font-size:14px;
-  }
-
-  .section-title h2{
-    font-size:20px;
-  }
-
-  .section-sub{
-    font-size:12px;
-    margin-left:45px;
-  }
-
-  .tier{
-    padding:9px 2px;
-  }
-
-  .tier-icon{
-    font-size:22px;
-  }
-
-  .tier-name{
-    font-size:11px;
-  }
-
-  .tier-amount{
-    font-size:11px;
-  }
-
-  .rate{
-    font-size:18px;
-  }
-
-  .daily{
-    font-size:10px;
-  }
-
-  .big-btn{
-    padding:13px 5px;
-    font-size:14px;
-  }
-
-  .active-mining{
-    grid-template-columns:45px 1fr;
-  }
-
-  .active-mining .next{
-    grid-column:2;
-  }
-
-  .active-claim{
-    display:none;
-  }
-
-  .info-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .info-card{
-    padding:11px 8px;
-  }
-
-  .info-card strong{
-    font-size:12px;
-  }
-
-  .info-card small{
-    font-size:9px;
-  }
-
-  .bottom-nav{
-    height:72px;
-  }
-
-  .bottom-btn.active{
-    height:72px;
-  }
-}/* COMPACT FREE MINING FINAL */
-@media (max-width:900px){
-
-  .free-card{
-    padding:14px !important;
-  }
-
-  .free-top{
-    display:grid !important;
-    grid-template-columns:minmax(0,1fr) 120px !important;
-    gap:8px !important;
-    align-items:start !important;
-  }
-
-  .free-top > div:first-child{
-    display:flex !important;
-    gap:8px !important;
-    min-width:0 !important;
-  }
-
-  .free-icon{
-    width:44px !important;
-    height:44px !important;
-    min-width:44px !important;
-    font-size:22px !important;
-  }
-
-  .free-card .card-title{
-    font-size:19px !important;
-    margin:0 !important;
-  }
-
-  .free-card .muted{
-    font-size:11px !important;
-    line-height:1.2 !important;
-  }
-
-  .free-card .reward{
-    font-size:23px !important;
-    margin-top:5px !important;
-    white-space:nowrap !important;
-  }
-
-  .free-top .claim-box{
-    width:120px !important;
-    min-width:120px !important;
-    padding:8px 4px !important;
-  }
-
-  .free-top .claim-time{
-    font-size:16px !important;
-  }
-
-  .free-card .claim-btn{
-    margin-top:9px !important;
-    padding:11px !important;
-    font-size:14px !important;
-  }
-
-}html{
-  -webkit-text-size-adjust:100%;
-  text-size-adjust:100%;
-  width:100%;
-  min-width:100%;
-  overflow-x:hidden;
+.referral-line {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+  line-height: 1.35;
 }
 
-body{
-  width:100%;
-  min-width:100%;
-  overflow-x:hidden;
-  -webkit-text-size-adjust:100%;
-  text-size-adjust:100%;
+.referral-line .ref-line-icon.lightning {
+  color: #10b981;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.referral-line .ref-line-icon.star {
+  color: #0284c7;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.referral-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding-top: 2px;
+  gap: 10px;
+}
+
+.avatar-stack {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.avatar-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  margin-left: -8px;
+  background: #e0f2fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(2, 132, 199, 0.12);
+}
+
+.avatar-circle:first-child {
+  margin-left: 0;
+}
+
+.avatar-circle.avatar-count {
+  background: #e0f2fe;
+  color: #0284c7;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
+}
+
+.ref-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ref-btn {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.ref-copy-btn {
+  background: #f0f7ff;
+  border: 1.2px solid var(--blue-neon-border);
+  color: #0284c7;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+}
+
+.ref-copy-btn svg {
+  width: 15px;
+  height: 15px;
+  color: #0284c7;
+}
+
+.ref-copy-btn:active {
+  transform: scale(0.97);
+  background: #e0f2fe;
+}
+
+.ref-invite-btn {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  border: none;
+  color: #ffffff;
+  padding: 0 20px;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+}
+
+.ref-invite-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.ref-invite-btn:active {
+  transform: scale(0.97);
+  opacity: 0.95;
+}
+
+/* PAYOUT REVIEWS CARD */
+.payout-card {
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1.2px solid var(--blue-neon-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.05), var(--blue-neon-glow);
+  transition: all 0.2s;
+  margin-top: 0;
+  margin-bottom: 14px;
+}
+
+.payout-card:active {
+  background: #f0f7ff;
+  border-color: var(--blue-neon-border-strong);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
+}
+
+.payout-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.payout-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #fbc531, #f39c12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.28);
+  flex-shrink: 0;
+}
+
+.payout-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.payout-left strong {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text-navy);
+}
+
+.payout-left small {
+  display: block;
+  color: #718ba8;
+  margin-top: 2px;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.payout-arrow {
+  color: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payout-arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+.info-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #0088ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 136, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.info-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.info-card strong {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text-navy);
+}
+
+.info-card small {
+  display: block;
+  color: #718ba8;
+  margin-top: 2px;
+  font-size: 11px;
+}
+
+.chevron-icon {
+  color: #9ab2cb;
+  display: flex;
+}
+
+.chevron-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* BOTTOM NAVIGATION */
+.bottom-nav {
+  position: fixed;
+  left: 14px;
+  right: 14px;
+  max-width: 440px;
+  margin: 0 auto;
+  bottom: calc(10px + var(--safe-bottom));
+  height: 68px;
+  z-index: 999;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  padding: 5px 6px;
+  gap: 4px;
+  border-radius: 34px;
+  background: #ffffff;
+  border: 1.5px solid var(--blue-neon-border-strong);
+  box-shadow: 0 10px 32px rgba(0, 102, 255, 0.1), var(--blue-neon-glow-strong);
+}
+
+.bottom-btn {
+  position: relative;
+  height: 56px;
+  border-radius: 20px;
+  background: transparent;
+  color: #486581;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+}
+
+.nav-svg {
+  width: 21px;
+  height: 21px;
+  stroke-width: 1.85px;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.bottom-btn:active {
+  transform: scale(0.95);
+}
+
+.bottom-btn.active {
+  color: #ffffff;
+  background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
+  border-radius: 24px;
+  box-shadow: 0 6px 18px rgba(0, 102, 255, 0.4);
+}
+
+.bottom-btn.active .nav-svg {
+  color: #ffffff;
+}
+
+.nav-indicator {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: transparent;
+  margin-top: 1px;
+}
+
+.bottom-btn.active .nav-indicator {
+  background: #ffffff;
+}
+
+/* TASK PAGE & MODALS */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #f1f7fd;
+  overflow-y: auto;
+  padding: 16px 14px calc(40px + var(--safe-bottom));
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-top: max(4px, env(safe-area-inset-top));
+}
+
+.modal-header h1 {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: #0a2240;
+}
+
+.modal-header p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin: 0;
+}
+
+.close-btn {
+  background: #ffffff;
+  color: #0a2240;
+  border: 1.2px solid var(--blue-neon-border);
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(10, 37, 64, 0.04), var(--blue-neon-glow-subtle);
+}
+
+.close-btn:active {
+  background: #eaf3fd;
+}
+
+.task-card {
+  background: #ffffff;
+  border: 1.2px solid var(--blue-neon-border);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 12px;
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: 0 4px 18px rgba(10, 37, 64, 0.04), var(--blue-neon-glow-subtle);
+}
+
+.task-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.task-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0284c7 0%, #0066cc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+}
+
+.task-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.task-content {
+  flex: 1;
+}
+
+.task-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0a2240;
+}
+
+.task-desc {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.task-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #eef4fb;
+}
+
+.task-reward {
+  color: #0284c7;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.task-action-btn {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 3px 12px rgba(2, 132, 199, 0.28);
+}
+
+/* MODAL GENERIC */
+.info-modal-body {
+  background: #ffffff;
+  border: 1.2px solid var(--blue-neon-border);
+  border-radius: 20px;
+  padding: 18px;
+  margin-top: 12px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+  box-shadow: 0 4px 18px rgba(10, 37, 64, 0.04), var(--blue-neon-glow-subtle);
+}
+
+.info-modal-body h3 {
+  color: #0a2240;
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.info-list {
+  padding-left: 18px;
+  margin: 10px 0;
+}
+
+.info-list li {
+  margin-bottom: 8px;
+}
+
+/* RESPONSIVE FINE-TUNING */
+@media (max-width: 360px) {
+  .container {
+    padding: 8px 10px 20px;
+  }
+  .balance {
+    font-size: 28px;
+  }
+  .tiers {
+    gap: 4px;
+  }
+  .tier {
+    padding: 8px 2px;
+  }
+  .rate {
+    font-size: 15px;
+  }
+  .tier-amount {
+    font-size: 10px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="container telegram-scale">
+<!-- FLOWING SKY-BLUE BACKGROUND SHAPES -->
+<div class="bg-waves" aria-hidden="true">
+  <svg class="bg-waves-svg" viewBox="0 0 460 920" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0C130 0 280 35 460 110V330C330 270 170 340 0 280V0Z" fill="url(#wave-grad-1)" opacity="0.6"/>
+    <path d="M460 160C360 210 210 200 110 300C20 390 0 490 0 490V920H460V160Z" fill="url(#wave-grad-2)" opacity="0.32"/>
+    <path d="M0 580C140 520 310 610 460 540V920H0V580Z" fill="url(#wave-grad-3)" opacity="0.38"/>
+    <defs>
+      <linearGradient id="wave-grad-1" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#bae6fd" stop-opacity="0.85"/>
+        <stop offset="50%" stop-color="#7dd3fc" stop-opacity="0.45"/>
+        <stop offset="100%" stop-color="#e0f2fe" stop-opacity="0.1"/>
+      </linearGradient>
+      <linearGradient id="wave-grad-2" x1="100%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#dbeafe" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="wave-grad-3" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#e0f2fe" stop-opacity="0.5"/>
+        <stop offset="100%" stop-color="#bae6fd" stop-opacity="0.3"/>
+      </linearGradient>
+    </defs>
+  </svg>
+</div>
+
+<div class="container" id="mainApp">
 
   <!-- HEADER -->
   <div class="header">
-
     <div class="profile">
-      <div class="avatar">👨‍💻</div>
-
-      <div>
-        <div class="username" id="username">Hridoy Bro..</div>
-        <div class="level">👑 Level 1 ›</div>
+      <div class="avatar" id="avatarBadge">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M6 3h13v3.2H9.8v4.2h8.2v3.2H9.8V21H6V3z"/>
+        </svg>
+      </div>
+      <div class="user-info">
+        <div class="username">Zenivora</div>
+        <div class="user-subtitle">Mine Today, A Better Tomorrow</div>
+        <span id="username" style="display:none;"></span>
       </div>
     </div>
 
     <div class="header-actions">
-      <button class="header-btn">🔔</button>
-      <button class="header-btn">⚙️</button>
+      <button class="header-btn" title="Notifications" onclick="openNotifications()">
+        <span class="notif-dot"></span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+      </button>
     </div>
-
   </div>
 
-
-  <!-- BALANCE -->
+  <!-- BALANCE CARD -->
   <div class="balance-card">
+    <div class="balance-card-watermark">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+      </svg>
+    </div>
 
-    <div class="balance-label">Total Balance 👁</div>
+    <div class="balance-top-row">
+      <div class="balance-label">
+        <span>Total Balance</span>
+        <span onclick="toggleBalanceVisibility()" style="display:inline-flex;cursor:pointer;">
+          <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </span>
+      </div>
 
-    <div class="mining-status">🟢 Mining Active ›</div>
+      <div class="wallet-badge" onclick="topUp()">
+        <div class="wallet-badge-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+            <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+            <path d="M18 12a2 2 0 0 0 0 4h4v-4z"></path>
+          </svg>
+        </div>
+        <div class="wallet-badge-text">
+          <span class="wallet-badge-title">Wallet</span>
+          <span class="wallet-badge-chain">BEP20</span>
+        </div>
+        <svg class="wallet-badge-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </div>
+    </div>
 
     <div class="balance">
-      <span>$</span><span id="balance">0.00</span>
-      <span style="font-size:22px">USDT</span>
+      <span class="balance-symbol">$</span><span id="balance">0.00</span>
+      <span class="currency">USDT</span>
     </div>
 
     <div class="usd">≈ $<span id="usdBalance">0.00</span></div>
 
     <div class="profit-grid">
-
       <div class="profit-box">
-        <div class="icon">◷</div>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
         <span class="value">$0.00</span>
         <small>Hourly Profit</small>
       </div>
 
       <div class="profit-box">
-        <div class="icon">▣</div>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
         <span class="value">$0.01</span>
         <small>Daily Profit</small>
       </div>
 
       <div class="profit-box">
-        <div class="icon">▣</div>
+        <div class="icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+            <polyline points="17 6 23 6 23 12"></polyline>
+          </svg>
+        </div>
         <span class="value">$0.30</span>
         <small>Monthly Profit</small>
       </div>
-
     </div>
-
   </div>
 
-
-  <!-- ACTION -->
+  <!-- ACTION NAVIGATION -->
   <div class="action-nav">
-
-    <button class="action-btn active">⛏️ Mine</button>
-    <button class="action-btn" onclick="topUp()">💳 Deposit</button>
-    <button class="action-btn" onclick="withdraw()">↥ Withdraw</button>
-    <button class="action-btn" onclick="historyPage()">▤ History</button>
-
+    <button class="action-btn active" onclick="switchMainTab('mine')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 20L15.5 8.5"></path>
+        <path d="M20 20L8.5 8.5"></path>
+        <path d="M14 4a12 12 0 0 1 6 6"></path>
+        <path d="M10 4a12 12 0 0 0-6 6"></path>
+      </svg>
+      Mine
+    </button>
+    <button class="action-btn" onclick="topUp()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="1" y="4" width="22" height="16" rx="3" ry="3"></rect>
+        <line x1="1" y1="10" x2="23" y2="10"></line>
+      </svg>
+      Deposit
+    </button>
+    <button class="action-btn" onclick="withdraw()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="19" x2="12" y2="5"></line>
+        <polyline points="5 12 12 5 19 12"></polyline>
+      </svg>
+      Withdraw
+    </button>
+    <button class="action-btn" onclick="historyPage()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 14 14"></polyline>
+      </svg>
+      History
+    </button>
   </div>
 
-
-  <!-- FREE MINING -->
+  <!-- FREE MINING CARD -->
   <div class="free-card">
-
     <div class="free-top">
-
       <div class="free-info">
-
-        <div class="free-icon">⛏️</div>
-
+        <div class="free-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 20L15.5 8.5"></path>
+            <path d="M20 20L8.5 8.5"></path>
+            <path d="M14 4a12 12 0 0 1 6 6"></path>
+            <path d="M10 4a12 12 0 0 0-6 6"></path>
+          </svg>
+        </div>
         <div>
-
           <div class="free-title">Free Mining</div>
-
-          <div class="free-desc">
-            Login daily and earn free USDT
-          </div>
-
+          <div class="free-desc">Login daily and earn free USDT</div>
           <div class="reward">
             $0.01 <span>/ day</span>
           </div>
-
           <div class="free-note">
-            🎁 Claim once every 24 hours
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 12 20 22 4 22 4 12"></polyline>
+              <rect x="2" y="7" width="20" height="5"></rect>
+              <line x1="12" y1="22" x2="12" y2="7"></line>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+            Claim once every 24 hours
           </div>
-
         </div>
-
       </div>
-
 
       <div class="claim-box">
-        <small>24h Reward</small>
+        <small>24H REWARD</small>
         <div class="claim-time" id="freeTimer">READY</div>
       </div>
-
     </div>
 
     <button class="claim-btn" onclick="claimFreeMining()">
-      ✨ Claim Now
-    </button>
-
-  </div>
-
-
-  <!-- DEPOSIT MINING -->
-  <div class="section-title">
-    <div class="section-icon">💎</div>
-    <h2>Deposit Mining</h2>
-  </div>
-
-  <p class="section-sub">
-    Top up and earn higher daily rewards
-  </p>
-
-
-  <div class="tiers">
-
-    <div class="tier">
-      <div class="tier-icon">🟢</div>
-      <div class="tier-name">Starter</div>
-      <div class="tier-amount">$3+</div>
-      <div class="rate">2.5%</div>
-      <div class="daily">Daily</div>
-    </div>
-
-    <div class="tier">
-      <div class="tier-icon">🔵</div>
-      <div class="tier-name">Bronze</div>
-      <div class="tier-amount">$15+</div>
-      <div class="rate">3%</div>
-      <div class="daily">Daily</div>
-    </div>
-
-    <div class="tier">
-      <div class="tier-icon">🟣</div>
-      <div class="tier-name">Silver</div>
-      <div class="tier-amount">$25+</div>
-      <div class="rate">3.5%</div>
-      <div class="daily">Daily</div>
-    </div>
-
-    <div class="tier">
-      <div class="tier-icon">🟡</div>
-      <div class="tier-name">Gold</div>
-      <div class="tier-amount">$50+</div>
-      <div class="rate">4%</div>
-      <div class="daily">Daily</div>
-    </div>
-
-    <div class="tier">
-      <div class="tier-icon">🔴</div>
-      <div class="tier-name">VIP</div>
-      <div class="tier-amount">$100+</div>
-      <div class="rate">4.5%</div>
-      <div class="daily">Daily</div>
-    </div>
-
-  </div>
-
-
-  <div class="two-buttons">
-    <button class="big-btn deposit-btn" onclick="topUp()">
-      ⊕ &nbsp; Top Up Now
-    </button>
-
-    <button class="big-btn calc-btn" onclick="calculator()">
-      🧮 &nbsp; Mining Calculator
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 12 20 22 4 22 4 12"></polyline>
+        <rect x="2" y="7" width="20" height="5"></rect>
+        <line x1="12" y1="22" x2="12" y2="7"></line>
+        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+      </svg>
+      Claim Now
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
     </button>
   </div>
 
+  <!-- DEPOSIT MINING SECTION -->
+  <div class="deposit-card">
+    <div class="section-title">
+      <div class="section-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="6 2 18 2 22 8 12 22 2 8 6 2"></polygon>
+          <line x1="2" y1="8" x2="22" y2="8"></line>
+        </svg>
+      </div>
+      <h2>Deposit Mining</h2>
+    </div>
+    <p class="section-sub">Top up and earn higher daily rewards</p>
 
-  <!-- ACTIVE MINING -->
-  <div class="active-head">
+    <div class="tiers">
+      <div class="tier" onclick="topUpTier('Starter')">
+        <div class="tier-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div class="tier-name">Starter</div>
+        <div class="tier-amount">$3+</div>
+        <div class="rate">2.5%</div>
+        <div class="daily">Daily</div>
+      </div>
 
-    <div class="active-title">
-      📊 Your Active Mining
+      <div class="tier" onclick="topUpTier('Bronze')">
+        <div class="tier-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"></path>
+          </svg>
+        </div>
+        <div class="tier-name">Bronze</div>
+        <div class="tier-amount">$15+</div>
+        <div class="rate">3%</div>
+        <div class="daily">Daily</div>
+      </div>
+
+      <div class="tier" onclick="topUpTier('Silver')">
+        <div class="tier-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <div class="tier-name">Silver</div>
+        <div class="tier-amount">$25+</div>
+        <div class="rate">3.5%</div>
+        <div class="daily">Daily</div>
+      </div>
+
+      <div class="tier" onclick="topUpTier('Gold')">
+        <div class="tier-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"></path>
+          </svg>
+        </div>
+        <div class="tier-name">Gold</div>
+        <div class="tier-amount">$50+</div>
+        <div class="rate">4%</div>
+        <div class="daily">Daily</div>
+      </div>
+
+      <div class="tier" onclick="topUpTier('VIP')">
+        <div class="tier-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="6 2 18 2 22 8 12 22 2 8 6 2"></polygon>
+            <line x1="2" y1="8" x2="22" y2="8"></line>
+          </svg>
+        </div>
+        <div class="tier-name">VIP</div>
+        <div class="tier-amount">$100+</div>
+        <div class="rate">4.5%</div>
+        <div class="daily">Daily</div>
+      </div>
     </div>
 
-    <button class="view-btn">View All ›</button>
+    <div class="two-buttons">
+      <button class="big-btn deposit-btn" onclick="topUp()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="16"></line>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+        Top Up Now
+      </button>
 
+      <button class="big-btn calc-btn" onclick="calculator()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+          <line x1="8" y1="6" x2="16" y2="6"></line>
+          <line x1="16" y1="14" x2="16" y2="18"></line>
+          <path d="M16 10h.01"></path>
+          <path d="M12 10h.01"></path>
+          <path d="M8 10h.01"></path>
+          <path d="M12 14h.01"></path>
+          <path d="M8 14h.01"></path>
+          <path d="M12 18h.01"></path>
+          <path d="M8 18h.01"></path>
+        </svg>
+        Mining Calculator
+      </button>
+    </div>
   </div>
 
-
-  <div class="active-mining">
-
-    <div class="coin">₮</div>
-
-    <div class="active-info">
-      <strong>Free Mining <span style="color:#14ef88">ACTIVE</span></strong>
-      <div class="active-reward">$0.01 / day</div>
-      <div class="active-date">Started: 15 Sep 2025, 03:28</div>
-    </div>
-
-    <div class="next">
-      Next claim in
-      <div class="next-time" id="nextTimer">24:00:00</div>
-    </div>
-
-    <button class="active-claim">Claim</button>
-
-  </div>
-
-
-  <!-- INFO -->
-  <div class="info-grid">
-
-    <div class="info-card">
-      <div class="info-left">
-        <div class="info-icon">?</div>
-        <div>
-          <strong>How to Earn?</strong>
-          <small>Learn how mining works</small>
+  <!-- REFERRAL PROMO CARD -->
+  <div class="referral-card">
+    <div class="referral-top">
+      <div class="referral-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <div class="referral-text-wrap">
+        <div class="referral-title">Get UpTo <span class="ref-highlight">$1</span> for an invite</div>
+        <div class="referral-line">
+          <span class="ref-line-icon lightning">⚡</span>
+          <span>Your hourly income will increase by +50%!</span>
+        </div>
+        <div class="referral-line">
+          <span class="ref-line-icon star">★</span>
+          <span>Automatic 5-level USDT income</span>
         </div>
       </div>
-      <b>›</b>
     </div>
 
-    <div class="info-card">
-      <div class="info-left">
-        <div class="info-icon">▤</div>
-        <div>
-          <strong>Rules & FAQs</strong>
-          <small>Read important information</small>
+    <div class="referral-bottom">
+      <div class="avatar-stack">
+        <div class="avatar-circle" style="background:#fed7aa;">
+          <svg viewBox="0 0 32 32" width="26" height="26" fill="none">
+            <circle cx="16" cy="12" r="6" fill="#b45309"/>
+            <path d="M5 28c0-5.5 4.9-9 11-9s11 3.5 11 9" fill="#b45309"/>
+          </svg>
         </div>
+        <div class="avatar-circle" style="background:#fce7f3;">
+          <svg viewBox="0 0 32 32" width="26" height="26" fill="none">
+            <circle cx="16" cy="12" r="6" fill="#be185d"/>
+            <path d="M5 28c0-5.5 4.9-9 11-9s11 3.5 11 9" fill="#be185d"/>
+          </svg>
+        </div>
+        <div class="avatar-circle" style="background:#bae6fd;">
+          <svg viewBox="0 0 32 32" width="26" height="26" fill="none">
+            <circle cx="16" cy="12" r="6" fill="#0369a1"/>
+            <path d="M5 28c0-5.5 4.9-9 11-9s11 3.5 11 9" fill="#0369a1"/>
+          </svg>
+        </div>
+        <div class="avatar-circle avatar-count">+99</div>
       </div>
-      <b>›</b>
-    </div>
 
+      <div class="ref-actions">
+        <button class="ref-btn ref-copy-btn" onclick="copyRefLink()" title="Copy referral link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copy
+        </button>
+
+        <button class="ref-btn ref-invite-btn" onclick="shareOnTelegram()" title="Invite friends">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+          Invite
+        </button>
+      </div>
+    </div>
   </div>
 
-</div>
-<!-- TASK PAGE -->
-<div id="taskPage" style="
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:9999;
-    background:#07111f;
-    overflow-y:auto;
-    padding:20px 14px 100px;
-">
-
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-        <div>
-            <h1 style="font-size:28px;margin:0 0 5px;"> 📝Tasks</h1>
-            <p style="color:#8ea6c8;margin:0;">Complete tasks & earn rewards</p>
-        </div>
-
-        <button onclick="closeTaskPage()" style="
-            background:#1b2d45;
-            color:#fff;
-            border:0;
-            border-radius:12px;
-            padding:10px 15px;
-            font-size:15px;
-        ">✕ Close</button>
+  <!-- PAYOUT REVIEWS CARD -->
+  <div class="payout-card" onclick="openPayoutReviews()" role="button" tabindex="0">
+    <div class="payout-left">
+      <div class="payout-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </div>
+      <div>
+        <strong>Payout reviews</strong>
+        <small>See real payments from our community</small>
+      </div>
     </div>
+    <div class="payout-arrow">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </div>
+  </div>
 
+</div><!-- /container -->
+
+
+<!-- TASK PAGE MODAL -->
+<div id="taskPage" class="modal-overlay">
+  <div style="max-width:480px;margin:0 auto;">
+    <div class="modal-header">
+      <div>
+        <h1>Tasks</h1>
+        <p>Complete tasks & earn instant rewards</p>
+      </div>
+      <button class="close-btn" onclick="closeTaskPage()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+        Close
+      </button>
+    </div>
 
     <!-- TASK 1 -->
-    <div style="
-        background:#0b263d;
-        border:1px solid #164c75;
-        border-radius:20px;
-        padding:18px;
-        margin-bottom:14px;
-    ">
-
-        <div style="display:flex;align-items:center;gap:12px;">
-
-            <div style="
-                width:48px;
-                height:48px;
-                border-radius:14px;
-                background:#229ed9;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                font-size:25px;
-            ">📢</div>
-
-            <div style="flex:1;">
-                <div style="font-size:17px;font-weight:700;">
-                    Join Our Telegram Channel
-                </div>
-
-                <div style="color:#8ea6c8;font-size:13px;margin-top:4px;">
-                    Join the official channel
-                </div>
-            </div>
-
+    <div class="task-card">
+      <div class="task-top">
+        <div class="task-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"></path>
+          </svg>
         </div>
-
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
-
-            <span style="color:#00ff9d;font-weight:700;">
-                +0.01 USDT
-            </span>
-
-            <button onclick="openTelegramTask('https://t.me/ZenivoraUpdate')" style="
-                background:#229ed9;
-                color:#fff;
-                border:0;
-                border-radius:12px;
-                padding:10px 20px;
-                font-weight:700;
-            ">
-                JOIN
-            </button>
-
+        <div class="task-content">
+          <div class="task-title">Join Our Telegram Channel</div>
+          <div class="task-desc">Join the official update channel for news</div>
         </div>
-
+      </div>
+      <div class="task-bottom">
+        <span class="task-reward">+0.01 USDT</span>
+        <button class="task-action-btn" onclick="openTelegramTask('https://t.me/ZenivoraUpdate')">JOIN</button>
+      </div>
     </div>
-
 
     <!-- TASK 2 -->
-    <div style="
-        background:#0b263d;
-        border:1px solid #164c75;
-        border-radius:20px;
-        padding:18px;
-        margin-bottom:14px;
-    ">
-
-        <div style="display:flex;align-items:center;gap:12px;">
-
-            <div style="
-                width:48px;
-                height:48px;
-                border-radius:14px;
-                background:#229ed9;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                font-size:25px;
-            ">👥</div>
-
-            <div style="flex:1;">
-                <div style="font-size:17px;font-weight:700;">
-                    Join Our Telegram Group
-                </div>
-
-                <div style="color:#8ea6c8;font-size:13px;margin-top:4px;">
-                    Join our community group
-                </div>
-            </div>
-
+    <div class="task-card">
+      <div class="task-top">
+        <div class="task-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"></path>
+          </svg>
         </div>
-
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
-
-            <span style="color:#00ff9d;font-weight:700;">
-                +0.01 USDT
-            </span>
-
-            <button onclick="openTelegramTask('https://t.me/ZenivoraCommunity')" style="
-                background:#229ed9;
-                color:#fff;
-                border:0;
-                border-radius:12px;
-                padding:10px 20px;
-                font-weight:700;
-            ">
-                JOIN
-            </button>
-
+        <div class="task-content">
+          <div class="task-title">Join Our Telegram Group</div>
+          <div class="task-desc">Join our official community group chat</div>
         </div>
-
+      </div>
+      <div class="task-bottom">
+        <span class="task-reward">+0.01 USDT</span>
+        <button class="task-action-btn" onclick="openTelegramTask('https://t.me/ZenivoraCommunity')">JOIN</button>
+      </div>
     </div>
-
 
     <!-- TASK 3 -->
-    <div style="
-        background:#0b263d;
-        border:1px solid #164c75;
-        border-radius:20px;
-        padding:18px;
-        margin-bottom:14px;
-    ">
-
-        <div style="display:flex;align-items:center;gap:12px;">
-
-            <div style="
-                width:48px;
-                height:48px;
-                border-radius:14px;
-                background:#229ed9;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                font-size:25px;
-            ">📣</div>
-
-            <div style="flex:1;">
-                <div style="font-size:17px;font-weight:700;">
-                    Join Payout Channel
-                </div>
-
-                <div style="color:#8ea6c8;font-size:13px;margin-top:4px;">
-                    Join official payout channel
-                </div>
-            </div>
-
+    <div class="task-card">
+      <div class="task-top">
+        <div class="task-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.75-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"></path>
+          </svg>
         </div>
-
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;">
-
-            <span style="color:#00ff9d;font-weight:700;">
-                +0.01 USDT
-            </span>
-
-            <button onclick="openTelegramTask('https://t.me/ZenivoraWithdraw')" style="
-                background:#229ed9;
-                color:#fff;
-                border:0;
-                border-radius:12px;
-                padding:10px 20px;
-                font-weight:700;
-            ">
-                JOIN
-            </button>
-
+        <div class="task-content">
+          <div class="task-title">Join Payout Channel</div>
+          <div class="task-desc">Join official transparent payout proof channel</div>
         </div>
+      </div>
+      <div class="task-bottom">
+        <span class="task-reward">+0.01 USDT</span>
+        <button class="task-action-btn" onclick="openTelegramTask('https://t.me/ZenivoraWithdraw')">JOIN</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- FRIENDS MODAL -->
+<div id="friendsModal" class="modal-overlay">
+  <div style="max-width:480px;margin:0 auto;">
+    <div class="modal-header">
+      <div>
+        <h1>Referral & Friends</h1>
+        <p>Invite friends and earn 10% lifetime commission</p>
+      </div>
+      <button class="close-btn" onclick="closeFriendsModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+        Close
+      </button>
     </div>
 
+    <div class="task-card" style="text-align:center;padding:24px 16px;">
+      <div style="width:48px;height:48px;border-radius:14px;background:#e0f2fe;border:1px solid #bae6fd;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:#0284c7;">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 19v2"></path>
+          <circle cx="10" cy="7.5" r="3.5"></circle>
+          <path d="M17.5 11a2.8 2.8 0 0 1 0 5.5"></path>
+          <path d="M21 21v-1.5a3 3 0 0 0-2.2-2.9"></path>
+        </svg>
+      </div>
+      <h2 style="font-size:18px;margin:0 0 6px;color:#0a2240;">Invite Friends & Earn</h2>
+      <p style="color:var(--text-secondary);font-size:13px;margin:0 0 16px;">
+        Share your unique referral link to earn 10% commission on all your friends' deposits and mining yields.
+      </p>
+
+      <div style="background:#f0f7ff;border:1px dashed #bae6fd;border-radius:12px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <span id="refLink" style="color:#0284c7;font-size:12px;font-weight:600;word-break:break-all;text-align:left;">https://t.me/ZenivoraBot?start=ref_user</span>
+        <button onclick="copyRefLink()" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#ffffff;font-weight:800;font-size:12px;padding:6px 14px;border-radius:8px;white-space:nowrap;box-shadow:0 2px 8px rgba(2,132,199,0.25);">Copy</button>
+      </div>
+
+      <button onclick="shareOnTelegram()" style="width:100%;margin-top:16px;padding:13px;border-radius:14px;background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;font-weight:800;font-size:14px;box-shadow:0 4px 16px rgba(2,132,199,0.28);">
+        Send to Telegram Friends
+      </button>
+    </div>
+  </div>
 </div>
+
+<!-- GIFT MODAL -->
+<div id="giftModal" class="modal-overlay">
+  <div style="max-width:480px;margin:0 auto;">
+    <div class="modal-header">
+      <div>
+        <h1>Daily Rewards & Gifts</h1>
+        <p>Claim surprise drops & promo vouchers</p>
+      </div>
+      <button class="close-btn" onclick="closeGiftModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+        Close
+      </button>
+    </div>
+
+    <div class="task-card">
+      <h3 style="color:#0a2240;margin-top:0;">Redeem Promo Code</h3>
+      <p style="color:var(--text-secondary);font-size:12px;">Enter an official promo code from the Zenivora announcement channel to redeem bonus USDT.</p>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <input type="text" id="promoInput" placeholder="Enter promo code" style="flex:1;background:#f0f7ff;border:1px solid #ddecfa;border-radius:10px;padding:10px 12px;color:#0a2240;font-size:13px;outline:none;">
+        <button onclick="redeemCode()" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#ffffff;font-weight:800;padding:0 16px;border-radius:10px;font-size:13px;box-shadow:0 2px 8px rgba(2,132,199,0.25);">Redeem</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="modal-overlay">
+  <div style="max-width:480px;margin:0 auto;">
+    <div class="modal-header">
+      <div>
+        <h1>My Account</h1>
+        <p>Security and profile overview</p>
+      </div>
+      <button class="close-btn" onclick="closeProfileModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+        Close
+      </button>
+    </div>
+
+    <div class="task-card">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+        <div class="avatar" style="width:54px;height:54px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;">
+            <circle cx="12" cy="7.5" r="3.75"></circle>
+            <path d="M5.5 20.5a6.5 6.5 0 0 1 13 0"></path>
+          </svg>
+        </div>
+        <div>
+          <div style="font-size:17px;font-weight:800;color:#0a2240;" id="profileUsername">Hridoy Bro..</div>
+          <div style="font-size:12px;color:#0284c7;font-weight:700;margin-top:2px;">● Telegram Verified</div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid #eef4fb;padding-top:12px;display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
+          <span style="color:var(--text-secondary);">Membership Status</span>
+          <span style="color:#d97706;font-weight:700;">Level 1 Pioneer</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
+          <span style="color:var(--text-secondary);">Account Protection</span>
+          <span style="color:#0284c7;font-weight:700;">High (Cloudflare SSL)</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
+          <span style="color:var(--text-secondary);">API Node</span>
+          <span style="color:var(--text-muted);font-size:11px;">zenith-backend (Active)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW TO EARN MODAL -->
+<div id="earnModal" class="modal-overlay">
+  <div style="max-width:480px;margin:0 auto;">
+    <div class="modal-header">
+      <div>
+        <h1>How to Earn?</h1>
+        <p>Simple guide to maximize daily yields</p>
+      </div>
+      <button class="close-btn" onclick="closeEarnModal()">✕ Close</button>
+    </div>
+    <div class="info-modal-body">
+      <h3>1. Free Daily Mining</h3>
+      <p>Log in every 24 hours to claim your base $0.01 USDT without depositing any funds.</p>
+      <h3>2. Tiered Deposit Mining</h3>
+      <p>Deposit funds to activate higher mining rigs, earning up to 4.5% daily compounding returns.</p>
+      <h3>3. Task Verification</h3>
+      <p>Join our official channels, groups, and partner channels to earn instant one-time bonuses.</p>
+      <h3>4. Referral Rewards</h3>
+      <p>Earn passive commissions whenever your friends deposit or claim mining rewards.</p>
+    </div>
+  </div>
+</div>
+
+<!-- RULES MODAL -->
+<div id="rulesModal" class="modal-overlay">
+  <div style="max-width:480px;margin:0 auto;">
+    <div class="modal-header">
+      <div>
+        <h1>Rules & FAQs</h1>
+        <p>Terms of participation and safety</p>
+      </div>
+      <button class="close-btn" onclick="closeRulesModal()">✕ Close</button>
+    </div>
+    <div class="info-modal-body">
+      <h3>Platform Rules</h3>
+      <ul class="info-list">
+        <li>One account per Telegram ID. Multi-account abuse is strictly monitored.</li>
+        <li>Mining rewards accumulate in real-time and are claimable after each 24h cycle.</li>
+        <li>Withdrawals are processed directly to your provided USDT TRC20/BEP20 wallet.</li>
+        <li>All operations are verified via cryptographic Telegram Mini App authentication.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- BOTTOM NAVIGATION BAR -->
 <div class="bottom-nav">
-
-  <button class="bottom-btn" onclick="openTaskPage()">
-    <span class="nav-icon">📝</span>
+  <!-- TASK BUTTON -->
+  <button class="bottom-btn" id="nav-task" onclick="handleNavClick('task')">
+    <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect>
+      <path d="M8.5 12l2.5 2.5 4.5-5"></path>
+    </svg>
     Task
+    <div class="nav-indicator"></div>
   </button>
 
-  <button class="bottom-btn">
-    <span class="nav-icon">👥</span>
+  <!-- FRIENDS BUTTON -->
+  <button class="bottom-btn" id="nav-friends" onclick="handleNavClick('friends')">
+    <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 21v-2a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 19v2"></path>
+      <circle cx="10" cy="7.5" r="3.5"></circle>
+      <path d="M17.5 11a2.8 2.8 0 0 1 0 5.5"></path>
+      <path d="M21 21v-1.5a3 3 0 0 0-2.2-2.9"></path>
+    </svg>
     Friends
+    <div class="nav-indicator"></div>
   </button>
 
-  <button class="bottom-btn active">
-    <span class="nav-icon">⛏️</span>
+  <!-- FARM/MINE BUTTON -->
+  <button class="bottom-btn active" id="nav-farm" onclick="handleNavClick('farm')">
+    <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 20L15.5 8.5"></path>
+      <path d="M20 20L8.5 8.5"></path>
+      <path d="M14 4a12 12 0 0 1 6 6"></path>
+      <path d="M10 4a12 12 0 0 0-6 6"></path>
+    </svg>
     Farm
+    <div class="nav-indicator"></div>
   </button>
 
-  <button class="bottom-btn">
-    <span class="nav-icon">🎁</span>
+  <!-- GIFT BUTTON -->
+  <button class="bottom-btn" id="nav-gift" onclick="handleNavClick('gift')">
+    <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="9" width="18" height="12" rx="3.5"></rect>
+      <path d="M2.5 8.5h19a1 1 0 0 0 1-1V6a2 2 0 0 0-2-2h-15a2 2 0 0 0-2 2v1.5a1 1 0 0 0 1 1z"></path>
+      <path d="M12 4v17"></path>
+      <path d="M12 4c-1.5-2.2-4.5-2.2-4.5 0s3 2 4.5 2z"></path>
+      <path d="M12 4c1.5-2.2 4.5-2.2 4.5 0s-3 2-4.5 2z"></path>
+    </svg>
     Gift
+    <div class="nav-indicator"></div>
   </button>
 
-  <button class="bottom-btn">
-    <span class="nav-icon">👤</span>
-    Profile 
+  <!-- PROFILE BUTTON -->
+  <button class="bottom-btn" id="nav-profile" onclick="handleNavClick('profile')">
+    <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="7.5" r="3.75"></circle>
+      <path d="M5.5 20.5a6.5 6.5 0 0 1 13 0"></path>
+    </svg>
+    Profile
+    <div class="nav-indicator"></div>
   </button>
-
 </div>
 
 
 <script>
+// Backend API Configuration
+const API_BASE = "https://zenith-backend.hamidalipq.workers.dev";
 
+// Telegram WebApp Initialization
+if (window.Telegram && window.Telegram.WebApp) {
+  try {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+    
+    // Set Header & Background Color in Telegram
+    if (Telegram.WebApp.setHeaderColor) {
+      Telegram.WebApp.setHeaderColor('#f0f7ff');
+    }
+    if (Telegram.WebApp.setBackgroundColor) {
+      Telegram.WebApp.setBackgroundColor('#f0f7ff');
+    }
+
+    const tgUser = Telegram.WebApp.initDataUnsafe?.user;
+    if (tgUser) {
+      const displayName = tgUser.first_name ? 
+        (tgUser.first_name + (tgUser.last_name ? ' ' + tgUser.last_name : '')) : 
+        (tgUser.username || 'User');
+      
+      const userEl = document.getElementById("username");
+      if (userEl) userEl.textContent = displayName;
+
+      const profileUserEl = document.getElementById("profileUsername");
+      if (profileUserEl) profileUserEl.textContent = displayName;
+
+      const refLinkEl = document.getElementById("refLink");
+      if (refLinkEl && tgUser.id) {
+        refLinkEl.textContent = "https://t.me/ZenivoraBot?start=ref_" + tgUser.id;
+      }
+    }
+  } catch(e) {
+    console.warn("Telegram WebApp initialization error:", e);
+  }
+}
+
+// Balance Mask Toggle
+let balanceVisible = true;
+let currentBalanceVal = "0.00";
+let currentUsdVal = "0.00";
+
+function toggleBalanceVisibility() {
+  balanceVisible = !balanceVisible;
+  const balanceEl = document.getElementById("balance");
+  const usdEl = document.getElementById("usdBalance");
+  if (balanceVisible) {
+    balanceEl.textContent = currentBalanceVal;
+    usdEl.textContent = currentUsdVal;
+  } else {
+    balanceEl.textContent = "••••••";
+    usdEl.textContent = "••••••";
+  }
+}
+
+// Countdown Timer Logic
 let remaining = 24 * 60 * 60;
 
-function updateTimer(){
-
-  const h = String(Math.floor(remaining / 3600)).padStart(2,"0");
-  const m = String(Math.floor((remaining % 3600) / 60)).padStart(2,"0");
-  const s = String(remaining % 60).padStart(2,"0");
+function updateTimer() {
+  const h = String(Math.floor(remaining / 3600)).padStart(2, "0");
+  const m = String(Math.floor((remaining % 3600) / 60)).padStart(2, "0");
+  const s = String(remaining % 60).padStart(2, "0");
 
   const time = h + ":" + m + ":" + s;
 
-  document.getElementById("freeTimer").textContent = time;
-  document.getElementById("nextTimer").textContent = time;
+  const freeEl = document.getElementById("freeTimer");
+  if (freeEl) freeEl.textContent = time;
 
-  if(remaining > 0){
+  const nextEl = document.getElementById("nextTimer");
+  if (nextEl) nextEl.textContent = time;
+
+  if (remaining > 0) {
     remaining--;
   }
-
 }
 
-setInterval(updateTimer,1000);
+setInterval(updateTimer, 1000);
 updateTimer();
 
-
-function claimFreeMining(){
-
-  if(remaining > 0){
-
+// Existing Business Functions
+function claimFreeMining() {
+  if (remaining > 0) {
     alert("Your free mining reward is still running.");
-
     return;
-
   }
-
   remaining = 24 * 60 * 60;
-
   alert("Free mining reward claimed successfully!");
-
 }
 
-
-function topUp(){
+function topUp() {
   alert("Deposit page will be connected to the backend.");
 }
 
+function topUpTier(tierName) {
+  alert("Selected " + tierName + " Tier. Deposit page will be connected to the backend.");
+}
 
-function withdraw(){
+function withdraw() {
   alert("Withdrawal page will be connected to the backend.");
 }
 
-
-function historyPage(){
+function historyPage() {
   alert("Transaction history will be connected to the backend.");
 }
 
-
-function calculator(){
-  alert("Mining Calculator");
+function calculator() {
+  alert("Mining Calculator will be connected to the backend.");
 }
-  /* TASK PAGE */
 
+function viewAllActive() {
+  alert("Active Mining Rigs:\n1. Free Mining ($0.01/day) - Active");
+}
+
+function showLevelInfo() {
+  alert("Level 1 Pioneer: 0/100 XP to Level 2. Upgrade by mining or inviting active peers.");
+}
+
+function openNotifications() {
+  alert("No new notifications at this time.");
+}
+
+function openSettings() {
+  alert("Settings: Connected to Cloudflare Worker edge node.");
+}
+
+// Modal Handlers
 function openTaskPage() {
-    document.getElementById("taskPage").style.display = "block";
+  closeAllModals();
+  document.getElementById("taskPage").style.display = "block";
+  setActiveNav("task");
 }
 
 function closeTaskPage() {
-    document.getElementById("taskPage").style.display = "none";
+  document.getElementById("taskPage").style.display = "none";
+  setActiveNav("farm");
+}
+
+function openFriendsModal() {
+  closeAllModals();
+  document.getElementById("friendsModal").style.display = "block";
+  setActiveNav("friends");
+}
+
+function closeFriendsModal() {
+  document.getElementById("friendsModal").style.display = "none";
+  setActiveNav("farm");
+}
+
+function openGiftModal() {
+  closeAllModals();
+  document.getElementById("giftModal").style.display = "block";
+  setActiveNav("gift");
+}
+
+function closeGiftModal() {
+  document.getElementById("giftModal").style.display = "none";
+  setActiveNav("farm");
+}
+
+function openProfileModal() {
+  closeAllModals();
+  document.getElementById("profileModal").style.display = "block";
+  setActiveNav("profile");
+}
+
+function closeProfileModal() {
+  document.getElementById("profileModal").style.display = "none";
+  setActiveNav("farm");
+}
+
+function openEarnModal() {
+  document.getElementById("earnModal").style.display = "block";
+}
+
+function closeEarnModal() {
+  document.getElementById("earnModal").style.display = "none";
+}
+
+function openRulesModal() {
+  document.getElementById("rulesModal").style.display = "block";
+}
+
+function closeRulesModal() {
+  document.getElementById("rulesModal").style.display = "none";
+}
+
+function closeAllModals() {
+  document.getElementById("taskPage").style.display = "none";
+  document.getElementById("friendsModal").style.display = "none";
+  document.getElementById("giftModal").style.display = "none";
+  document.getElementById("profileModal").style.display = "none";
+  document.getElementById("earnModal").style.display = "none";
+  document.getElementById("rulesModal").style.display = "none";
+}
+
+function setActiveNav(tab) {
+  document.querySelectorAll(".bottom-btn").forEach(btn => btn.classList.remove("active"));
+  const target = document.getElementById("nav-" + tab);
+  if (target) target.classList.add("active");
+}
+
+function handleNavClick(tab) {
+  if (tab === "task") {
+    openTaskPage();
+  } else if (tab === "friends") {
+    openFriendsModal();
+  } else if (tab === "farm") {
+    closeAllModals();
+    setActiveNav("farm");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tab === "gift") {
+    openGiftModal();
+  } else if (tab === "profile") {
+    openProfileModal();
+  }
+}
+
+function switchMainTab(type) {
+  if (type === 'mine') {
+    closeAllModals();
+    setActiveNav("farm");
+  }
 }
 
 function openTelegramTask(link) {
-    if (window.Telegram && Telegram.WebApp) {
-        Telegram.WebApp.openTelegramLink(link);
-    } else {
-        window.open(link, "_blank");
-    }
+  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openTelegramLink) {
+    Telegram.WebApp.openTelegramLink(link);
+  } else {
+    window.open(link, "_blank");
+  }
 }
-  </script>
-  
+
+// =======================================================
+// PAYOUT REVIEWS TELEGRAM CHANNEL URL PLACEHOLDER
+// Paste your real Telegram channel link here when ready:
+// e.g., "https://t.me/zenivora_payouts"
+// =======================================================
+const PAYOUT_REVIEWS_TELEGRAM_URL = "";
+
+function openPayoutReviews() {
+  if (PAYOUT_REVIEWS_TELEGRAM_URL && PAYOUT_REVIEWS_TELEGRAM_URL.trim() !== "") {
+    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openTelegramLink) {
+      Telegram.WebApp.openTelegramLink(PAYOUT_REVIEWS_TELEGRAM_URL);
+    } else {
+      window.open(PAYOUT_REVIEWS_TELEGRAM_URL, "_blank");
+    }
+  } else {
+    alert("Payout reviews channel link will be connected soon! Check back shortly.");
+  }
+}
+
+function copyRefLink() {
+  const refEl = document.getElementById("refLink");
+  const linkText = (refEl && refEl.textContent) ? refEl.textContent.trim() : "https://t.me/ZenivoraBot?start=ref_user";
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+    navigator.clipboard.writeText(linkText).then(() => {
+      alert("Referral link copied to clipboard!");
+    }).catch(() => {
+      prompt("Copy your referral link:", linkText);
+    });
+  } else {
+    prompt("Copy your referral link:", linkText);
+  }
+}
+
+function shareOnTelegram() {
+  const refEl = document.getElementById("refLink");
+  const linkText = (refEl && refEl.textContent) ? refEl.textContent.trim() : "https://t.me/ZenivoraBot?start=ref_user";
+  const shareText = encodeURIComponent("Join Zenivora Mining and earn daily USDT rewards on Telegram!");
+  const tgShareUrl = "https://t.me/share/url?url=" + encodeURIComponent(linkText) + "&text=" + shareText;
+  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openTelegramLink) {
+    Telegram.WebApp.openTelegramLink(tgShareUrl);
+  } else {
+    window.open(tgShareUrl, "_blank");
+  }
+}
+
+function redeemCode() {
+  const input = document.getElementById("promoInput").value.trim();
+  if (!input) {
+    alert("Please enter a valid promo code.");
+    return;
+  }
+  alert("Promo code validation will be verified with the backend node.");
+}
+</script>
+
 </body>
 </html>

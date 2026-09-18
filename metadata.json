@@ -1,0 +1,6 @@
+{
+  "name": "Zenith Dashboard",
+  "description": "Zenith (Zenivora) crypto mining dashboard and task management app",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
