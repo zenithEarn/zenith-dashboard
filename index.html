@@ -1592,7 +1592,7 @@ button:active {
     </div>
 
     <div class="balance-top-row">
-      <div class="balance-label">
+      <div class="balance-label" style="position:relative;z-index:3;">
         <span>Total Balance</span>
         <span onclick="toggleBalanceVisibility()" style="display:inline-flex;cursor:pointer;">
           <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1602,11 +1602,11 @@ button:active {
         </span>
       </div>
 
-      <div style="width:210px;height:74px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <div style="position:absolute;right:0;top:10px;width:210px;height:90px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0;">
   <img src="zenivora_balance_illustration.png"
        alt=""
-       style="width:210px;height:74px;object-fit:contain;display:block;">
-</div>
+       style="width:210px;height:90px;object-fit:contain;display:block;">
+      </div>
 
     <div class="balance">
       <span class="balance-symbol">$</span><span id="balance">0.00</span>
