@@ -1449,9 +1449,10 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px solid #eef4fb;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #edf5fe;
+  gap: 8px;
 }
 
 .task-reward {
@@ -1461,6 +1462,156 @@ button:active {
   display: flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.task-btn-join {
+  background: #ffffff;
+  color: #0066ff;
+  border: 1.5px solid rgba(0, 102, 255, 0.4);
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 6px rgba(0, 102, 255, 0.08);
+  transition: all 0.18s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.task-btn-join:active {
+  background: #f0f7ff;
+  transform: scale(0.97);
+}
+
+.task-btn-verify {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0066ff 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  box-shadow: 0 3px 12px rgba(0, 102, 255, 0.28);
+  transition: all 0.18s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  min-width: 78px;
+  text-align: center;
+}
+
+.task-btn-verify:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 6px rgba(0, 102, 255, 0.2);
+}
+
+.task-btn-verify:disabled {
+  opacity: 0.85;
+  cursor: wait;
+}
+
+.task-btn-claim {
+  background: linear-gradient(135deg, #00b074 0%, #009966 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  padding: 6px 13px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  box-shadow: 0 3px 12px rgba(0, 176, 116, 0.35);
+  transition: all 0.18s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  animation: pulse-claim 2s infinite ease-in-out;
+}
+
+@keyframes pulse-claim {
+  0%, 100% { box-shadow: 0 3px 12px rgba(0, 176, 116, 0.35); }
+  50% { box-shadow: 0 4px 18px rgba(0, 176, 116, 0.6); }
+}
+
+.task-btn-claim:active {
+  transform: scale(0.97);
+}
+
+.task-btn-claim:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  animation: none;
+}
+
+.task-badge-verified {
+  color: #00b074;
+  font-size: 11.5px;
+  font-weight: 800;
+  background: #e6fcf5;
+  border: 1px solid rgba(0, 176, 116, 0.3);
+  padding: 4px 8px;
+  border-radius: 8px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.task-claimed-badge {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1.2px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.task-msg-box {
+  margin-top: 6px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.35;
+  display: none;
+  animation: fadeInMsg 0.2s ease-out;
+}
+
+@keyframes fadeInMsg {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.task-msg-box.error {
+  display: block;
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+}
+
+.task-msg-box.success {
+  display: block;
+  color: #00b074;
+  background: #f0fdf4;
+  border: 1px solid #dcfce7;
+}
+
+.task-msg-box.info {
+  display: block;
+  color: #0284c7;
+  background: #f0f9ff;
+  border: 1px solid #e0f2fe;
 }
 
 .task-action-btn {
@@ -1945,7 +2096,7 @@ button:active {
     </div>
 
     <!-- TASK 1 -->
-    <div class="task-card">
+    <div class="task-card" id="card-task_channel">
       <div class="task-top">
         <div class="task-icon">
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -1955,16 +2106,20 @@ button:active {
         <div class="task-content">
           <div class="task-title">Join Our Telegram Channel</div>
           <div class="task-desc">Join the official update channel for news</div>
+          <div class="task-msg-box" id="msg-task_channel"></div>
         </div>
       </div>
       <div class="task-bottom">
         <span class="task-reward">+0.01 USDT</span>
-        <button class="task-action-btn" onclick="openTelegramTask('https://t.me/ZenivoraUpdate')">JOIN</button>
+        <div class="task-actions" id="actions-task_channel">
+          <button class="task-btn-join" onclick="openTelegramTask('https://t.me/ZenivoraUpdate')">JOIN</button>
+          <button class="task-btn-verify" id="btn-verify-task_channel" onclick="startTaskVerification('task_channel')">VERIFY</button>
+        </div>
       </div>
     </div>
 
     <!-- TASK 2 -->
-    <div class="task-card">
+    <div class="task-card" id="card-task_group">
       <div class="task-top">
         <div class="task-icon">
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -1974,16 +2129,20 @@ button:active {
         <div class="task-content">
           <div class="task-title">Join Our Telegram Group</div>
           <div class="task-desc">Join our official community group chat</div>
+          <div class="task-msg-box" id="msg-task_group"></div>
         </div>
       </div>
       <div class="task-bottom">
         <span class="task-reward">+0.01 USDT</span>
-        <button class="task-action-btn" onclick="openTelegramTask('https://t.me/ZenivoraCommunity')">JOIN</button>
+        <div class="task-actions" id="actions-task_group">
+          <button class="task-btn-join" onclick="openTelegramTask('https://t.me/ZenivoraCommunity')">JOIN</button>
+          <button class="task-btn-verify" id="btn-verify-task_group" onclick="startTaskVerification('task_group')">VERIFY</button>
+        </div>
       </div>
     </div>
 
     <!-- TASK 3 -->
-    <div class="task-card">
+    <div class="task-card" id="card-task_payout">
       <div class="task-top">
         <div class="task-icon">
           <svg viewBox="0 0 24 24" fill="currentColor">
@@ -1993,11 +2152,15 @@ button:active {
         <div class="task-content">
           <div class="task-title">Join Payout Channel</div>
           <div class="task-desc">Join official transparent payout proof channel</div>
+          <div class="task-msg-box" id="msg-task_payout"></div>
         </div>
       </div>
       <div class="task-bottom">
         <span class="task-reward">+0.01 USDT</span>
-        <button class="task-action-btn" onclick="openTelegramTask('https://t.me/ZenivoraWithdraw')">JOIN</button>
+        <div class="task-actions" id="actions-task_payout">
+          <button class="task-btn-join" onclick="openTelegramTask('https://t.me/ZenivoraWithdraw')">JOIN</button>
+          <button class="task-btn-verify" id="btn-verify-task_payout" onclick="startTaskVerification('task_payout')">VERIFY</button>
+        </div>
       </div>
     </div>
   </div>
@@ -2363,12 +2526,281 @@ function openTaskPage() {
   closeAllModals();
   document.getElementById("taskPage").style.display = "block";
   setActiveNav("task");
+  fetchTaskStatuses();
 }
 
 function closeTaskPage() {
   document.getElementById("taskPage").style.display = "none";
   setActiveNav("farm");
 }
+
+// -------------------------------------------------------------
+// TELEGRAM TASK VERIFICATION & CLAIM SYSTEM
+// -------------------------------------------------------------
+const TELEGRAM_TASKS = {
+  task_channel: {
+    id: "task_channel",
+    title: "Join Our Telegram Channel",
+    url: "https://t.me/ZenivoraUpdate",
+    username: "@ZenivoraUpdate",
+    reward: "0.01"
+  },
+  task_group: {
+    id: "task_group",
+    title: "Join Our Telegram Group",
+    url: "https://t.me/ZenivoraCommunity",
+    username: "@ZenivoraCommunity",
+    reward: "0.01"
+  },
+  task_payout: {
+    id: "task_payout",
+    title: "Join Payout Channel",
+    url: "https://t.me/ZenivoraWithdraw",
+    username: "@ZenivoraWithdraw",
+    reward: "0.01"
+  }
+};
+
+const taskClientState = {
+  task_channel: { verified: false, claimed: false },
+  task_group: { verified: false, claimed: false },
+  task_payout: { verified: false, claimed: false }
+};
+
+function updateDisplayedBalance(newBalance) {
+  const num = Number(newBalance) || 0;
+  const formatted = num.toFixed(2);
+  currentBalanceVal = formatted;
+  currentUsdVal = formatted;
+  const balanceEl = document.getElementById("balance");
+  const usdEl = document.getElementById("usdBalance");
+  if (balanceVisible) {
+    if (balanceEl) balanceEl.textContent = formatted;
+    if (usdEl) usdEl.textContent = formatted;
+  }
+}
+
+function getActiveTelegramUserId() {
+  if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
+    return window.Telegram.WebApp.initDataUnsafe.user.id;
+  }
+  let stored = localStorage.getItem("zenivora_uid");
+  if (!stored) {
+    stored = "tg_" + Math.floor(100000000 + Math.random() * 900000000);
+    localStorage.setItem("zenivora_uid", stored);
+  }
+  return stored;
+}
+
+function getTelegramInitData() {
+  if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
+    return window.Telegram.WebApp.initData;
+  }
+  return "";
+}
+
+function renderTaskUI(taskId) {
+  const task = TELEGRAM_TASKS[taskId];
+  const state = taskClientState[taskId] || { verified: false, claimed: false };
+  const actionsEl = document.getElementById("actions-" + taskId);
+  const msgEl = document.getElementById("msg-" + taskId);
+  if (!actionsEl) return;
+
+  if (state.claimed) {
+    actionsEl.innerHTML = `
+      <span class="task-claimed-badge" id="badge-claimed-${taskId}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        CLAIMED
+      </span>
+    `;
+    if (msgEl) {
+      msgEl.className = "task-msg-box success";
+      msgEl.innerHTML = "<strong>✓ Task completed</strong> &bull; +0.01 USDT credited";
+    }
+    return;
+  }
+
+  if (state.verified) {
+    actionsEl.innerHTML = `
+      <span class="task-badge-verified">✓ Verified</span>
+      <button class="task-btn-claim" id="btn-claim-${taskId}" onclick="claimTaskReward('${taskId}')">CLAIM 0.01 USDT</button>
+    `;
+    if (msgEl) {
+      msgEl.className = "task-msg-box success";
+      msgEl.innerHTML = "Membership verified successfully.";
+    }
+    return;
+  }
+
+  // Default state: [ JOIN ] [ VERIFY ]
+  actionsEl.innerHTML = `
+    <button class="task-btn-join" onclick="openTelegramTask('${task.url}')">JOIN</button>
+    <button class="task-btn-verify" id="btn-verify-${taskId}" onclick="startTaskVerification('${taskId}')">VERIFY</button>
+  `;
+}
+
+async function fetchTaskStatuses() {
+  const userId = getActiveTelegramUserId();
+  try {
+    const res = await fetch(`${API_BASE}/api/tasks/status?userId=` + encodeURIComponent(userId));
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.ok && data.tasks) {
+        Object.keys(TELEGRAM_TASKS).forEach(taskId => {
+          if (data.tasks[taskId]) {
+            taskClientState[taskId] = data.tasks[taskId];
+            renderTaskUI(taskId);
+          }
+        });
+      }
+      if (typeof data.balance === "number" && data.balance > 0) {
+        updateDisplayedBalance(data.balance);
+      }
+    }
+  } catch (err) {
+    console.warn("Could not fetch server task status:", err);
+  }
+}
+
+let verifyingTasks = {};
+
+async function startTaskVerification(taskId) {
+  if (verifyingTasks[taskId]) return;
+  verifyingTasks[taskId] = true;
+
+  const btn = document.getElementById("btn-verify-" + taskId);
+  const msgEl = document.getElementById("msg-" + taskId);
+  const task = TELEGRAM_TASKS[taskId];
+
+  if (msgEl) {
+    msgEl.className = "task-msg-box info";
+    msgEl.innerHTML = `Verifying membership for <strong>${task.username}</strong>...`;
+  }
+
+  // Mandatory 3-2-1 Countdown
+  for (let count = 3; count >= 1; count--) {
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = `Verifying... ${count}`;
+    }
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  if (btn) {
+    btn.textContent = "Checking...";
+  }
+
+  const userId = getActiveTelegramUserId();
+  const initData = getTelegramInitData();
+
+  try {
+    const res = await fetch(`${API_BASE}/api/tasks/verify`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ taskId, userId, initData })
+    });
+
+    const data = await res.json();
+
+    if (data.ok && data.verified) {
+      taskClientState[taskId].verified = true;
+      taskClientState[taskId].claimed = Boolean(data.claimed);
+      renderTaskUI(taskId);
+      if (msgEl) {
+        msgEl.className = "task-msg-box success";
+        msgEl.textContent = "Membership verified successfully.";
+      }
+    } else {
+      taskClientState[taskId].verified = false;
+      renderTaskUI(taskId);
+      if (msgEl) {
+        msgEl.className = "task-msg-box error";
+        const errMsg = data.error || "Please join the Telegram channel/group first.<br>Join first, then try Verify again.";
+        msgEl.innerHTML = errMsg;
+      }
+    }
+  } catch (err) {
+    taskClientState[taskId].verified = false;
+    renderTaskUI(taskId);
+    if (msgEl) {
+      msgEl.className = "task-msg-box error";
+      msgEl.textContent = "Network error during verification. Please try again.";
+    }
+  } finally {
+    delete verifyingTasks[taskId];
+  }
+}
+
+let claimingTasks = {};
+
+async function claimTaskReward(taskId) {
+  if (claimingTasks[taskId]) return;
+  claimingTasks[taskId] = true;
+
+  const claimBtn = document.getElementById("btn-claim-" + taskId);
+  const msgEl = document.getElementById("msg-" + taskId);
+
+  if (claimBtn) {
+    claimBtn.disabled = true;
+    claimBtn.textContent = "Claiming...";
+  }
+
+  const userId = getActiveTelegramUserId();
+  const initData = getTelegramInitData();
+
+  try {
+    const res = await fetch(`${API_BASE}/api/tasks/claim`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ taskId, userId, initData })
+    });
+
+    const data = await res.json();
+
+    if (data.ok && data.claimed) {
+      taskClientState[taskId].claimed = true;
+      taskClientState[taskId].verified = true;
+      renderTaskUI(taskId);
+
+      if (typeof data.newBalance === "number") {
+        updateDisplayedBalance(data.newBalance);
+      } else {
+        const cur = parseFloat(currentBalanceVal) || 0;
+        updateDisplayedBalance(cur + 0.01);
+      }
+
+      if (msgEl) {
+        msgEl.className = "task-msg-box success";
+        msgEl.innerHTML = "<strong>✓ Claimed! +0.01 USDT credited to your balance.</strong>";
+      }
+    } else {
+      if (claimBtn) {
+        claimBtn.disabled = false;
+        claimBtn.textContent = "CLAIM 0.01 USDT";
+      }
+      if (msgEl) {
+        msgEl.className = "task-msg-box error";
+        msgEl.textContent = data.error || "Failed to claim reward. Please try again.";
+      }
+    }
+  } catch (err) {
+    if (claimBtn) {
+      claimBtn.disabled = false;
+      claimBtn.textContent = "CLAIM 0.01 USDT";
+    }
+    if (msgEl) {
+      msgEl.className = "task-msg-box error";
+      msgEl.textContent = "Connection error. Please try again.";
+    }
+  } finally {
+    delete claimingTasks[taskId];
+  }
+}
+
+// Initial status load on script run
+fetchTaskStatuses();
 
 function openFriendsModal() {
   closeAllModals();
