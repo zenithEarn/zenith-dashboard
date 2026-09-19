@@ -481,65 +481,24 @@ button:active {
   white-space: nowrap;
 }
 
-/* ACTION NAVIGATION */
+/* ACTION NAVIGATION (HIDDEN AS REQUESTED) */
 .action-nav {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
-  padding: 5px;
-  margin: 14px 0;
-  border-radius: 20px;
-  background: #ffffff;
-  border: 1.5px solid var(--blue-neon-border-strong);
-  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.06), var(--blue-neon-glow);
-}
-
-.action-btn {
-  padding: 10px 4px;
-  border-radius: 15px;
-  background: transparent;
-  color: var(--text-dark-blue);
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  border: 1px solid transparent;
-}
-
-.action-btn svg {
-  width: 19px;
-  height: 19px;
-  stroke-width: 2.2px;
-}
-
-.action-btn:active {
-  background: #f0f7ff;
-}
-
-.action-btn.active {
-  color: #ffffff;
-  background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
-  border-color: transparent;
-  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.35);
-}
-
-.action-btn.active svg {
-  color: #ffffff;
+  display: none;
 }
 
 /* FREE MINING CARD */
 .free-card {
   border: 1.5px solid var(--blue-neon-border-strong);
-  border-radius: 24px;
-  padding: 16px;
+  border-radius: 22px;
+  padding: 16px 16px 14px;
   background: 
-    radial-gradient(circle at 95% 95%, rgba(56, 189, 248, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 95% 95%, rgba(56, 189, 248, 0.16) 0%, transparent 45%),
     #ffffff;
   box-shadow: 0 8px 26px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
   position: relative;
   overflow: hidden;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 .free-top {
@@ -558,9 +517,9 @@ button:active {
 }
 
 .free-icon {
-  width: 46px;
-  height: 46px;
-  min-width: 46px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
   border-radius: 14px;
   background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
   display: flex;
@@ -576,7 +535,7 @@ button:active {
 }
 
 .free-title {
-  font-size: 17px;
+  font-size: 16.5px;
   font-weight: 800;
   color: var(--text-navy);
   margin: 0;
@@ -643,88 +602,124 @@ button:active {
 
 .claim-time {
   color: var(--accent-blue);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   margin-top: 2px;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.5px;
 }
 
-.claim-btn {
-  width: 100%;
+.free-buttons {
+  display: flex;
+  gap: 10px;
   margin-top: 14px;
-  padding: 13px 18px;
+}
+
+.free-claim-btn {
+  flex: 1;
+  padding: 12px 14px;
   border-radius: 16px;
   background: linear-gradient(90deg, #0099ff 0%, #0066ff 100%);
   color: #ffffff;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
-  box-shadow: 0 6px 20px rgba(0, 102, 255, 0.32);
+  box-shadow: 0 6px 18px rgba(0, 102, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  position: relative;
+  border: none;
 }
 
-.claim-btn svg {
+.free-claim-btn svg {
   width: 18px;
   height: 18px;
+}
+
+.free-withdraw-btn {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #0a2240;
+  border: 1.5px solid rgba(56, 189, 248, 0.75);
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.04);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.free-withdraw-btn svg {
+  width: 18px;
+  height: 18px;
+  color: var(--accent-blue);
+}
+
+.chevron-svg {
+  width: 14px;
+  height: 14px;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 /* DEPOSIT MINING CONTAINER */
 .deposit-card {
   border: 1.5px solid var(--blue-neon-border-strong);
-  border-radius: 24px;
-  padding: 16px 14px 16px;
+  border-radius: 22px;
+  padding: 16px 14px 14px;
   background: #ffffff;
   box-shadow: 0 8px 26px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
-  margin-top: 14px;
+  margin-top: 0;
   margin-bottom: 12px;
   position: relative;
 }
 
-.deposit-card .section-title {
-  margin-top: 0;
-}
-
-/* SECTION */
-.section-title {
+.deposit-header {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 22px 0 2px;
+  margin-bottom: 12px;
 }
 
-.section-icon {
-  width: 34px;
-  height: 34px;
+.deposit-icon {
+  width: 38px;
+  height: 38px;
   border-radius: 12px;
+  background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0088ff;
   color: #ffffff;
-  box-shadow: 0 3px 10px rgba(0, 136, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.28);
+  flex-shrink: 0;
 }
 
-.section-icon svg {
-  width: 18px;
-  height: 18px;
+.deposit-icon svg {
+  width: 20px;
+  height: 20px;
 }
 
-.section-title h2 {
-  margin: 0;
-  font-size: 18px;
+.deposit-title-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.deposit-title {
+  font-size: 16px;
   font-weight: 800;
-  letter-spacing: -0.3px;
   color: var(--text-navy);
+  margin: 0;
+  letter-spacing: -0.2px;
 }
 
-.section-sub {
+.deposit-sub {
   color: var(--text-secondary);
-  margin: 0 0 12px 44px;
   font-size: 12px;
+  font-weight: 500;
+  margin: 2px 0 0;
 }
 
 /* TIERS */
@@ -732,32 +727,31 @@ button:active {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 6px;
+  margin-bottom: 12px;
 }
 
 .tier {
   min-width: 0;
-  padding: 12px 3px;
+  padding: 10px 2px;
   text-align: center;
-  border-radius: 18px;
+  border-radius: 16px;
   background: #ffffff;
   border: 1.2px solid var(--blue-neon-border);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
   cursor: pointer;
 }
 
-.tier:hover {
-  transform: translateY(-2px);
-  border-color: var(--blue-neon-border-strong);
-  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.08), var(--blue-neon-glow);
+.tier:active {
+  transform: scale(0.97);
 }
 
 .tier-badge {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -765,67 +759,67 @@ button:active {
   margin-bottom: 4px;
 }
 
-.tier:nth-child(1) .tier-badge { background: #00b074; color: #ffffff; box-shadow: 0 2px 6px rgba(0, 176, 116, 0.25); }
-.tier:nth-child(2) .tier-badge { background: #0070f3; color: #ffffff; box-shadow: 0 2px 6px rgba(0, 112, 243, 0.25); }
-.tier:nth-child(3) .tier-badge { background: #8e44ad; color: #ffffff; box-shadow: 0 2px 6px rgba(142, 68, 173, 0.25); }
-.tier:nth-child(4) .tier-badge { background: #f39c12; color: #ffffff; box-shadow: 0 2px 6px rgba(243, 156, 18, 0.25); }
-.tier:nth-child(5) .tier-badge { background: #e84393; color: #ffffff; box-shadow: 0 2px 6px rgba(232, 67, 147, 0.25); }
+.tier:nth-child(1) .tier-badge { background: #00b074; color: #ffffff; }
+.tier:nth-child(2) .tier-badge { background: #0284c7; color: #ffffff; }
+.tier:nth-child(3) .tier-badge { background: #9333ea; color: #ffffff; }
+.tier:nth-child(4) .tier-badge { background: #f59e0b; color: #ffffff; }
+.tier:nth-child(5) .tier-badge { background: #e11d48; color: #ffffff; }
 
 .tier-badge svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
 }
 
 .tier-name {
   font-size: 11px;
-  font-weight: 700;
-  color: #486581;
-  margin-top: 2px;
+  font-weight: 800;
+  color: var(--text-navy);
 }
 
 .tier-amount {
-  color: #8097b0;
-  font-size: 11px;
+  color: #64748b;
+  font-size: 10px;
   font-weight: 600;
-  margin-top: 3px;
+  margin-top: 1px;
 }
 
 .rate {
-  font-size: 15.5px;
+  font-size: 13.5px;
   font-weight: 800;
-  margin-top: 5px;
+  margin-top: 4px;
   font-variant-numeric: tabular-nums;
 }
 
-.tier:nth-child(1) .rate { color: #00b894; }
-.tier:nth-child(2) .rate { color: #0070f3; }
-.tier:nth-child(3) .rate { color: #8e44ad; }
-.tier:nth-child(4) .rate { color: #f39c12; }
-.tier:nth-child(5) .rate { color: #e84393; }
+.tier:nth-child(1) .rate { color: #00b074; }
+.tier:nth-child(2) .rate { color: #0066ff; }
+.tier:nth-child(3) .rate { color: #9333ea; }
+.tier:nth-child(4) .rate { color: #d97706; }
+.tier:nth-child(5) .rate { color: #e11d48; }
 
 .daily {
-  color: #8097b0;
-  font-size: 10px;
+  color: #64748b;
+  font-size: 9.5px;
   font-weight: 600;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 /* BUTTONS */
 .two-buttons {
   display: flex;
-  gap: 8px;
-  margin-top: 12px;
+  gap: 10px;
 }
 
 .big-btn {
-  padding: 13px 12px;
-  border-radius: 16px;
+  padding: 12px 12px;
+  border-radius: 14px;
   font-size: 13.5px;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  transition: all 0.2s;
+  cursor: pointer;
 }
 
 .big-btn svg {
@@ -834,18 +828,19 @@ button:active {
 }
 
 .deposit-btn {
-  flex: 1.1;
+  flex: 1;
   background: linear-gradient(90deg, #0099ff 0%, #0066ff 100%);
   color: #ffffff;
-  box-shadow: 0 6px 20px rgba(0, 102, 255, 0.28);
+  border: none;
+  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.28);
 }
 
 .calc-btn {
   flex: 1;
   background: #ffffff;
-  border: 1.2px solid var(--blue-neon-border);
-  color: var(--text-navy);
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+  border: 1.5px solid rgba(56, 189, 248, 0.75);
+  color: #0a2240;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04);
 }
 
 .calc-btn svg {
@@ -1016,8 +1011,8 @@ button:active {
   border-radius: 22px;
   padding: 14px 16px;
   box-shadow: 0 8px 24px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
-  margin-top: 2px;
-  margin-bottom: 10px;
+  margin-top: 0;
+  margin-bottom: 12px;
   transition: all 0.2s;
 }
 
@@ -1028,21 +1023,21 @@ button:active {
 }
 
 .referral-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.28);
 }
 
 .referral-icon svg {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
 }
 
 .referral-text-wrap {
@@ -1053,14 +1048,9 @@ button:active {
 .referral-title {
   font-size: 15px;
   font-weight: 800;
-  color: #0a2540;
+  color: var(--text-navy);
   letter-spacing: -0.2px;
   line-height: 1.3;
-}
-
-.referral-title .ref-highlight {
-  color: #0284c7;
-  font-weight: 900;
 }
 
 .referral-line {
@@ -1075,7 +1065,7 @@ button:active {
 }
 
 .referral-line .ref-line-icon.lightning {
-  color: #10b981;
+  color: #f59e0b;
   font-size: 13px;
   line-height: 1;
 }
@@ -1102,8 +1092,8 @@ button:active {
 }
 
 .avatar-circle {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: 2px solid #ffffff;
   margin-left: -8px;
@@ -1119,11 +1109,11 @@ button:active {
   margin-left: 0;
 }
 
-.avatar-circle.avatar-count {
-  background: #e0f2fe;
+.avatar-count-text {
   color: #0284c7;
-  font-size: 11px;
+  font-size: 13.5px;
   font-weight: 800;
+  margin-left: 6px;
   letter-spacing: -0.2px;
 }
 
@@ -1134,9 +1124,9 @@ button:active {
 }
 
 .ref-btn {
-  height: 38px;
-  padding: 0 16px;
-  border-radius: 14px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 12px;
   font-size: 13px;
   font-weight: 700;
   display: inline-flex;
@@ -1149,29 +1139,29 @@ button:active {
 }
 
 .ref-copy-btn {
-  background: #f0f7ff;
-  border: 1.2px solid var(--blue-neon-border);
-  color: #0284c7;
-  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+  background: #ffffff;
+  border: 1.5px solid rgba(56, 189, 248, 0.75);
+  color: #0066ff;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.04);
 }
 
 .ref-copy-btn svg {
   width: 15px;
   height: 15px;
-  color: #0284c7;
+  color: #0066ff;
 }
 
 .ref-copy-btn:active {
   transform: scale(0.97);
-  background: #e0f2fe;
+  background: #f0f7ff;
 }
 
 .ref-invite-btn {
-  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
   border: none;
   color: #ffffff;
-  padding: 0 20px;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+  padding: 0 18px;
+  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.32);
 }
 
 .ref-invite-btn svg {
@@ -1186,18 +1176,18 @@ button:active {
 
 /* PAYOUT REVIEWS CARD */
 .payout-card {
-  padding: 12px 14px;
+  padding: 12px 16px;
   border-radius: 18px;
   background: #ffffff;
-  border: 1.2px solid var(--blue-neon-border);
+  border: 1.5px solid var(--blue-neon-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.05), var(--blue-neon-glow);
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.06), var(--blue-neon-glow-subtle);
   transition: all 0.2s;
   margin-top: 0;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .payout-card:active {
@@ -1216,12 +1206,12 @@ button:active {
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #fbc531, #f39c12);
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(243, 156, 18, 0.28);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.28);
   flex-shrink: 0;
 }
 
@@ -1232,21 +1222,21 @@ button:active {
 
 .payout-left strong {
   display: block;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 800;
   color: var(--text-navy);
 }
 
 .payout-left small {
   display: block;
-  color: #718ba8;
+  color: #64748b;
   margin-top: 2px;
   font-size: 11.5px;
   font-weight: 500;
 }
 
 .payout-arrow {
-  color: var(--accent-blue);
+  color: #64748b;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1257,54 +1247,6 @@ button:active {
   height: 16px;
 }
 
-.info-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.info-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: #0088ff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 136, 255, 0.2);
-  flex-shrink: 0;
-}
-
-.info-icon svg {
-  width: 18px;
-  height: 18px;
-}
-
-.info-card strong {
-  display: block;
-  font-size: 13.5px;
-  font-weight: 800;
-  color: var(--text-navy);
-}
-
-.info-card small {
-  display: block;
-  color: #718ba8;
-  margin-top: 2px;
-  font-size: 11px;
-}
-
-.chevron-icon {
-  color: #9ab2cb;
-  display: flex;
-}
-
-.chevron-icon svg {
-  width: 14px;
-  height: 14px;
-}
-
 /* BOTTOM NAVIGATION */
 .bottom-nav {
   position: fixed;
@@ -1313,68 +1255,81 @@ button:active {
   max-width: 440px;
   margin: 0 auto;
   bottom: calc(10px + var(--safe-bottom));
-  height: 68px;
+  height: 64px;
   z-index: 999;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: 1fr 1fr 1.15fr 1fr 1fr;
   align-items: center;
-  padding: 5px 6px;
-  gap: 4px;
+  padding: 4px 8px;
   border-radius: 34px;
   background: #ffffff;
-  border: 1.5px solid var(--blue-neon-border-strong);
-  box-shadow: 0 10px 32px rgba(0, 102, 255, 0.1), var(--blue-neon-glow-strong);
+  border: 1.5px solid var(--blue-neon-border);
+  box-shadow: 0 10px 30px rgba(0, 102, 255, 0.08), var(--blue-neon-glow-subtle);
 }
 
 .bottom-btn {
   position: relative;
-  height: 56px;
-  border-radius: 20px;
+  height: 52px;
+  border-radius: 18px;
   background: transparent;
-  color: #486581;
+  color: #64748b;
   font-size: 11px;
   font-weight: 600;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0;
 }
 
-.nav-svg {
-  width: 21px;
-  height: 21px;
-  stroke-width: 1.85px;
-  transition: transform 0.2s, color 0.2s;
+.bottom-btn .nav-svg {
+  width: 20px;
+  height: 20px;
+  stroke: #64748b;
+  transition: transform 0.2s, color 0.2s, stroke 0.2s;
 }
 
 .bottom-btn:active {
   transform: scale(0.95);
 }
 
-.bottom-btn.active {
-  color: #ffffff;
+.bottom-btn.active:not(.farm-center) {
+  color: #0066ff;
+}
+
+.bottom-btn.active:not(.farm-center) .nav-svg {
+  stroke: #0066ff;
+}
+
+/* FARM CENTER HIGHLIGHTED BUTTON */
+.bottom-btn.farm-center {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto;
+  border-radius: 27px;
   background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
-  border-radius: 24px;
-  box-shadow: 0 6px 18px rgba(0, 102, 255, 0.4);
-}
-
-.bottom-btn.active .nav-svg {
   color: #ffffff;
+  box-shadow: 0 6px 18px rgba(0, 102, 255, 0.38);
 }
 
-.nav-indicator {
-  width: 4px;
-  height: 4px;
+.bottom-btn.farm-center .nav-svg {
+  stroke: #ffffff;
+  width: 19px;
+  height: 19px;
+}
+
+.bottom-btn.farm-center .nav-indicator {
+  width: 3.5px;
+  height: 3.5px;
   border-radius: 50%;
-  background: transparent;
+  background: #ffffff;
   margin-top: 1px;
 }
 
-.bottom-btn.active .nav-indicator {
-  background: #ffffff;
+.bottom-btn.farm-center:not(.active) {
+  opacity: 0.88;
 }
 
 /* TASK PAGE & MODALS */
@@ -1624,7 +1579,6 @@ button:active {
 
     <div class="header-actions">
       <button class="header-btn" title="Notifications" onclick="openNotifications()">
-        <span class="notif-dot"></span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
@@ -1676,7 +1630,7 @@ button:active {
             <polyline points="12 6 12 12 16 14"></polyline>
           </svg>
         </div>
-        <span class="value">$0.00</span>
+        <span class="value" id="hourlyProfit">$0.00</span>
         <small>Hourly Profit</small>
       </div>
 
@@ -1689,7 +1643,7 @@ button:active {
             <line x1="3" y1="10" x2="21" y2="10"></line>
           </svg>
         </div>
-        <span class="value">$0.01</span>
+        <span class="value" id="dailyProfit">$0.01</span>
         <small>Daily Profit</small>
       </div>
 
@@ -1700,44 +1654,10 @@ button:active {
             <polyline points="17 6 23 6 23 12"></polyline>
           </svg>
         </div>
-        <span class="value">$0.30</span>
+        <span class="value" id="monthlyProfit">$0.30</span>
         <small>Monthly Profit</small>
       </div>
     </div>
-  </div>
-
-  <!-- ACTION NAVIGATION -->
-  <div class="action-nav">
-    <button class="action-btn active" onclick="switchMainTab('mine')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 20L15.5 8.5"></path>
-        <path d="M20 20L8.5 8.5"></path>
-        <path d="M14 4a12 12 0 0 1 6 6"></path>
-        <path d="M10 4a12 12 0 0 0-6 6"></path>
-      </svg>
-      Mine
-    </button>
-    <button class="action-btn" onclick="topUp()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="1" y="4" width="22" height="16" rx="3" ry="3"></rect>
-        <line x1="1" y1="10" x2="23" y2="10"></line>
-      </svg>
-      Deposit
-    </button>
-    <button class="action-btn" onclick="withdraw()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="12" y1="19" x2="12" y2="5"></line>
-        <polyline points="5 12 12 5 19 12"></polyline>
-      </svg>
-      Withdraw
-    </button>
-    <button class="action-btn" onclick="historyPage()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"></circle>
-        <polyline points="12 6 12 12 14 14"></polyline>
-      </svg>
-      History
-    </button>
   </div>
 
   <!-- FREE MINING CARD -->
@@ -1745,7 +1665,7 @@ button:active {
     <div class="free-top">
       <div class="free-info">
         <div class="free-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 20L15.5 8.5"></path>
             <path d="M20 20L8.5 8.5"></path>
             <path d="M14 4a12 12 0 0 1 6 6"></path>
@@ -1773,37 +1693,52 @@ button:active {
 
       <div class="claim-box">
         <small>24H REWARD</small>
-        <div class="claim-time" id="freeTimer">READY</div>
+        <div class="claim-time" id="freeTimer">23:58:57</div>
       </div>
     </div>
 
-    <button class="claim-btn" onclick="claimFreeMining()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="20 12 20 22 4 22 4 12"></polyline>
-        <rect x="2" y="7" width="20" height="5"></rect>
-        <line x1="12" y1="22" x2="12" y2="7"></line>
-        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-      </svg>
-      Claim Now
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left:auto;">
-        <polyline points="9 18 15 12 9 6"></polyline>
-      </svg>
-    </button>
+    <div class="two-buttons free-buttons">
+      <button class="big-btn free-claim-btn" onclick="claimFreeMining()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 12 20 22 4 22 4 12"></polyline>
+          <rect x="2" y="7" width="20" height="5"></rect>
+          <line x1="12" y1="22" x2="12" y2="7"></line>
+          <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+          <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+        </svg>
+        <span>Claim Now</span>
+        <svg class="chevron-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+
+      <button class="big-btn free-withdraw-btn" onclick="withdraw()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="3"></rect>
+          <line x1="2" y1="10" x2="22" y2="10"></line>
+        </svg>
+        <span>Withdraw</span>
+        <svg class="chevron-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <!-- DEPOSIT MINING SECTION -->
   <div class="deposit-card">
-    <div class="section-title">
-      <div class="section-icon">
+    <div class="deposit-header">
+      <div class="deposit-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="6 2 18 2 22 8 12 22 2 8 6 2"></polygon>
           <line x1="2" y1="8" x2="22" y2="8"></line>
         </svg>
       </div>
-      <h2>Deposit Mining</h2>
+      <div class="deposit-title-wrap">
+        <h2 class="deposit-title">Deposit Mining</h2>
+        <p class="deposit-sub">Top up and earn higher daily rewards</p>
+      </div>
     </div>
-    <p class="section-sub">Top up and earn higher daily rewards</p>
 
     <div class="tiers">
       <div class="tier" onclick="topUpTier('Starter')">
@@ -1908,13 +1843,13 @@ button:active {
         </svg>
       </div>
       <div class="referral-text-wrap">
-        <div class="referral-title">Get UpTo <span class="ref-highlight">$1</span> for an invite</div>
+        <div class="referral-title">Get UpTo $1 for an invite</div>
         <div class="referral-line">
           <span class="ref-line-icon lightning">⚡</span>
           <span>Your hourly income will increase by +50%!</span>
         </div>
         <div class="referral-line">
-          <span class="ref-line-icon star">★</span>
+          <span class="ref-line-icon star">⭐</span>
           <span>Automatic 5-level USDT income</span>
         </div>
       </div>
@@ -1940,7 +1875,7 @@ button:active {
             <path d="M5 28c0-5.5 4.9-9 11-9s11 3.5 11 9" fill="#0369a1"/>
           </svg>
         </div>
-        <div class="avatar-circle avatar-count">+99</div>
+        <span class="avatar-count-text">+99</span>
       </div>
 
       <div class="ref-actions">
@@ -2252,7 +2187,7 @@ button:active {
   </button>
 
   <!-- FARM/MINE BUTTON -->
-  <button class="bottom-btn active" id="nav-farm" onclick="handleNavClick('farm')">
+  <button class="bottom-btn active farm-center" id="nav-farm" onclick="handleNavClick('farm')">
     <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
       <path d="M4 20L15.5 8.5"></path>
       <path d="M20 20L8.5 8.5"></path>
