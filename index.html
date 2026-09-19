@@ -62,7 +62,7 @@ body {
     radial-gradient(ellipse 75% 40% at -5% 60%, rgba(56, 189, 248, 0.16) 0%, transparent 55%),
     #f4f8fd;
   background-attachment: fixed;
-  padding-bottom: calc(96px + var(--safe-bottom));
+  padding-bottom: calc(76px + var(--safe-bottom));
   position: relative;
 }
 
@@ -100,7 +100,7 @@ button:active {
   width: 100%;
   max-width: 460px;
   margin: 0 auto;
-  padding: 12px 14px 20px;
+  padding: 8px 12px 16px;
   position: relative;
   z-index: 1;
 }
@@ -110,43 +110,43 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
 }
 
 .profile {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .avatar {
-  width: 46px;
-  height: 46px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: linear-gradient(135deg, #00a2ff 0%, #0066ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.25);
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
 }
 
 .avatar svg {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .username {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--text-navy);
   letter-spacing: -0.3px;
@@ -154,7 +154,7 @@ button:active {
 }
 
 .user-subtitle {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
   color: var(--text-secondary);
   letter-spacing: -0.1px;
@@ -187,16 +187,16 @@ button:active {
 }
 
 .header-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   border: 1.2px solid var(--blue-neon-border);
   background: #ffffff;
   color: #334e68;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.06), var(--blue-neon-glow-subtle);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.05), var(--blue-neon-glow-subtle);
   position: relative;
   transition: all 0.2s;
 }
@@ -206,8 +206,8 @@ button:active {
 }
 
 .header-btn svg {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
 }
 
 .notif-dot {
@@ -226,10 +226,10 @@ button:active {
   position: relative;
   overflow: hidden;
   border: 1.5px solid var(--blue-neon-border-strong);
-  border-radius: 24px;
-  padding: 16px 16px 14px;
+  border-radius: 20px;
+  padding: 12px 14px 10px;
   background: #ffffff;
-  box-shadow: 0 10px 30px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.07), var(--blue-neon-glow-strong);
 }
 
 .balance-card-watermark {
@@ -252,10 +252,10 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   position: relative;
   z-index: 2;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .balance-info {
@@ -268,17 +268,17 @@ button:active {
 .balance-label {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   color: #1f385c;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: -0.2px;
   white-space: nowrap;
 }
 
 .balance-label svg {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   cursor: pointer;
   color: #627d98;
   transition: color 0.2s;
@@ -290,8 +290,8 @@ button:active {
 
 .balance-illustration {
   flex: 0 0 auto;
-  width: clamp(110px, 36vw, 168px);
-  max-width: 48%;
+  width: clamp(90px, 30vw, 138px);
+  max-width: 46%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -301,7 +301,7 @@ button:active {
 .balance-illustration-img {
   width: 100%;
   height: auto;
-  max-height: 72px;
+  max-height: 52px;
   object-fit: contain;
   display: block;
 }
@@ -393,14 +393,14 @@ button:active {
 }
 
 .balance {
-  font-size: clamp(23px, 6.8vw, 34px);
+  font-size: clamp(21px, 6vw, 29px);
   font-weight: 800;
   letter-spacing: -0.5px;
   color: var(--accent-blue);
-  margin-top: 2px;
+  margin-top: 1px;
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 3px;
   line-height: 1.1;
   white-space: nowrap;
 }
@@ -412,7 +412,7 @@ button:active {
 }
 
 .balance .currency {
-  font-size: clamp(13px, 3.5vw, 17px);
+  font-size: clamp(12px, 3.2vw, 15px);
   font-weight: 800;
   color: var(--accent-blue);
   margin-left: 2px;
@@ -420,9 +420,9 @@ button:active {
 
 .usd {
   color: var(--text-secondary);
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
-  margin-top: 2px;
+  margin-top: 1px;
   margin-bottom: 0;
   white-space: nowrap;
 }
@@ -430,29 +430,29 @@ button:active {
 .profit-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 6px;
   position: relative;
   z-index: 2;
   width: 100%;
 }
 
 .profit-box {
-  padding: 9px 4px;
-  border-radius: 16px;
+  padding: 6px 3px 5px;
+  border-radius: 12px;
   background: #f0f7ff;
   border: 1.2px solid var(--blue-neon-border);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+  gap: 2px;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
   min-width: 0;
 }
 
 .profit-box .icon-wrap {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   color: var(--accent-blue);
   display: flex;
   align-items: center;
@@ -460,12 +460,12 @@ button:active {
 }
 
 .profit-box .icon-wrap svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 }
 
 .profit-box .value {
-  font-size: 14.5px;
+  font-size: 13.5px;
   font-weight: 800;
   color: var(--text-navy);
   letter-spacing: -0.2px;
@@ -474,7 +474,7 @@ button:active {
 
 .profit-box small {
   color: #6885a5;
-  font-size: 9px;
+  font-size: 8.5px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.2px;
@@ -489,79 +489,80 @@ button:active {
 /* FREE MINING CARD */
 .free-card {
   border: 1.5px solid var(--blue-neon-border-strong);
-  border-radius: 22px;
-  padding: 16px 16px 14px;
+  border-radius: 20px;
+  padding: 11px 12px 10px;
   background: 
     radial-gradient(circle at 95% 95%, rgba(56, 189, 248, 0.16) 0%, transparent 45%),
     #ffffff;
-  box-shadow: 0 8px 26px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.07), var(--blue-neon-glow-strong);
   position: relative;
   overflow: hidden;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 
 .free-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
 }
 
 .free-info {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
   flex: 1;
   min-width: 0;
 }
 
 .free-icon {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  border-radius: 14px;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 11px;
   background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.25);
 }
 
 .free-icon svg {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
 }
 
 .free-title {
-  font-size: 16.5px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--text-navy);
   margin: 0;
   letter-spacing: -0.2px;
+  line-height: 1.2;
 }
 
 .free-desc {
   color: var(--text-secondary);
-  font-size: 12px;
-  line-height: 1.35;
-  margin-top: 2px;
+  font-size: 11.5px;
+  line-height: 1.3;
+  margin-top: 1px;
 }
 
 .reward {
   color: var(--accent-blue);
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 800;
   line-height: 1;
-  margin-top: 7px;
+  margin-top: 4px;
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 3px;
 }
 
 .reward span {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
   font-weight: 600;
 }
@@ -569,31 +570,31 @@ button:active {
 .free-note {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   color: var(--text-secondary);
-  font-size: 11.5px;
-  margin-top: 6px;
+  font-size: 11px;
+  margin-top: 3px;
 }
 
 .free-note svg {
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
   color: #f59e0b;
 }
 
 .claim-box {
-  padding: 6px 12px;
-  border-radius: 14px;
+  padding: 4px 8px;
+  border-radius: 11px;
   background: #e6f3fe;
   border: 1.2px solid var(--blue-neon-border);
   text-align: center;
-  min-width: 96px;
+  min-width: 86px;
   box-shadow: var(--blue-neon-glow-subtle);
 }
 
 .claim-box small {
   color: #0070f3;
-  font-size: 9.5px;
+  font-size: 8.5px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -602,65 +603,65 @@ button:active {
 
 .claim-time {
   color: var(--accent-blue);
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 800;
-  margin-top: 2px;
+  margin-top: 1px;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
 }
 
 .free-buttons {
   display: flex;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .free-claim-btn {
   flex: 1;
-  padding: 12px 14px;
-  border-radius: 16px;
+  padding: 9px 12px;
+  border-radius: 12px;
   background: linear-gradient(90deg, #0099ff 0%, #0066ff 100%);
   color: #ffffff;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
-  box-shadow: 0 6px 18px rgba(0, 102, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   border: none;
 }
 
 .free-claim-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 .free-withdraw-btn {
   flex: 1;
-  padding: 12px 14px;
-  border-radius: 16px;
+  padding: 9px 12px;
+  border-radius: 12px;
   background: #ffffff;
   color: #0a2240;
   border: 1.5px solid rgba(56, 189, 248, 0.75);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
-  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.04);
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .free-withdraw-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   color: var(--accent-blue);
 }
 
 .chevron-svg {
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   margin-left: auto;
   flex-shrink: 0;
 }
@@ -668,38 +669,38 @@ button:active {
 /* DEPOSIT MINING CONTAINER */
 .deposit-card {
   border: 1.5px solid var(--blue-neon-border-strong);
-  border-radius: 22px;
-  padding: 16px 14px 14px;
+  border-radius: 20px;
+  padding: 11px 11px 10px;
   background: #ffffff;
-  box-shadow: 0 8px 26px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
+  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.07), var(--blue-neon-glow-strong);
   margin-top: 0;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   position: relative;
 }
 
 .deposit-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .deposit-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.28);
+  box-shadow: 0 3px 10px rgba(0, 102, 255, 0.25);
   flex-shrink: 0;
 }
 
 .deposit-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
 }
 
 .deposit-title-wrap {
@@ -708,40 +709,41 @@ button:active {
 }
 
 .deposit-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--text-navy);
   margin: 0;
   letter-spacing: -0.2px;
+  line-height: 1.2;
 }
 
 .deposit-sub {
   color: var(--text-secondary);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 500;
-  margin: 2px 0 0;
+  margin: 1px 0 0;
 }
 
 /* TIERS */
 .tiers {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 6px;
-  margin-bottom: 12px;
+  gap: 4px;
+  margin-bottom: 8px;
 }
 
 .tier {
   min-width: 0;
-  padding: 10px 2px;
+  padding: 6px 1px 5px;
   text-align: center;
-  border-radius: 16px;
+  border-radius: 13px;
   background: #ffffff;
   border: 1.2px solid var(--blue-neon-border);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
   cursor: pointer;
 }
 
@@ -750,13 +752,13 @@ button:active {
 }
 
 .tier-badge {
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .tier:nth-child(1) .tier-badge { background: #00b074; color: #ffffff; }
@@ -766,28 +768,31 @@ button:active {
 .tier:nth-child(5) .tier-badge { background: #e11d48; color: #ffffff; }
 
 .tier-badge svg {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
 }
 
 .tier-name {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
   color: var(--text-navy);
+  line-height: 1.2;
 }
 
 .tier-amount {
   color: #64748b;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 600;
   margin-top: 1px;
+  line-height: 1.1;
 }
 
 .rate {
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 800;
-  margin-top: 4px;
+  margin-top: 2px;
   font-variant-numeric: tabular-nums;
+  line-height: 1.1;
 }
 
 .tier:nth-child(1) .rate { color: #00b074; }
@@ -798,33 +803,34 @@ button:active {
 
 .daily {
   color: #64748b;
-  font-size: 9.5px;
+  font-size: 8.5px;
   font-weight: 600;
   margin-top: 1px;
+  line-height: 1.1;
 }
 
 /* BUTTONS */
 .two-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .big-btn {
-  padding: 12px 12px;
-  border-radius: 14px;
-  font-size: 13.5px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  font-size: 13px;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   transition: all 0.2s;
   cursor: pointer;
 }
 
 .big-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 .deposit-btn {
@@ -1008,36 +1014,36 @@ button:active {
   position: relative;
   background: #ffffff;
   border: 1.5px solid var(--blue-neon-border-strong);
-  border-radius: 22px;
-  padding: 14px 16px;
-  box-shadow: 0 8px 24px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
+  border-radius: 18px;
+  padding: 10px 12px 9px;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.07), var(--blue-neon-glow-strong);
   margin-top: 0;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   transition: all 0.2s;
 }
 
 .referral-top {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 10px;
 }
 
 .referral-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.28);
+  box-shadow: 0 3px 10px rgba(0, 102, 255, 0.25);
 }
 
 .referral-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
 }
 
 .referral-text-wrap {
@@ -1046,33 +1052,33 @@ button:active {
 }
 
 .referral-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
   color: var(--text-navy);
   letter-spacing: -0.2px;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .referral-line {
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   color: #475569;
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 3px;
-  line-height: 1.35;
+  gap: 5px;
+  margin-top: 2px;
+  line-height: 1.3;
 }
 
 .referral-line .ref-line-icon.lightning {
   color: #f59e0b;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1;
 }
 
 .referral-line .ref-line-icon.star {
   color: #0284c7;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1;
 }
 
@@ -1080,9 +1086,9 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12px;
-  padding-top: 2px;
-  gap: 10px;
+  margin-top: 8px;
+  padding-top: 0;
+  gap: 8px;
 }
 
 .avatar-stack {
@@ -1092,11 +1098,11 @@ button:active {
 }
 
 .avatar-circle {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   border: 2px solid #ffffff;
-  margin-left: -8px;
+  margin-left: -6px;
   background: #e0f2fe;
   display: flex;
   align-items: center;
@@ -1111,28 +1117,28 @@ button:active {
 
 .avatar-count-text {
   color: #0284c7;
-  font-size: 13.5px;
+  font-size: 12px;
   font-weight: 800;
-  margin-left: 6px;
+  margin-left: 5px;
   letter-spacing: -0.2px;
 }
 
 .ref-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .ref-btn {
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 12px;
-  font-size: 13px;
+  height: 31px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 12px;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
@@ -1146,8 +1152,8 @@ button:active {
 }
 
 .ref-copy-btn svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   color: #0066ff;
 }
 
@@ -1160,13 +1166,13 @@ button:active {
   background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
   border: none;
   color: #ffffff;
-  padding: 0 18px;
-  box-shadow: 0 4px 14px rgba(0, 102, 255, 0.32);
+  padding: 0 14px;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.28);
 }
 
 .ref-invite-btn svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
 }
 
 .ref-invite-btn:active {
@@ -1176,18 +1182,18 @@ button:active {
 
 /* PAYOUT REVIEWS CARD */
 .payout-card {
-  padding: 12px 16px;
-  border-radius: 18px;
+  padding: 9px 12px;
+  border-radius: 16px;
   background: #ffffff;
   border: 1.5px solid var(--blue-neon-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.06), var(--blue-neon-glow-subtle);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.05), var(--blue-neon-glow-subtle);
   transition: all 0.2s;
   margin-top: 0;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .payout-card:active {
@@ -1199,13 +1205,13 @@ button:active {
 .payout-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .payout-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
   display: flex;
   align-items: center;
@@ -1216,22 +1222,23 @@ button:active {
 }
 
 .payout-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
 }
 
 .payout-left strong {
   display: block;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 800;
   color: var(--text-navy);
+  line-height: 1.2;
 }
 
 .payout-left small {
   display: block;
   color: #64748b;
-  margin-top: 2px;
-  font-size: 11.5px;
+  margin-top: 1px;
+  font-size: 11px;
   font-weight: 500;
 }
 
@@ -1243,37 +1250,37 @@ button:active {
 }
 
 .payout-arrow svg {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 
 /* BOTTOM NAVIGATION */
 .bottom-nav {
   position: fixed;
-  left: 14px;
-  right: 14px;
+  left: 12px;
+  right: 12px;
   max-width: 440px;
   margin: 0 auto;
-  bottom: calc(10px + var(--safe-bottom));
-  height: 64px;
+  bottom: calc(8px + var(--safe-bottom));
+  height: 58px;
   z-index: 999;
   display: grid;
   grid-template-columns: 1fr 1fr 1.15fr 1fr 1fr;
   align-items: center;
-  padding: 4px 8px;
-  border-radius: 34px;
+  padding: 3px 6px;
+  border-radius: 30px;
   background: #ffffff;
   border: 1.5px solid var(--blue-neon-border);
-  box-shadow: 0 10px 30px rgba(0, 102, 255, 0.08), var(--blue-neon-glow-subtle);
+  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.08), var(--blue-neon-glow-subtle);
 }
 
 .bottom-btn {
   position: relative;
-  height: 52px;
-  border-radius: 18px;
+  height: 48px;
+  border-radius: 16px;
   background: transparent;
   color: #64748b;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   display: flex;
   flex-direction: column;
@@ -1285,8 +1292,8 @@ button:active {
 }
 
 .bottom-btn .nav-svg {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
   stroke: #64748b;
   transition: transform 0.2s, color 0.2s, stroke 0.2s;
 }
@@ -1305,19 +1312,19 @@ button:active {
 
 /* FARM CENTER HIGHLIGHTED BUTTON */
 .bottom-btn.farm-center {
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
   margin: 0 auto;
-  border-radius: 27px;
+  border-radius: 24px;
   background: linear-gradient(135deg, #0099ff 0%, #0066ff 100%);
   color: #ffffff;
-  box-shadow: 0 6px 18px rgba(0, 102, 255, 0.38);
+  box-shadow: 0 5px 16px rgba(0, 102, 255, 0.38);
 }
 
 .bottom-btn.farm-center .nav-svg {
   stroke: #ffffff;
-  width: 19px;
-  height: 19px;
+  width: 18px;
+  height: 18px;
 }
 
 .bottom-btn.farm-center .nav-indicator {
