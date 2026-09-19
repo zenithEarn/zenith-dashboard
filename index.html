@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Zenivora</title>
+<title>Zenith Dashboard</title>
+<meta name="description" content="Zenith (Zenivora) crypto mining dashboard and task management app">
+<meta property="og:title" content="Zenith Dashboard">
+<meta property="og:description" content="Zenith (Zenivora) crypto mining dashboard and task management app">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
@@ -224,7 +227,7 @@ button:active {
   overflow: hidden;
   border: 1.5px solid var(--blue-neon-border-strong);
   border-radius: 24px;
-  padding: 18px 18px 16px;
+  padding: 16px 16px 14px;
   background: #ffffff;
   box-shadow: 0 10px 30px rgba(2, 132, 199, 0.08), var(--blue-neon-glow-strong);
 }
@@ -249,7 +252,17 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 12px;
+}
+
+.balance-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .balance-label {
@@ -257,9 +270,10 @@ button:active {
   align-items: center;
   gap: 6px;
   color: #1f385c;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   letter-spacing: -0.2px;
+  white-space: nowrap;
 }
 
 .balance-label svg {
@@ -272,6 +286,24 @@ button:active {
 
 .balance-label svg:hover {
   color: var(--accent-blue);
+}
+
+.balance-illustration {
+  flex: 0 0 auto;
+  width: clamp(110px, 36vw, 168px);
+  max-width: 48%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.balance-illustration-img {
+  width: 100%;
+  height: auto;
+  max-height: 72px;
+  object-fit: contain;
+  display: block;
 }
 
 .wallet-badge {
@@ -361,17 +393,16 @@ button:active {
 }
 
 .balance {
-  font-size: 38px;
+  font-size: clamp(23px, 6.8vw, 34px);
   font-weight: 800;
-  letter-spacing: -0.6px;
+  letter-spacing: -0.5px;
   color: var(--accent-blue);
   margin-top: 2px;
   display: flex;
   align-items: baseline;
   gap: 4px;
   line-height: 1.1;
-  position: relative;
-  z-index: 2;
+  white-space: nowrap;
 }
 
 .balance-symbol {
@@ -381,7 +412,7 @@ button:active {
 }
 
 .balance .currency {
-  font-size: 18px;
+  font-size: clamp(13px, 3.5vw, 17px);
   font-weight: 800;
   color: var(--accent-blue);
   margin-left: 2px;
@@ -389,10 +420,11 @@ button:active {
 
 .usd {
   color: var(--text-secondary);
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 600;
   margin-top: 2px;
-  margin-bottom: 14px;
+  margin-bottom: 0;
+  white-space: nowrap;
 }
 
 .profit-grid {
@@ -401,11 +433,11 @@ button:active {
   gap: 8px;
   position: relative;
   z-index: 2;
-  margin-top: 14px;
+  width: 100%;
 }
 
 .profit-box {
-  padding: 10px 6px;
+  padding: 9px 4px;
   border-radius: 16px;
   background: #f0f7ff;
   border: 1.2px solid var(--blue-neon-border);
@@ -415,11 +447,12 @@ button:active {
   align-items: center;
   gap: 3px;
   box-shadow: 0 2px 8px rgba(2, 132, 199, 0.04), var(--blue-neon-glow-subtle);
+  min-width: 0;
 }
 
 .profit-box .icon-wrap {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   color: var(--accent-blue);
   display: flex;
   align-items: center;
@@ -427,23 +460,25 @@ button:active {
 }
 
 .profit-box .icon-wrap svg {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
 }
 
 .profit-box .value {
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 800;
   color: var(--text-navy);
   letter-spacing: -0.2px;
+  white-space: nowrap;
 }
 
 .profit-box small {
   color: #6885a5;
-  font-size: 9.5px;
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
 }
 
 /* ACTION NAVIGATION */
@@ -1510,8 +1545,23 @@ button:active {
   .container {
     padding: 8px 10px 20px;
   }
+  .balance-card {
+    padding: 14px 12px 12px;
+  }
   .balance {
-    font-size: 28px;
+    font-size: 21px;
+  }
+  .balance .currency {
+    font-size: 11.5px;
+  }
+  .balance-illustration {
+    width: 105px;
+  }
+  .profit-box {
+    padding: 7px 2px;
+  }
+  .profit-box small {
+    font-size: 8px;
   }
   .tiers {
     gap: 4px;
@@ -1591,29 +1641,32 @@ button:active {
       </svg>
     </div>
 
-    <div class="balance-top-row" style="min-height:90px;position:relative;">
-      <div class="balance-label" style="position:relative;z-index:3;">
-        <span>Total Balance</span>
-        <span onclick="toggleBalanceVisibility()" style="display:inline-flex;cursor:pointer;">
-          <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
-        </span>
+    <div class="balance-top-row">
+      <div class="balance-info">
+        <div class="balance-label">
+          <span>Total Balance</span>
+          <span onclick="toggleBalanceVisibility()" style="display:inline-flex;cursor:pointer;">
+            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </span>
+        </div>
+
+        <div class="balance">
+          <span class="balance-symbol">$</span><span id="balance">0.00</span>
+          <span class="currency">USDT</span>
+        </div>
+
+        <div class="usd">≈ $<span id="usdBalance">0.00</span></div>
       </div>
 
-     <div style="position:absolute;right:0;top:5px;width:210px;height:90px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0;">
-  <img src="zenivora_balance_illustration.png"
-       alt=""
-       style="width:210px;height:90px;object-fit:contain;display:block;">
-     </div>
-
-    <div class="balance">
-      <span class="balance-symbol">$</span><span id="balance">0.00</span>
-      <span class="currency">USDT</span>
+      <div class="balance-illustration">
+        <img src="zenivora_balance_illustration.png"
+             alt=""
+             class="balance-illustration-img">
+      </div>
     </div>
-
-    <div class="usd">≈ $<span id="usdBalance">0.00</span></div>
 
     <div class="profit-grid">
       <div class="profit-box">
