@@ -2242,49 +2242,734 @@ button:active {
 
   </div>
 </div>
+  
 
-<!-- PROFILE MODAL -->
+    <!-- PROFILE MODAL -->
 <div id="profileModal" class="modal-overlay">
   <div style="max-width:480px;margin:0 auto;">
 
+    <!-- HEADER -->
     <div class="modal-header">
       <div>
         <h1>👤 Profile</h1>
         <p>Account information</p>
       </div>
 
-      <button class="close-btn" onclick="closeProfileModal()" type="button">
-        ✕
-      </button>
+      <button class="close-btn"
+        onclick="closeProfileModal()"
+        type="button">×</button>
     </div>
 
-    <div class="task-card" style="text-align:center;padding:24px 16px;">
+
+    <!-- PROFILE USER CARD -->
+    <div class="task-card" style="padding:20px 16px;">
+
       <div style="
-        width:72px;
-        height:72px;
-        margin:0 auto 14px;
-        border-radius:50%;
-        background:linear-gradient(135deg,#0099ff,#0066ff);
         display:flex;
         align-items:center;
-        justify-content:center;
-        color:#fff;
-        font-size:32px;
+        gap:14px;
+        margin-bottom:18px;
       ">
-        👤
+
+        <div style="
+          width:72px;
+          height:72px;
+          min-width:72px;
+          border-radius:50%;
+          background:linear-gradient(135deg,#0099ff,#0066ff);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          color:#fff;
+          font-size:32px;
+          box-shadow:0 4px 15px rgba(0,153,255,.25);
+        ">👤</div>
+
+        <div style="text-align:left;flex:1;">
+
+          <h2 style="
+            margin:0 0 4px;
+            color:var(--text-navy);
+            font-size:22px;
+          " id="profileDisplayName">
+            User
+          </h2>
+
+          <p style="
+            margin:0;
+            color:var(--text-secondary);
+            font-size:13px;
+          " id="profileUsername">
+            Telegram User
+          </p>
+
+        </div>
+
       </div>
 
-      <h2 style="margin:0 0 6px;color:var(--text-navy);">
-        Profile
-      </h2>
 
-      <p style="margin:0;color:var(--text-secondary);font-size:13px;">
-        Welcome to Zenivora
-      </p>
+      <!-- ACCOUNT STATS -->
+      <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+      ">
+
+        <!-- WITHDRAW BALANCE -->
+        <div style="
+          padding:14px;
+          border:1px solid #8ee8c1;
+          border-radius:15px;
+          background:#f2fff9;
+          text-align:left;
+        ">
+          <div style="font-size:23px;">💰</div>
+
+          <strong style="display:block;color:#087443;">
+            Withdraw Balance
+          </strong>
+
+          <span style="
+            font-size:18px;
+            font-weight:700;
+            color:var(--text-navy);
+          " id="profileWithdrawBalance">
+            $0.00
+          </span>
+
+          <small>USDT</small>
+        </div>
+
+
+        <!-- TOTAL EARNED -->
+        <div style="
+          padding:14px;
+          border:1px solid #c9b5ff;
+          border-radius:15px;
+          background:#faf7ff;
+          text-align:left;
+        ">
+          <div style="font-size:23px;">📊</div>
+
+          <strong style="display:block;color:#673ab7;">
+            Total Earned
+          </strong>
+
+          <span style="
+            font-size:18px;
+            font-weight:700;
+            color:var(--text-navy);
+          " id="profileTotalEarned">
+            $0.00
+          </span>
+
+          <small>USDT</small>
+        </div>
+
+
+        <!-- TOTAL REFERRALS -->
+        <div style="
+          padding:14px;
+          border:1px solid #ffb9d6;
+          border-radius:15px;
+          background:#fff7fb;
+          text-align:left;
+        ">
+          <div style="font-size:23px;">👥</div>
+
+          <strong style="display:block;color:#e91e63;">
+            Total Referrals
+          </strong>
+
+          <span style="
+            font-size:18px;
+            font-weight:700;
+            color:var(--text-navy);
+          " id="profileTotalReferrals">
+            0
+          </span>
+        </div>
+
+
+        <!-- MINING POWER -->
+        <div style="
+          padding:14px;
+          border:1px solid #ffe09a;
+          border-radius:15px;
+          background:#fffdf3;
+          text-align:left;
+        ">
+          <div style="font-size:23px;">⛏️</div>
+
+          <strong style="display:block;color:#b47b00;">
+            Mining Power
+          </strong>
+
+          <span style="
+            font-size:18px;
+            font-weight:700;
+            color:var(--text-navy);
+          " id="profileMiningPower">
+            0.00
+          </span>
+
+          <small>GH/s</small>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- REFERRAL LINK -->
+    <div class="task-card" style="padding:16px;margin-top:12px;">
+
+      <div style="
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-bottom:10px;
+      ">
+
+        <div style="font-size:30px;">🔗</div>
+
+        <div>
+          <h3 style="
+            margin:0;
+            color:var(--text-navy);
+          ">
+            Your Referral Link
+          </h3>
+
+          <p style="
+            margin:2px 0 0;
+            color:var(--text-secondary);
+            font-size:13px;
+          ">
+            Invite friends and earn more rewards
+          </p>
+        </div>
+
+      </div>
+
+      <div style="
+        display:flex;
+        gap:8px;
+      ">
+
+        <input
+          id="profileReferralLink"
+          type="text"
+          readonly
+          value=""
+          style="
+            flex:1;
+            min-width:0;
+            border:1px solid #c8d9ed;
+            border-radius:12px;
+            padding:12px;
+            font-size:13px;
+            background:#fff;
+            color:var(--text-navy);
+          "
+        >
+
+        <button
+          type="button"
+          onclick="zenivoraCopyReferral()"
+          style="
+            border:0;
+            border-radius:12px;
+            padding:0 16px;
+            background:#087ff5;
+            color:#fff;
+            font-weight:700;
+          ">
+          📋 Copy
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- WALLET -->
+    <div class="task-card" style="padding:16px;margin-top:12px;">
+
+      <div style="
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-bottom:10px;
+      ">
+
+        <div style="font-size:30px;">👛</div>
+
+        <div>
+          <h3 style="
+            margin:0;
+            color:var(--text-navy);
+          ">
+            Wallet Address (BEP20)
+          </h3>
+
+          <p style="
+            margin:2px 0 0;
+            color:var(--text-secondary);
+            font-size:13px;
+          ">
+            Your USDT receive address
+          </p>
+        </div>
+
+      </div>
+
+      <div style="
+        display:flex;
+        gap:8px;
+      ">
+
+        <input
+          id="profileWalletAddress"
+          type="text"
+          readonly
+          placeholder="Not added yet"
+          style="
+            flex:1;
+            min-width:0;
+            border:1px solid #c8d9ed;
+            border-radius:12px;
+            padding:12px;
+            font-size:13px;
+            background:#fff;
+            color:var(--text-navy);
+          "
+        >
+
+        <button
+          type="button"
+          onclick="zenivoraAddWallet()"
+          style="
+            border:0;
+            border-radius:12px;
+            padding:0 16px;
+            background:#087ff5;
+            color:#fff;
+            font-weight:700;
+          ">
+          ＋ Add
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- LANGUAGE + HELP -->
+    <div style="
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    ">
+
+      <!-- LANGUAGE -->
+      <div class="task-card" style="
+        padding:15px;
+        border:1px solid #72d8ff;
+        background:#f5fcff;
+      ">
+
+        <div style="font-size:28px;">🌐</div>
+
+        <h3 style="
+          margin:5px 0 2px;
+          color:var(--text-navy);
+        ">
+          Language
+        </h3>
+
+        <p style="
+          margin:0 0 8px;
+          color:var(--text-secondary);
+          font-size:12px;
+        ">
+          Select your language
+        </p>
+
+        <select
+          id="zenivoraLanguage"
+          onchange="zenivoraChangeLanguage(this.value)"
+          style="
+            width:100%;
+            padding:10px;
+            border:1px solid #bdd4e8;
+            border-radius:10px;
+            background:#fff;
+            color:var(--text-navy);
+            font-size:13px;
+          ">
+
+          <option value="en">🇺🇸 English</option>
+          <option value="bn">🇧🇩 বাংলা (Bangla)</option>
+          <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+          <option value="ur">🇵🇰 اردو (Urdu)</option>
+          <option value="es">🇪🇸 Español (Spanish)</option>
+          <option value="ar">🇸🇦 العربية (Arabic)</option>
+          <option value="ru">🇷🇺 Русский (Russian)</option>
+
+        </select>
+
+      </div>
+
+
+      <!-- HELP -->
+      <button
+        type="button"
+        onclick="zenivoraHelpSupport()"
+        class="task-card"
+        style="
+          padding:15px;
+          border:1px solid #ffacd0;
+          background:#fff5fa;
+          text-align:left;
+        ">
+
+        <div style="font-size:28px;">🎧</div>
+
+        <h3 style="
+          margin:5px 0 2px;
+          color:var(--text-navy);
+        ">
+          Help & Support
+        </h3>
+
+        <p style="
+          margin:0;
+          color:var(--text-secondary);
+          font-size:12px;
+        ">
+          Get help or contact us
+        </p>
+
+      </button>
+
+    </div>
+
+
+    <!-- HISTORY BUTTONS -->
+    <div style="
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    ">
+
+      <!-- DEPOSIT HISTORY -->
+      <button
+        type="button"
+        onclick="zenivoraDepositHistory()"
+        style="
+          border:1px solid #8ee8c1;
+          border-radius:15px;
+          padding:15px 10px;
+          background:#f2fff9;
+          color:var(--text-navy);
+          text-align:left;
+        ">
+
+        <div style="font-size:25px;">⬇️</div>
+
+        <strong>Deposit History</strong>
+
+        <div style="
+          color:var(--text-secondary);
+          font-size:12px;
+          margin-top:4px;
+        ">
+          View your deposits
+        </div>
+
+      </button>
+
+
+      <!-- WITHDRAW HISTORY -->
+      <button
+        type="button"
+        onclick="zenivoraWithdrawHistory()"
+        style="
+          border:1px solid #ffb9c8;
+          border-radius:15px;
+          padding:15px 10px;
+          background:#fff5f8;
+          color:var(--text-navy);
+          text-align:left;
+        ">
+
+        <div style="font-size:25px;">⬆️</div>
+
+        <strong>Withdraw History</strong>
+
+        <div style="
+          color:var(--text-secondary);
+          font-size:12px;
+          margin-top:4px;
+        ">
+          View your withdrawals
+        </div>
+
+      </button>
+
+
+      <!-- GIFT HISTORY -->
+      <button
+        type="button"
+        onclick="zenivoraGiftHistory()"
+        style="
+          border:1px solid #ffd66b;
+          border-radius:15px;
+          padding:15px 10px;
+          background:#fffaf0;
+          color:var(--text-navy);
+          text-align:left;
+        ">
+
+        <div style="font-size:25px;">🎁</div>
+
+        <strong>Gift History</strong>
+
+        <div style="
+          color:var(--text-secondary);
+          font-size:12px;
+          margin-top:4px;
+        ">
+          View your gifts & rewards
+        </div>
+
+      </button>
+
+
+      <!-- REFERRAL HISTORY -->
+      <button
+        type="button"
+        onclick="zenivoraReferralHistory()"
+        style="
+          border:1px solid #9bcfff;
+          border-radius:15px;
+          padding:15px 10px;
+          background:#f2f9ff;
+          color:var(--text-navy);
+          text-align:left;
+        ">
+
+        <div style="font-size:25px;">👥</div>
+
+        <strong>Referral History</strong>
+
+        <div style="
+          color:var(--text-secondary);
+          font-size:12px;
+          margin-top:4px;
+        ">
+          View referral earnings
+        </div>
+
+      </button>
+
     </div>
 
   </div>
 </div>
+
+
+<script>
+/* ================================
+   ZENIVORA PROFILE FUNCTIONS
+   ================================ */
+
+(function () {
+
+  /* Load selected language */
+  const savedLanguage =
+    localStorage.getItem("zenivora_language") || "en";
+
+  const languageSelect =
+    document.getElementById("zenivoraLanguage");
+
+  if (languageSelect) {
+    languageSelect.value = savedLanguage;
+  }
+
+
+  /* Telegram user information */
+  try {
+
+    if (
+      typeof Telegram !== "undefined" &&
+      Telegram.WebApp &&
+      Telegram.WebApp.initDataUnsafe &&
+      Telegram.WebApp.initDataUnsafe.user
+    ) {
+
+      const user = Telegram.WebApp.initDataUnsafe.user;
+
+      const fullName =
+        [user.first_name, user.last_name]
+          .filter(Boolean)
+          .join(" ") || "User";
+
+      const username =
+        user.username
+          ? "@" + user.username
+          : "Telegram User";
+
+      const nameElement =
+        document.getElementById("profileDisplayName");
+
+      const usernameElement =
+        document.getElementById("profileUsername");
+
+      if (nameElement) {
+        nameElement.textContent = fullName;
+      }
+
+      if (usernameElement) {
+        usernameElement.textContent = username;
+      }
+
+      const referralElement =
+        document.getElementById("profileReferralLink");
+
+      if (referralElement && user.id) {
+        referralElement.value =
+          "https://t.me/ZenivoraBot?start=ref_" + user.id;
+      }
+
+    }
+
+  } catch (error) {
+    console.log("Profile user loading error:", error);
+  }
+
+})();
+
+
+/* LANGUAGE */
+function zenivoraChangeLanguage(language) {
+
+  localStorage.setItem(
+    "zenivora_language",
+    language
+  );
+
+  const names = {
+    en: "English",
+    bn: "বাংলা",
+    hi: "हिन्दी",
+    ur: "اردو",
+    es: "Español",
+    ar: "العربية",
+    ru: "Русский"
+  };
+
+  alert(
+    "Language selected: " +
+    (names[language] || "English")
+  );
+}
+
+
+/* COPY REFERRAL */
+function zenivoraCopyReferral() {
+
+  const input =
+    document.getElementById("profileReferralLink");
+
+  if (!input || !input.value) {
+    alert("Referral link is not available yet.");
+    return;
+  }
+
+  navigator.clipboard.writeText(input.value)
+    .then(function () {
+      alert("Referral link copied!");
+    })
+    .catch(function () {
+      input.select();
+      document.execCommand("copy");
+      alert("Referral link copied!");
+    });
+}
+
+
+/* ADD WALLET */
+function zenivoraAddWallet() {
+
+  const wallet =
+    prompt("Enter your BEP20 USDT wallet address:");
+
+  if (!wallet) return;
+
+  if (!/^0x[a-fA-F0-9]{40}$/.test(wallet)) {
+    alert("Please enter a valid BEP20 wallet address.");
+    return;
+  }
+
+  document.getElementById(
+    "profileWalletAddress"
+  ).value = wallet;
+
+  localStorage.setItem(
+    "zenivora_wallet",
+    wallet
+  );
+
+  alert("Wallet address saved.");
+}
+
+
+/* LOAD WALLET */
+(function () {
+
+  const savedWallet =
+    localStorage.getItem("zenivora_wallet");
+
+  const walletInput =
+    document.getElementById("profileWalletAddress");
+
+  if (savedWallet && walletInput) {
+    walletInput.value = savedWallet;
+  }
+
+})();
+
+
+/* HELP */
+function zenivoraHelpSupport() {
+  alert(
+    "Help & Support\n\n" +
+    "For assistance, please contact Zenivora Support."
+  );
+}
+
+
+/* HISTORY */
+function zenivoraDepositHistory() {
+  alert("Deposit History will be available here.");
+}
+
+function zenivoraWithdrawHistory() {
+  alert("Withdraw History will be available here.");
+}
+
+function zenivoraGiftHistory() {
+  alert("Gift / Reward History will be available here.");
+}
+
+function zenivoraReferralHistory() {
+  alert("Referral History will be available here.");
+}
+
+</script>
   
 <!-- HOW TO EARN MODAL -->
 <div id="earnModal" class="modal-overlay">
