@@ -2762,12 +2762,14 @@ function closeFriendsModal() {
 
 function openGiftModal() {
   closeAllModals();
-  document.getElementById("giftModal").style.display = "block";
+  const giftModal = document.getElementById("referralGiftModal");
+  if (giftModal) giftModal.style.display = "block";
   setActiveNav("gift");
 }
 
-function closeGiftModal() {
-  document.getElementById("giftModal").style.display = "none";
+function closeReferralGiftModal() {
+  const giftModal = document.getElementById("referralGiftModal");
+  if (giftModal) giftModal.style.display = "none";
   setActiveNav("farm");
 }
 
@@ -2801,7 +2803,7 @@ function closeRulesModal() {
 function closeAllModals() {
   document.getElementById("taskPage").style.display = "none";
   document.getElementById("friendsModal").style.display = "none";
-  document.getElementById("giftModal").style.display = "none";
+  document.getElementById("referralGiftModal").style.display = "none";
   document.getElementById("profileModal").style.display = "none";
   document.getElementById("earnModal").style.display = "none";
   document.getElementById("rulesModal").style.display = "none";
