@@ -2243,7 +2243,49 @@ button:active {
   </div>
 </div>
 
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="modal-overlay">
+  <div style="max-width:480px;margin:0 auto;">
 
+    <div class="modal-header">
+      <div>
+        <h1>👤 Profile</h1>
+        <p>Account information</p>
+      </div>
+
+      <button class="close-btn" onclick="closeProfileModal()" type="button">
+        ✕
+      </button>
+    </div>
+
+    <div class="task-card" style="text-align:center;padding:24px 16px;">
+      <div style="
+        width:72px;
+        height:72px;
+        margin:0 auto 14px;
+        border-radius:50%;
+        background:linear-gradient(135deg,#0099ff,#0066ff);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#fff;
+        font-size:32px;
+      ">
+        👤
+      </div>
+
+      <h2 style="margin:0 0 6px;color:var(--text-navy);">
+        Profile
+      </h2>
+
+      <p style="margin:0;color:var(--text-secondary);font-size:13px;">
+        Welcome to Zenivora
+      </p>
+    </div>
+
+  </div>
+</div>
+  
 <!-- HOW TO EARN MODAL -->
 <div id="earnModal" class="modal-overlay">
   <div style="max-width:480px;margin:0 auto;">
@@ -2318,7 +2360,7 @@ button:active {
   </button>
 
   <!-- PROFILE BUTTON -->
-  <button class="bottom-btn" id="nav-profile" onclick="handleNavClick('profile')">
+  <button class="bottom-btn" id="nav-profile" onclick="openProfileModal()">
     <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="7.5" r="3.75"></circle>
       <path d="M5.5 20.5a6.5 6.5 0 0 1 13 0"></path>
