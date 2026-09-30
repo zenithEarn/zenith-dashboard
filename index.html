@@ -2801,21 +2801,21 @@ function closeRulesModal() {
 }
 
 function closeAllModals() {
-  document.getElementById("taskPage").style.display = "none";
-  document.getElementById("friendsModal").style.display = "none";
-  document.getElementById("referralGiftModal").style.display = "none";
-  document.getElementById("profileModal").style.display = "none";
-  document.getElementById("earnModal").style.display = "none";
-  document.getElementById("rulesModal").style.display = "none";
-}
+  const taskPage = document.getElementById("taskPage");
+  const friendsModal = document.getElementById("friendsModal");
+  const giftModal = document.getElementById("referralGiftModal");
+  const earnModal = document.getElementById("earnModal");
 
+  if (taskPage) taskPage.style.display = "none";
+  if (friendsModal) friendsModal.style.display = "none";
+  if (giftModal) giftModal.style.display = "none";
+  if (earnModal) earnModal.style.display = "none";
+}
 function setActiveNav(tab) {
   document.querySelectorAll(".bottom-btn").forEach(btn => btn.classList.remove("active"));
   const target = document.getElementById("nav-" + tab);
   if (target) target.classList.add("active");
 }
-
-function handleNavClick(tab) {
   if (tab === "task") {
     openTaskPage();
   } else if (tab === "friends") {
@@ -2823,12 +2823,13 @@ function handleNavClick(tab) {
   } else if (tab === "farm") {
     closeAllModals();
     setActiveNav("farm");
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   } else if (tab === "gift") {
     openGiftModal();
   } else if (tab === "profile") {
     openProfileModal();
   }
+}
 }
 
 function switchMainTab(type) {
