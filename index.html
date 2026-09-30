@@ -2816,6 +2816,8 @@ function setActiveNav(tab) {
   const target = document.getElementById("nav-" + tab);
   if (target) target.classList.add("active");
 }
+
+function handleNavClick(tab) {
   if (tab === "task") {
     openTaskPage();
   } else if (tab === "friends") {
@@ -2829,7 +2831,6 @@ function setActiveNav(tab) {
   } else if (tab === "profile") {
     openProfileModal();
   }
-}
 }
 
 function switchMainTab(type) {
