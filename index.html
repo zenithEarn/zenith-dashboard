@@ -2209,82 +2209,40 @@ button:active {
   </div>
 </div>
 
-<!-- GIFT MODAL -->
-<div id="giftModal" class="modal-overlay">
+<!-- REFERRAL GIFTS MODAL -->
+<div id="referralGiftModal" class="modal-overlay">
   <div style="max-width:480px;margin:0 auto;">
+
     <div class="modal-header">
       <div>
-        <h1>Daily Rewards & Gifts</h1>
-        <p>Claim surprise drops & promo vouchers</p>
+        <h1>🎁 Referral Gifts</h1>
+        <p>Invite friends and open amazing rewards!</p>
       </div>
-      <button class="close-btn" onclick="closeGiftModal()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-        Close
+
+      <button class="close-btn" onclick="closeReferralGiftModal()">
+        ✕
       </button>
     </div>
 
-    <div class="task-card">
-      <h3 style="color:#0a2240;margin-top:0;">Redeem Promo Code</h3>
-      <p style="color:var(--text-secondary);font-size:12px;">Enter an official promo code from the Zenivora announcement channel to redeem bonus USDT.</p>
-      <div style="display:flex;gap:8px;margin-top:12px;">
-        <input type="text" id="promoInput" placeholder="Enter promo code" style="flex:1;background:#f0f7ff;border:1px solid #ddecfa;border-radius:10px;padding:10px 12px;color:#0a2240;font-size:13px;outline:none;">
-        <button onclick="redeemCode()" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#ffffff;font-weight:800;padding:0 16px;border-radius:10px;font-size:13px;box-shadow:0 2px 8px rgba(2,132,199,0.25);">Redeem</button>
+    <div class="task-card" style="text-align:center;">
+      <h2 style="margin:0;color:#0a2240;">Your Gifts</h2>
+
+      <p style="color:var(--text-secondary);margin:6px 0 18px;">
+        Open your gifts and win instant USDT rewards!
+      </p>
+
+      <div id="referralGiftBoxes"
+           style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+      </div>
+
+      <div id="referralGiftResult"
+           style="margin-top:18px;font-weight:700;font-size:16px;">
       </div>
     </div>
+
   </div>
 </div>
 
-<!-- PROFILE MODAL -->
-<div id="profileModal" class="modal-overlay">
-  <div style="max-width:480px;margin:0 auto;">
-    <div class="modal-header">
-      <div>
-        <h1>My Account</h1>
-        <p>Security and profile overview</p>
-      </div>
-      <button class="close-btn" onclick="closeProfileModal()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-        Close
-      </button>
-    </div>
-
-    <div class="task-card">
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-        <div class="avatar" style="width:54px;height:54px;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px;">
-            <circle cx="12" cy="7.5" r="3.75"></circle>
-            <path d="M5.5 20.5a6.5 6.5 0 0 1 13 0"></path>
-          </svg>
-        </div>
-        <div>
-          <div style="font-size:17px;font-weight:800;color:#0a2240;" id="profileUsername">Hridoy Bro..</div>
-          <div style="font-size:12px;color:#0284c7;font-weight:700;margin-top:2px;">● Telegram Verified</div>
-        </div>
-      </div>
-
-      <div style="border-top:1px solid #eef4fb;padding-top:12px;display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;justify-content:space-between;font-size:13px;">
-          <span style="color:var(--text-secondary);">Membership Status</span>
-          <span style="color:#d97706;font-weight:700;">Level 1 Pioneer</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;">
-          <span style="color:var(--text-secondary);">Account Protection</span>
-          <span style="color:#0284c7;font-weight:700;">High (Cloudflare SSL)</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;">
-          <span style="color:var(--text-secondary);">API Node</span>
-          <span style="color:var(--text-muted);font-size:11px;">zenith-backend (Active)</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- HOW TO EARN MODAL -->
 <div id="earnModal" class="modal-overlay">
@@ -2305,28 +2263,6 @@ button:active {
       <p>Join our official channels, groups, and partner channels to earn instant one-time bonuses.</p>
       <h3>4. Referral Rewards</h3>
       <p>Earn passive commissions whenever your friends deposit or claim mining rewards.</p>
-    </div>
-  </div>
-</div>
-
-<!-- RULES MODAL -->
-<div id="rulesModal" class="modal-overlay">
-  <div style="max-width:480px;margin:0 auto;">
-    <div class="modal-header">
-      <div>
-        <h1>Rules & FAQs</h1>
-        <p>Terms of participation and safety</p>
-      </div>
-      <button class="close-btn" onclick="closeRulesModal()">✕ Close</button>
-    </div>
-    <div class="info-modal-body">
-      <h3>Platform Rules</h3>
-      <ul class="info-list">
-        <li>One account per Telegram ID. Multi-account abuse is strictly monitored.</li>
-        <li>Mining rewards accumulate in real-time and are claimable after each 24h cycle.</li>
-        <li>Withdrawals are processed directly to your provided USDT TRC20/BEP20 wallet.</li>
-        <li>All operations are verified via cryptographic Telegram Mini App authentication.</li>
-      </ul>
     </div>
   </div>
 </div>
