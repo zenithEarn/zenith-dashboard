@@ -1,5 +1,5 @@
-name = "zenivora-worker"
-main = "worker.js"
+name = "zenith-backend"
+main = "worker.js"compatibility_date = \"2024-01-01\"
 compatibility_date = "2024-01-01"
 
 # NOTE: Do NOT put your bot token here in plain text.
