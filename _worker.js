@@ -1,26 +1,82 @@
-// Cloudflare Worker / Cloudflare Pages Functions for Zenivora
+// Cloudflare Worker for Zenivora Telegram Task Verification
+// Production Worker URL: https://zenith-backend.hamidalipq.workers.dev
+
 const TASK_CHANNELS = {
   task_channel: '@ZenivoraUpdate',
   task_group: '@ZenivoraCommunity',
   task_payout: '@ZenivoraWithdraw'
 };
 
-const workerUserStore = new Map();
+// In-memory fallback cache (used if env.ZENIVORA_KV is not yet bound in local/dev)
+const memoryUserCache = new Map();
 
-function getWorkerUserState(userId) {
-  const id = String(userId || 'anonymous');
-  if (!workerUserStore.has(id)) {
-    workerUserStore.set(id, {
-      balance: 0.00,
-      wallet: null,
-      tasks: {
-        task_channel: { verified: false, claimed: false },
-        task_group: { verified: false, claimed: false },
-        task_payout: { verified: false, claimed: false }
+function createDefaultUserState() {
+  return {
+    balance: 0.00,
+    wallet: null,
+    tasks: {
+      task_channel: { verified: false, claimed: false },
+      task_group: { verified: false, claimed: false },
+      task_payout: { verified: false, claimed: false }
+    }
+  };
+}
+
+// Persistent user state reader via Cloudflare KV (ZENIVORA_KV)
+async function getWorkerUserState(userId, env) {
+  const cleanId = String(userId || 'anonymous').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  const kvKey = `zenivora:user:${cleanId}`;
+
+  if (env && env.ZENIVORA_KV) {
+    try {
+      const data = await env.ZENIVORA_KV.get(kvKey, 'json');
+      if (data && typeof data === 'object') {
+        return {
+          balance: typeof data.balance === 'number' ? data.balance : 0.00,
+          wallet: data.wallet || null,
+          tasks: {
+            task_channel: {
+              verified: Boolean(data.tasks?.task_channel?.verified),
+              claimed: Boolean(data.tasks?.task_channel?.claimed)
+            },
+            task_group: {
+              verified: Boolean(data.tasks?.task_group?.verified),
+              claimed: Boolean(data.tasks?.task_group?.claimed)
+            },
+            task_payout: {
+              verified: Boolean(data.tasks?.task_payout?.verified),
+              claimed: Boolean(data.tasks?.task_payout?.claimed)
+            }
+          }
+        };
       }
-    });
+    } catch (kvErr) {
+      console.warn('[ZENIVORA_KV Read Warning]:', kvErr.message);
+    }
   }
-  return workerUserStore.get(id);
+
+  // Graceful fallback to memory cache if KV is not bound
+  if (!memoryUserCache.has(cleanId)) {
+    memoryUserCache.set(cleanId, createDefaultUserState());
+  }
+  return memoryUserCache.get(cleanId);
+}
+
+// Persistent user state writer via Cloudflare KV (ZENIVORA_KV)
+async function saveWorkerUserState(userId, state, env) {
+  const cleanId = String(userId || 'anonymous').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  const kvKey = `zenivora:user:${cleanId}`;
+
+  // Keep memory cache in sync
+  memoryUserCache.set(cleanId, state);
+
+  if (env && env.ZENIVORA_KV) {
+    try {
+      await env.ZENIVORA_KV.put(kvKey, JSON.stringify(state));
+    } catch (kvErr) {
+      console.error('[ZENIVORA_KV Write Error]:', kvErr.message);
+    }
+  }
 }
 
 const corsHeaders = {
@@ -30,25 +86,37 @@ const corsHeaders = {
   'Content-Type': 'application/json'
 };
 
+// Safe JSON Response Helper: Guaranteed to ALWAYS return a valid Response instance
+function jsonResponse(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: corsHeaders
+  });
+}
+
 async function verifyTelegramMembershipWithBot(channelUsername, userId, botToken) {
+  // Check secret configuration
   if (!botToken) {
     return {
-      status: 'SERVER_ERROR',
-      message: 'Verification server is temporarily unavailable (bot token secret not configured).'
+      status: 'CONFIG_ERROR',
+      error: 'CONFIG_ERROR',
+      message: 'Worker secret TELEGRAM_BOT_TOKEN is not configured.'
+    };
+  }
+
+  // Check valid user ID
+  const cleanUserId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  if (!cleanUserId || !/^\d+$/.test(cleanUserId)) {
+    return {
+      status: 'INVALID_USER',
+      error: 'INVALID_USER',
+      message: 'Valid Telegram numeric user ID is required for verification.'
     };
   }
 
   const targetChat = channelUsername.startsWith('@') || channelUsername.startsWith('-')
     ? channelUsername
     : `@${channelUsername}`;
-
-  const cleanUserId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
-  if (!cleanUserId || !/^\d+$/.test(cleanUserId)) {
-    return {
-      status: 'INVALID_USER',
-      message: 'Valid Telegram user ID is required for verification.'
-    };
-  }
 
   try {
     const controller = new AbortController();
@@ -58,7 +126,17 @@ async function verifyTelegramMembershipWithBot(channelUsername, userId, botToken
     const response = await fetch(url, { signal: controller.signal });
     clearTimeout(timeout);
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      return {
+        status: 'TELEGRAM_ERROR',
+        error: 'TELEGRAM_ERROR',
+        message: 'Telegram verification failed: Invalid response from Telegram',
+        details: `HTTP ${response.status}`
+      };
+    }
 
     if (data.ok && data.result) {
       const memberStatus = data.result.status;
@@ -69,56 +147,75 @@ async function verifyTelegramMembershipWithBot(channelUsername, userId, botToken
         return {
           status: 'NOT_JOINED',
           joined: false,
+          error: 'NOT_JOINED',
           message: 'Please join the Telegram channel first.'
         };
       }
     } else {
       const description = (data.description || '').toLowerCase();
+      // Telegram returns "user not found" or "PARTICIPANT_ID_INVALID" when the user has never joined
       if (description.includes('user not found') || description.includes('participant') || description.includes('not a member')) {
         return {
           status: 'NOT_JOINED',
           joined: false,
+          error: 'NOT_JOINED',
           message: 'Please join the Telegram channel first.'
         };
       }
+
+      // Safe diagnostic error without exposing bot token
+      const safeDesc = (data.description || 'Unknown Telegram API error').replace(/bot\d+:[a-zA-Z0-9_-]+/gi, 'bot[REDACTED]');
       return {
-        status: 'SERVER_ERROR',
-        message: 'Verification server is temporarily unavailable. Please try again.'
+        status: 'TELEGRAM_ERROR',
+        error: 'TELEGRAM_ERROR',
+        message: 'Telegram verification failed',
+        details: safeDesc
       };
     }
   } catch (err) {
+    if (err.name === 'AbortError') {
+      return {
+        status: 'TELEGRAM_ERROR',
+        error: 'TIMEOUT',
+        message: 'Telegram API request timed out. Please try again.',
+        details: 'Connection to Telegram API timed out after 8s'
+      };
+    }
     return {
-      status: 'SERVER_ERROR',
-      message: 'Verification server is temporarily unavailable. Please try again.'
+      status: 'TELEGRAM_ERROR',
+      error: 'NETWORK_ERROR',
+      message: 'Failed to connect to Telegram API. Please try again.',
+      details: err.message || 'Network error'
     };
   }
 }
 
 export default {
   async fetch(request, env, ctx) {
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { status: 204, headers: corsHeaders });
-    }
+    try {
+      // 1. Guaranteed OPTIONS handling for CORS preflight
+      if (request.method === 'OPTIONS') {
+        return new Response(null, { status: 204, headers: corsHeaders });
+      }
 
-    const url = new URL(request.url);
-    const pathname = url.pathname;
+      const url = new URL(request.url);
+      const pathname = url.pathname.replace(/\/$/, '') || '/';
 
-    // GET /api/tasks/status
-    if (pathname === '/api/tasks/status' && request.method === 'GET') {
-      const userId = url.searchParams.get('userId') || 'anonymous';
-      const state = getWorkerUserState(userId);
-      return new Response(JSON.stringify({
-        success: true,
-        ok: true,
-        tasks: state.tasks,
-        balance: state.balance,
-        wallet: state.wallet || null
-      }), { status: 200, headers: corsHeaders });
-    }
+      // 2. GET /api/tasks/status
+      if (pathname === '/api/tasks/status' && request.method === 'GET') {
+        const userId = url.searchParams.get('userId') || 'anonymous';
+        const state = await getWorkerUserState(userId, env);
+        return jsonResponse({
+          success: true,
+          ok: true,
+          tasks: state.tasks,
+          balance: state.balance,
+          wallet: state.wallet || null
+        }, 200);
+      }
 
-    // POST /api/tasks/verify
-    if (pathname === '/api/tasks/verify' && request.method === 'POST') {
-      try {
+      // 3. POST /api/tasks/verify
+      if (pathname === '/api/tasks/verify' && request.method === 'POST') {
         const body = await request.json().catch(() => ({}));
         const { taskId, task_id, userId } = body;
         const key = taskId || (task_id ? String(task_id) : 'task_channel');
@@ -133,23 +230,24 @@ export default {
         };
         const targetKey = taskMap[key];
         if (!targetKey) {
-          return new Response(JSON.stringify({
+          return jsonResponse({
             success: false,
             joined: false,
             error: 'INVALID_TASK',
             message: 'Invalid task identifier.'
-          }), { status: 400, headers: corsHeaders });
+          }, 400);
         }
 
-        const state = getWorkerUserState(userId);
+        const state = await getWorkerUserState(userId, env);
+        // If already verified or claimed, return success immediately
         if (state.tasks[targetKey].verified || state.tasks[targetKey].claimed) {
-          return new Response(JSON.stringify({
+          return jsonResponse({
             success: true,
             joined: true,
             ok: true,
             verified: true,
             claimed: state.tasks[targetKey].claimed
-          }), { status: 200, headers: corsHeaders });
+          }, 200);
         }
 
         const channel = TASK_CHANNELS[targetKey];
@@ -158,43 +256,58 @@ export default {
 
         if (result.status === 'SUCCESS' && result.joined) {
           state.tasks[targetKey].verified = true;
-          return new Response(JSON.stringify({
+          await saveWorkerUserState(userId, state, env);
+          return jsonResponse({
             success: true,
             joined: true,
             ok: true,
             verified: true,
             claimed: state.tasks[targetKey].claimed
-          }), { status: 200, headers: corsHeaders });
+          }, 200);
         }
 
         if (result.status === 'NOT_JOINED') {
-          return new Response(JSON.stringify({
+          return jsonResponse({
             success: false,
             joined: false,
             error: 'NOT_JOINED',
             message: result.message || 'Please join the Telegram channel first.'
-          }), { status: 403, headers: corsHeaders });
+          }, 403);
         }
 
-        return new Response(JSON.stringify({
-          success: false,
-          joined: false,
-          error: result.status || 'SERVER_ERROR',
-          message: result.message || 'Verification server is temporarily unavailable. Please try again.'
-        }), { status: 503, headers: corsHeaders });
-      } catch (err) {
-        return new Response(JSON.stringify({
-          success: false,
-          joined: false,
-          error: 'SERVER_ERROR',
-          message: 'Verification server is temporarily unavailable. Please try again.'
-        }), { status: 500, headers: corsHeaders });
-      }
-    }
+        if (result.status === 'CONFIG_ERROR') {
+          return jsonResponse({
+            success: false,
+            joined: false,
+            status: 'CONFIG_ERROR',
+            error: 'CONFIG_ERROR',
+            message: result.message
+          }, 503);
+        }
 
-    // POST /api/tasks/claim
-    if (pathname === '/api/tasks/claim' && request.method === 'POST') {
-      try {
+        if (result.status === 'INVALID_USER') {
+          return jsonResponse({
+            success: false,
+            joined: false,
+            status: 'INVALID_USER',
+            error: 'INVALID_USER',
+            message: result.message
+          }, 400);
+        }
+
+        // TELEGRAM_ERROR / other failure
+        return jsonResponse({
+          success: false,
+          joined: false,
+          status: result.status || 'TELEGRAM_ERROR',
+          error: result.error || 'TELEGRAM_ERROR',
+          message: result.message || 'Telegram verification failed',
+          details: result.details || 'Unable to verify membership at this time.'
+        }, 502);
+      }
+
+      // 4. POST /api/tasks/claim
+      if (pathname === '/api/tasks/claim' && request.method === 'POST') {
         const body = await request.json().catch(() => ({}));
         const { taskId, task_id, userId } = body;
         const key = taskId || (task_id ? String(task_id) : 'task_channel');
@@ -209,55 +322,66 @@ export default {
         };
         const targetKey = taskMap[key];
         if (!targetKey) {
-          return new Response(JSON.stringify({
+          return jsonResponse({
             success: false,
             claimed: false,
-            error: 'INVALID_TASK'
-          }), { status: 400, headers: corsHeaders });
+            error: 'INVALID_TASK',
+            message: 'Invalid task identifier.'
+          }, 400);
         }
 
-        const state = getWorkerUserState(userId);
+        const state = await getWorkerUserState(userId, env);
         if (!state.tasks[targetKey].verified && !state.tasks[targetKey].claimed) {
-          return new Response(JSON.stringify({
+          return jsonResponse({
             success: false,
             claimed: false,
             error: 'NOT_VERIFIED',
             message: 'Please verify Telegram channel membership before claiming reward.'
-          }), { status: 400, headers: corsHeaders });
+          }, 400);
         }
 
         if (state.tasks[targetKey].claimed) {
-          return new Response(JSON.stringify({
+          return jsonResponse({
             success: true,
             claimed: true,
             alreadyClaimed: true,
             newBalance: state.balance
-          }), { status: 200, headers: corsHeaders });
+          }, 200);
         }
 
         state.tasks[targetKey].claimed = true;
         state.tasks[targetKey].verified = true;
         state.balance = parseFloat((state.balance + 0.01).toFixed(2));
+        await saveWorkerUserState(userId, state, env);
 
-        return new Response(JSON.stringify({
+        return jsonResponse({
           success: true,
           claimed: true,
           newBalance: state.balance
-        }), { status: 200, headers: corsHeaders });
-      } catch (err) {
-        return new Response(JSON.stringify({
-          success: false,
-          claimed: false,
-          error: 'SERVER_ERROR'
-        }), { status: 500, headers: corsHeaders });
+        }, 200);
       }
-    }
 
-    // Pass through to assets if on Cloudflare Pages
-    if (env?.ASSETS?.fetch) {
-      return env.ASSETS.fetch(request);
-    }
+      // 5. Pass through to assets if on Cloudflare Pages
+      if (env?.ASSETS?.fetch) {
+        return env.ASSETS.fetch(request);
+      }
 
-    return new Response('Not Found', { status: 404 });
+      // 6. Guaranteed 404 Response for unmatched routes
+      return jsonResponse({
+        success: false,
+        error: 'NOT_FOUND',
+        message: 'Endpoint not found'
+      }, 404);
+
+    } catch (unhandledError) {
+      // 7. Catastrophic catch: ALWAYS returns a Response object!
+      return jsonResponse({
+        success: false,
+        status: 'SERVER_ERROR',
+        error: 'SERVER_ERROR',
+        message: 'Worker execution error',
+        details: String(unhandledError && unhandledError.message ? unhandledError.message : unhandledError)
+      }, 500);
+    }
   }
 };

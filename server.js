@@ -43,22 +43,24 @@ async function verifyTelegramMembership(channelUsername, userId) {
   if (!botToken) {
     console.warn('[Telegram Task] TELEGRAM_BOT_TOKEN not configured on server.');
     return {
-      status: 'SERVER_ERROR',
-      message: 'Verification server is temporarily unavailable. Please try again.'
+      status: 'CONFIG_ERROR',
+      error: 'CONFIG_ERROR',
+      message: 'Server secret TELEGRAM_BOT_TOKEN is not configured.'
+    };
+  }
+
+  const cleanUserId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  if (!cleanUserId || !/^\d+$/.test(cleanUserId)) {
+    return {
+      status: 'INVALID_USER',
+      error: 'INVALID_USER',
+      message: 'Valid Telegram numeric user ID is required for verification.'
     };
   }
 
   const targetChat = channelUsername.startsWith('@') || channelUsername.startsWith('-')
     ? channelUsername
     : `@${channelUsername}`;
-
-  const cleanUserId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
-  if (!cleanUserId || !/^\d+$/.test(cleanUserId)) {
-    return {
-      status: 'INVALID_USER',
-      message: 'Valid Telegram user ID is required for verification.'
-    };
-  }
 
   try {
     const controller = new AbortController();
@@ -68,7 +70,17 @@ async function verifyTelegramMembership(channelUsername, userId) {
     const response = await fetch(url, { signal: controller.signal });
     clearTimeout(timeout);
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      return {
+        status: 'TELEGRAM_ERROR',
+        error: 'TELEGRAM_ERROR',
+        message: 'Telegram verification failed: Invalid response from Telegram',
+        details: `HTTP ${response.status}`
+      };
+    }
 
     if (data.ok && data.result) {
       const memberStatus = data.result.status;
@@ -79,6 +91,7 @@ async function verifyTelegramMembership(channelUsername, userId) {
         return {
           status: 'NOT_JOINED',
           joined: false,
+          error: 'NOT_JOINED',
           message: 'Please join the Telegram channel first.'
         };
       }
@@ -88,21 +101,33 @@ async function verifyTelegramMembership(channelUsername, userId) {
         return {
           status: 'NOT_JOINED',
           joined: false,
+          error: 'NOT_JOINED',
           message: 'Please join the Telegram channel first.'
         };
       }
 
-      console.warn(`[Telegram Bot API error] ${data.description}`);
+      const safeDesc = (data.description || 'Unknown Telegram API error').replace(/bot\d+:[a-zA-Z0-9_-]+/gi, 'bot[REDACTED]');
       return {
-        status: 'SERVER_ERROR',
-        message: 'Verification server is temporarily unavailable. Please try again.'
+        status: 'TELEGRAM_ERROR',
+        error: 'TELEGRAM_ERROR',
+        message: 'Telegram verification failed',
+        details: safeDesc
       };
     }
   } catch (err) {
-    console.error('[Telegram API fetch error]:', err.message);
+    if (err.name === 'AbortError') {
+      return {
+        status: 'TELEGRAM_ERROR',
+        error: 'TIMEOUT',
+        message: 'Telegram API request timed out. Please try again.',
+        details: 'Connection to Telegram API timed out after 8s'
+      };
+    }
     return {
-      status: 'SERVER_ERROR',
-      message: 'Verification server is temporarily unavailable. Please try again.'
+      status: 'TELEGRAM_ERROR',
+      error: 'NETWORK_ERROR',
+      message: 'Failed to connect to Telegram API. Please try again.',
+      details: err.message || 'Network error'
     };
   }
 }
@@ -248,23 +273,37 @@ app.post('/api/tasks/verify', async (req, res) => {
       });
     }
 
+    if (result.status === 'CONFIG_ERROR') {
+      return res.status(503).json({
+        ok: false,
+        success: false,
+        verified: false,
+        status: 'CONFIG_ERROR',
+        error: 'CONFIG_ERROR',
+        message: result.message
+      });
+    }
+
     if (result.status === 'INVALID_USER') {
       return res.status(400).json({
         ok: false,
         success: false,
         verified: false,
+        status: 'INVALID_USER',
         error: 'INVALID_USER',
-        message: result.message || 'Valid Telegram user ID is required for verification.'
+        message: result.message || 'Valid Telegram numeric user ID is required for verification.'
       });
     }
 
-    // SERVER_ERROR / Bot API unavailable
-    return res.status(503).json({
+    // TELEGRAM_ERROR / other failure
+    return res.status(502).json({
       ok: false,
       success: false,
       verified: false,
-      error: 'SERVER_ERROR',
-      message: result.message || 'Verification server is temporarily unavailable. Please try again.'
+      status: result.status || 'TELEGRAM_ERROR',
+      error: result.error || 'TELEGRAM_ERROR',
+      message: result.message || 'Telegram verification failed',
+      details: result.details || 'Unable to verify membership at this time.'
     });
   } catch (err) {
     console.error('[Verify Route Error]:', err);

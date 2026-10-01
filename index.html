@@ -4092,13 +4092,15 @@ function zenivoraReferralHistory() {
 
 
 <script>
-// Backend API Configuration (Defaults to same-origin; can be pointed to Cloudflare Worker on GitHub Pages)
+// Backend API Configuration:
+// When deployed on GitHub Pages, automatically routes to production Cloudflare Worker:
+const WORKER_PROD_URL = "https://zenith-backend.hamidalipq.workers.dev";
 const API_BASE = (
   window.ZENIVORA_API_BASE ||
   window.API_BASE ||
   (typeof window !== "undefined" && window.location ? new URLSearchParams(window.location.search).get("api") : "") ||
   (typeof localStorage !== "undefined" ? localStorage.getItem("zenivora_api_base") : "") ||
-  ""
+  (typeof window !== "undefined" && (window.location.hostname.includes("github.io") || window.location.hostname === "") ? WORKER_PROD_URL : "")
 ).replace(/\/$/, "");
 
 // Telegram WebApp Initialization
@@ -4517,6 +4519,12 @@ async function startTaskVerification(taskId) {
         msgEl.className = "task-msg-box error";
         if (isNotJoined) {
           msgEl.innerHTML = data.message || "Please join the Telegram channel first.<br>Join first, then try Verify again.";
+        } else if (data.status === "CONFIG_ERROR" || data.error === "CONFIG_ERROR") {
+          msgEl.textContent = data.message || "Worker secret TELEGRAM_BOT_TOKEN is not configured.";
+        } else if (data.status === "INVALID_USER" || data.error === "INVALID_USER") {
+          msgEl.textContent = data.message || "Valid Telegram numeric user ID is required.";
+        } else if (data.status === "TELEGRAM_ERROR" || data.error === "TELEGRAM_ERROR") {
+          msgEl.innerHTML = `<strong>Verification Note:</strong> ${data.details || data.message || 'Telegram verification failed'}`;
         } else if (data.error === "SERVER_ERROR") {
           msgEl.textContent = data.message || "Verification server is temporarily unavailable. Please try again.";
         } else {
