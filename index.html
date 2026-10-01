@@ -3353,7 +3353,7 @@ button:active {
 
     <!-- UNIFIED 2-COLUMN LOWER GRID (6 COMPACT CARDS: LANGUAGE, HELP, 4 HISTORIES) -->
     <div class="profile-lower-grid">
-      <!-- LANGUAGE (COMING SOON) -->
+      <div class="lower-nav-card card-lang" onclick="openLanguageModal()">
       <div class="lower-nav-card card-lang" onclick="alert('Language selection coming soon!')">
         <div class="lower-card-left">
           <div class="lower-card-icon icon-circle-globe">
@@ -3364,7 +3364,7 @@ button:active {
             </svg>
           </div>
           <div class="lower-card-text">
-            <strong class="lower-card-title">Language</strong>
+            <span class="lower-card-sub" id="selectedLanguageLabel">English</span>
             <span class="lower-card-sub">Coming Soon</span>
           </div>
         </div>
@@ -4813,6 +4813,306 @@ function redeemCode() {
   alert("Promo code validation will be verified with the backend node.");
 }
 </script>
+<!-- LANGUAGE MODAL -->
+<div id="languageModal" class="language-modal" style="display:none;">
+  <div class="language-modal-overlay" onclick="closeLanguageModal()"></div>
 
+  <div class="language-modal-box">
+
+    <div class="language-modal-header">
+      <div>
+        <strong>Select Language</strong>
+        <span>Choose your preferred language</span>
+      </div>
+
+      <button type="button" onclick="closeLanguageModal()">×</button>
+    </div>
+
+    <div class="language-list">
+
+      <button type="button" class="language-option" data-lang="en"
+        onclick="selectLanguage('en')">
+        <span>🇬🇧</span>
+        <div>
+          <strong>English</strong>
+          <small>English</small>
+        </div>
+        <span class="language-check">✓</span>
+      </button>
+
+      <button type="button" class="language-option" data-lang="bn"
+        onclick="selectLanguage('bn')">
+        <span>🇧🇩</span>
+        <div>
+          <strong>বাংলা</strong>
+          <small>Bangla</small>
+        </div>
+        <span class="language-check">✓</span>
+      </button>
+
+      <button type="button" class="language-option" data-lang="hi"
+        onclick="selectLanguage('hi')">
+        <span>🇮🇳</span>
+        <div>
+          <strong>हिन्दी</strong>
+          <small>Hindi</small>
+        </div>
+        <span class="language-check">✓</span>
+      </button>
+
+      <button type="button" class="language-option" data-lang="ar"
+        onclick="selectLanguage('ar')">
+        <span>🇸🇦</span>
+        <div>
+          <strong>العربية</strong>
+          <small>Arabic</small>
+        </div>
+        <span class="language-check">✓</span>
+      </button>
+
+      <button type="button" class="language-option" data-lang="es"
+        onclick="selectLanguage('es')">
+        <span>🇪🇸</span>
+        <div>
+          <strong>Español</strong>
+          <small>Spanish</small>
+        </div>
+        <span class="language-check">✓</span>
+      </button>
+
+      <button type="button" class="language-option" data-lang="fr"
+        onclick="selectLanguage('fr')">
+        <span>🇫🇷</span>
+        <div>
+          <strong>Français</strong>
+          <small>French</small>
+        </div>
+        <span class="language-check">✓</span>
+      </button>
+
+      <button type="button" class="language-option" data-lang="pt"
+        onclick="selectLanguage('pt')">
+        <span>🇧🇷</span>
+        <div>
+          <strong>Português</strong>
+          <small>Portuguese</small>
+        </div>
+        <span class="language-check">✓</span>
+      </button>
+
+      <button type="button" class="language-option" data-lang="zh"
+        onclick="selectLanguage('zh')">
+        <span>🇨🇳</span>
+        <div>
+          <strong>中文</strong>
+          <small>Chinese</small>
+        </div>
+        <span class="language-check">✓</span>
+      </button>
+
+    </div>
+  </div>
+</div><script>
+function openLanguageModal() {
+    document.getElementById("languageModal").style.display = "flex";
+}
+
+function closeLanguageModal() {
+    document.getElementById("languageModal").style.display = "none";
+}
+function selectLanguage(lang) {
+    const translations = {
+        en: {
+            "Withdraw Balance": "Withdraw Balance",
+            "Total Earned": "Total Earned",
+            "Total Referrals": "Total Referrals",
+            "Mining Power": "Mining Power",
+            "Your Referral Link": "Your Referral Link",
+            "Invite friends and earn more rewards": "Invite friends and earn more rewards",
+            "Copy": "Copy",
+            "Wallet Address (BEP20)": "Wallet Address (BEP20)",
+            "Your USDT receive address": "Your USDT receive address",
+            "Not added yet": "Not added yet",
+            "Add": "Add",
+            "Language": "Language",
+            "Coming Soon": "Coming Soon",
+            "Help & Support": "Help & Support",
+            "Get support": "Get support",
+            "Deposit History": "Deposit History",
+            "View deposits": "View deposits",
+            "Withdraw History": "Withdraw History",
+            "View withdraws": "View withdraws",
+            "Gift History": "Gift History",
+            "Rewards & gifts": "Rewards & gifts",
+            "Referral History": "Referral History",
+            "Referral earnings": "Referral earnings",
+            "Select Language": "Select Language",
+            "Choose your preferred language": "Choose your preferred language"
+        },
+
+        bn: {
+            "Withdraw Balance": "উইথড্র ব্যালেন্স",
+            "Total Earned": "মোট আয়",
+            "Total Referrals": "মোট রেফারেল",
+            "Mining Power": "মাইনিং পাওয়ার",
+            "Your Referral Link": "আপনার রেফারেল লিংক",
+            "Invite friends and earn more rewards": "বন্ধুদের আমন্ত্রণ করুন এবং আরও রিওয়ার্ড আয় করুন",
+            "Copy": "কপি",
+            "Wallet Address (BEP20)": "ওয়ালেট অ্যাড্রেস (BEP20)",
+            "Your USDT receive address": "আপনার USDT রিসিভ অ্যাড্রেস",
+            "Not added yet": "এখনো যোগ করা হয়নি",
+            "Add": "যোগ করুন",
+            "Language": "ভাষা",
+            "Coming Soon": "শীঘ্রই আসছে",
+            "Help & Support": "সাহায্য ও সাপোর্ট",
+            "Get support": "সাপোর্ট পান",
+            "Deposit History": "ডিপোজিট হিস্টোরি",
+            "View deposits": "ডিপোজিট দেখুন",
+            "Withdraw History": "উইথড্র হিস্টোরি",
+            "View withdraws": "উইথড্র দেখুন",
+            "Gift History": "গিফট হিস্টোরি",
+            "Rewards & gifts": "রিওয়ার্ড ও গিফট",
+            "Referral History": "রেফারেল হিস্টোরি",
+            "Referral earnings": "রেফারেল আয়",
+            "Select Language": "ভাষা নির্বাচন করুন",
+            "Choose your preferred language": "আপনার পছন্দের ভাষা নির্বাচন করুন"
+        },
+
+        hi: {
+            "Withdraw Balance": "निकासी बैलेंस",
+            "Total Earned": "कुल कमाई",
+            "Total Referrals": "कुल रेफरल",
+            "Mining Power": "माइनिंग पावर",
+            "Your Referral Link": "आपका रेफरल लिंक",
+            "Copy": "कॉपी",
+            "Add": "जोड़ें",
+            "Language": "भाषा",
+            "Help & Support": "मदद और सहायता",
+            "Deposit History": "डिपॉजिट हिस्ट्री",
+            "Withdraw History": "निकासी हिस्ट्री",
+            "Gift History": "गिफ्ट हिस्ट्री",
+            "Referral History": "रेफरल हिस्ट्री"
+        },
+
+        ar: {
+            "Withdraw Balance": "رصيد السحب",
+            "Total Earned": "إجمالي الأرباح",
+            "Total Referrals": "إجمالي الإحالات",
+            "Mining Power": "قوة التعدين",
+            "Your Referral Link": "رابط الإحالة الخاص بك",
+            "Copy": "نسخ",
+            "Add": "إضافة",
+            "Language": "اللغة",
+            "Help & Support": "المساعدة والدعم",
+            "Deposit History": "سجل الإيداعات",
+            "Withdraw History": "سجل السحب",
+            "Gift History": "سجل الهدايا",
+            "Referral History": "سجل الإحالات"
+        },
+
+        es: {
+            "Withdraw Balance": "Saldo de retiro",
+            "Total Earned": "Ganancias totales",
+            "Total Referrals": "Referidos totales",
+            "Mining Power": "Potencia de minería",
+            "Your Referral Link": "Tu enlace de referido",
+            "Copy": "Copiar",
+            "Add": "Añadir",
+            "Language": "Idioma",
+            "Help & Support": "Ayuda y soporte",
+            "Deposit History": "Historial de depósitos",
+            "Withdraw History": "Historial de retiros",
+            "Gift History": "Historial de regalos",
+            "Referral History": "Historial de referidos"
+        },
+
+        fr: {
+            "Withdraw Balance": "Solde de retrait",
+            "Total Earned": "Total gagné",
+            "Total Referrals": "Total des parrainages",
+            "Mining Power": "Puissance de minage",
+            "Your Referral Link": "Votre lien de parrainage",
+            "Copy": "Copier",
+            "Add": "Ajouter",
+            "Language": "Langue",
+            "Help & Support": "Aide et support",
+            "Deposit History": "Historique des dépôts",
+            "Withdraw History": "Historique des retraits",
+            "Gift History": "Historique des cadeaux",
+            "Referral History": "Historique des parrainages"
+        },
+
+        pt: {
+            "Withdraw Balance": "Saldo de saque",
+            "Total Earned": "Total ganho",
+            "Total Referrals": "Total de indicações",
+            "Mining Power": "Poder de mineração",
+            "Your Referral Link": "Seu link de indicação",
+            "Copy": "Copiar",
+            "Add": "Adicionar",
+            "Language": "Idioma",
+            "Help & Support": "Ajuda e suporte",
+            "Deposit History": "Histórico de depósitos",
+            "Withdraw History": "Histórico de saques",
+            "Gift History": "Histórico de presentes",
+            "Referral History": "Histórico de indicações"
+        },
+
+        zh: {
+            "Withdraw Balance": "提现余额",
+            "Total Earned": "总收入",
+            "Total Referrals": "总推荐人数",
+            "Mining Power": "挖矿算力",
+            "Your Referral Link": "您的推荐链接",
+            "Copy": "复制",
+            "Add": "添加",
+            "Language": "语言",
+            "Help & Support": "帮助与支持",
+            "Deposit History": "充值记录",
+            "Withdraw History": "提现记录",
+            "Gift History": "礼物记录",
+            "Referral History": "推荐记录"
+        }
+    };
+
+    const selected = translations[lang] || translations.en;
+
+    document.querySelectorAll("body *").forEach(element => {
+        if (element.children.length === 0) {
+            const original = element.textContent.trim();
+
+            if (selected[original]) {
+                element.textContent = selected[original];
+            }
+        }
+    });
+
+    const label = document.getElementById("selectedLanguageLabel");
+
+    const languageNames = {
+        en: "English",
+        bn: "বাংলা",
+        hi: "हिन्दी",
+        ar: "العربية",
+        es: "Español",
+        fr: "Français",
+        pt: "Português",
+        zh: "中文"
+    };
+
+    if (label) {
+        label.textContent = languageNames[lang] || "English";
+    }
+
+    localStorage.setItem("zenivoraLanguage", lang);
+
+    closeLanguageModal();
+}</script>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const savedLanguage = localStorage.getItem("zenivoraLanguage") || "en";
+    selectLanguage(savedLanguage);
+});
+  </script>
 </body>
 </html>
