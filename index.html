@@ -1261,7 +1261,7 @@ button:active {
   right: 12px;
   max-width: 440px;
   margin: 0 auto;
-  bottom: 8px;
+  bottom: calc(8px + var(--safe-bottom));
   height: 58px;
   z-index: 999;
   display: grid;
@@ -3354,7 +3354,6 @@ button:active {
     <!-- UNIFIED 2-COLUMN LOWER GRID (6 COMPACT CARDS: LANGUAGE, HELP, 4 HISTORIES) -->
     <div class="profile-lower-grid">
       <div class="lower-nav-card card-lang" onclick="openLanguageModal()">
-      <div class="lower-nav-card card-lang" onclick="alert('Language selection coming soon!')">
         <div class="lower-card-left">
           <div class="lower-card-icon icon-circle-globe">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3364,8 +3363,8 @@ button:active {
             </svg>
           </div>
           <div class="lower-card-text">
+            <strong class="lower-card-title">Language</strong>
             <span class="lower-card-sub" id="selectedLanguageLabel">English</span>
-            <span class="lower-card-sub">Coming Soon</span>
           </div>
         </div>
         <div class="lower-card-chevron chevron-blue">
@@ -4328,20 +4327,36 @@ function updateDisplayedBalance(newBalance) {
 }
 
 function getActiveTelegramUserId() {
-  if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user && window.Telegram.WebApp.initDataUnsafe.user.id) {
-    const uid = String(window.Telegram.WebApp.initDataUnsafe.user.id).replace(/^tg_/, "").replace(/_tg$/, "");
-    localStorage.setItem("zenivora_uid", uid);
-    return uid;
+  try {
+    if (window.Telegram && window.Telegram.WebApp) {
+      const user = window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user;
+      if (user && user.id) {
+        const uid = String(user.id).replace(/^tg_/, "").replace(/_tg$/, "");
+        localStorage.setItem("zenivora_uid", uid);
+        return uid;
+      }
+      if (window.Telegram.WebApp.initData) {
+        const params = new URLSearchParams(window.Telegram.WebApp.initData);
+        const userJson = params.get("user");
+        if (userJson) {
+          const parsed = JSON.parse(decodeURIComponent(userJson));
+          if (parsed && parsed.id) {
+            const uid = String(parsed.id).replace(/^tg_/, "").replace(/_tg$/, "");
+            localStorage.setItem("zenivora_uid", uid);
+            return uid;
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn("Could not read Telegram WebApp user id:", e);
   }
   let stored = localStorage.getItem("zenivora_uid");
   if (stored) {
     stored = String(stored).replace(/^tg_/, "").replace(/_tg$/, "");
-    localStorage.setItem("zenivora_uid", stored);
     return stored;
   }
-  stored = "363361802";
-  localStorage.setItem("zenivora_uid", stored);
-  return stored;
+  return "363361802";
 }
 
 function getTelegramInitData() {
@@ -4448,27 +4463,37 @@ async function startTaskVerification(taskId) {
   const initData = getTelegramInitData();
 
   try {
+    const abortCtrl = new AbortController();
+    const timeoutId = setTimeout(() => abortCtrl.abort(), 10000);
+
     const res = await fetch(`${API_BASE}/api/tasks/verify`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer " + (
-      localStorage.getItem("zenivoraAccountToken") ||
-      localStorage.getItem("zenithAccountToken") ||
-      ""
-    )
-  },
-  body: JSON.stringify({
-    taskId,
-    task_id: taskId,
-    userId,
-    initData
-  })
-});
+      method: "POST",
+      signal: abortCtrl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + (
+          localStorage.getItem("zenivoraAccountToken") ||
+          localStorage.getItem("zenithAccountToken") ||
+          ""
+        )
+      },
+      body: JSON.stringify({
+        taskId,
+        task_id: taskId,
+        userId,
+        initData
+      })
+    });
+    clearTimeout(timeoutId);
 
-    const data = await res.json();
+    let data = {};
+    try {
+      data = await res.json();
+    } catch (parseErr) {
+      data = { ok: false, error: "SERVER_ERROR", message: "Verification server is temporarily unavailable. Please try again." };
+    }
 
-    if (data.ok && data.verified) {
+    if (data.ok && (data.verified || data.joined)) {
       taskClientState[taskId].verified = true;
       taskClientState[taskId].claimed = Boolean(data.claimed);
       renderTaskUI(taskId);
@@ -4481,8 +4506,13 @@ async function startTaskVerification(taskId) {
       renderTaskUI(taskId);
       if (msgEl) {
         msgEl.className = "task-msg-box error";
-        const errMsg = data.error || "Please join the Telegram channel/group first.<br>Join first, then try Verify again.";
-        msgEl.innerHTML = errMsg;
+        if (data.error === "NOT_JOINED") {
+          msgEl.innerHTML = data.message || "Please join the Telegram channel first.<br>Join first, then try Verify again.";
+        } else if (data.error === "SERVER_ERROR") {
+          msgEl.textContent = data.message || "Verification server is temporarily unavailable. Please try again.";
+        } else {
+          msgEl.innerHTML = data.message || data.error || "Please join the Telegram channel first.";
+        }
       }
     }
   } catch (err) {
@@ -4490,7 +4520,11 @@ async function startTaskVerification(taskId) {
     renderTaskUI(taskId);
     if (msgEl) {
       msgEl.className = "task-msg-box error";
-      msgEl.textContent = "Network error during verification. Please try again.";
+      if (err.name === "AbortError") {
+        msgEl.textContent = "Verification request timed out. Please try again.";
+      } else {
+        msgEl.textContent = "Network error during verification. Please check your connection and try again.";
+      }
     }
   } finally {
     delete verifyingTasks[taskId];
@@ -4515,13 +4549,30 @@ async function claimTaskReward(taskId) {
   const initData = getTelegramInitData();
 
   try {
+    const abortCtrl = new AbortController();
+    const timeoutId = setTimeout(() => abortCtrl.abort(), 10000);
+
     const res = await fetch(`${API_BASE}/api/tasks/claim`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ taskId, userId, initData })
+      signal: abortCtrl.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + (
+          localStorage.getItem("zenivoraAccountToken") ||
+          localStorage.getItem("zenithAccountToken") ||
+          ""
+        )
+      },
+      body: JSON.stringify({ taskId, task_id: taskId, userId, initData })
     });
+    clearTimeout(timeoutId);
 
-    const data = await res.json();
+    let data = {};
+    try {
+      data = await res.json();
+    } catch (parseErr) {
+      data = { ok: false, error: "SERVER_ERROR", message: "Failed to claim task reward. Please try again." };
+    }
 
     if (data.ok && data.claimed) {
       taskClientState[taskId].claimed = true;
@@ -4546,7 +4597,7 @@ async function claimTaskReward(taskId) {
       }
       if (msgEl) {
         msgEl.className = "task-msg-box error";
-        msgEl.textContent = data.error || "Failed to claim reward. Please try again.";
+        msgEl.textContent = data.message || data.error || "Failed to claim reward. Please try again.";
       }
     }
   } catch (err) {
@@ -4920,8 +4971,7 @@ function openLanguageModal() {
 function closeLanguageModal() {
     document.getElementById("languageModal").style.display = "none";
 }
-function selectLanguage(lang) {
-    const translations = {
+const translations = {
         en: {
             "Withdraw Balance": "Withdraw Balance",
             "Total Earned": "Total Earned",
