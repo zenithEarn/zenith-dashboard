@@ -5074,18 +5074,29 @@ function selectLanguage(lang) {
             "Referral History": "推荐记录"
         }
     };
-
+function selectLanguage(lang) {
     const selected = translations[lang] || translations.en;
 
-    document.querySelectorAll("body *").forEach(element => {
-        if (element.children.length === 0) {
+document.querySelectorAll("body *").forEach(element => {
+    if (element.children.length === 0) {
+
+        // Save the original English text only once
+        if (!element.dataset.i18nKey) {
             const original = element.textContent.trim();
 
-            if (selected[original]) {
-                element.textContent = selected[original];
+            if (original) {
+                element.dataset.i18nKey = original;
             }
         }
-    });
+
+        // Always translate from the original English key
+        const key = element.dataset.i18nKey;
+
+        if (key && Object.prototype.hasOwnProperty.call(selected, key)) {
+            element.textContent = selected[key];
+        }
+    }
+});
 
     const label = document.getElementById("selectedLanguageLabel");
 
