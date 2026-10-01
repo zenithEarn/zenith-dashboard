@@ -2,6 +2,15 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// Load .env file automatically in Node.js 22 if present
+try {
+  if (typeof process.loadEnvFile === 'function') {
+    process.loadEnvFile();
+  }
+} catch (e) {
+  // Optional .env file
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

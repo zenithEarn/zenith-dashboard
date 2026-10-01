@@ -1,0 +1,7 @@
+name = "zenivora-worker"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# NOTE: Do NOT put your bot token here in plain text.
+# Store it as a Cloudflare Worker secret:
+# wrangler secret put TELEGRAM_BOT_TOKEN

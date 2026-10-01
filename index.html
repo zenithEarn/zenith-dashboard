@@ -4092,8 +4092,14 @@ function zenivoraReferralHistory() {
 
 
 <script>
-// Backend API Configuration
-const API_BASE = "";
+// Backend API Configuration (Defaults to same-origin; can be pointed to Cloudflare Worker on GitHub Pages)
+const API_BASE = (
+  window.ZENIVORA_API_BASE ||
+  window.API_BASE ||
+  (typeof window !== "undefined" && window.location ? new URLSearchParams(window.location.search).get("api") : "") ||
+  (typeof localStorage !== "undefined" ? localStorage.getItem("zenivora_api_base") : "") ||
+  ""
+).replace(/\/$/, "");
 
 // Telegram WebApp Initialization
 if (window.Telegram && window.Telegram.WebApp) {
@@ -4493,7 +4499,10 @@ async function startTaskVerification(taskId) {
       data = { ok: false, error: "SERVER_ERROR", message: "Verification server is temporarily unavailable. Please try again." };
     }
 
-    if (data.ok && (data.verified || data.joined)) {
+    const isSuccess = (data.success === true && data.joined === true) || (data.ok && (data.verified || data.joined));
+    const isNotJoined = data.error === "NOT_JOINED" || (data.success === false && data.joined === false);
+
+    if (isSuccess) {
       taskClientState[taskId].verified = true;
       taskClientState[taskId].claimed = Boolean(data.claimed);
       renderTaskUI(taskId);
@@ -4506,7 +4515,7 @@ async function startTaskVerification(taskId) {
       renderTaskUI(taskId);
       if (msgEl) {
         msgEl.className = "task-msg-box error";
-        if (data.error === "NOT_JOINED") {
+        if (isNotJoined) {
           msgEl.innerHTML = data.message || "Please join the Telegram channel first.<br>Join first, then try Verify again.";
         } else if (data.error === "SERVER_ERROR") {
           msgEl.textContent = data.message || "Verification server is temporarily unavailable. Please try again.";
@@ -4574,7 +4583,9 @@ async function claimTaskReward(taskId) {
       data = { ok: false, error: "SERVER_ERROR", message: "Failed to claim task reward. Please try again." };
     }
 
-    if (data.ok && data.claimed) {
+    const isClaimSuccess = (data.success === true && data.claimed === true) || (data.ok && data.claimed);
+
+    if (isClaimSuccess) {
       taskClientState[taskId].claimed = true;
       taskClientState[taskId].verified = true;
       renderTaskUI(taskId);
