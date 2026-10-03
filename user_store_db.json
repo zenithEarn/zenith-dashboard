@@ -1,4 +1,33 @@
 {
+  "363361802": {
+    "userId": "363361802",
+    "balance": 0,
+    "totalEarned": 0,
+    "totalReferrals": 0,
+    "miningPower": 0,
+    "wallet": null,
+    "createdAt": 1791038714943,
+    "claimedTasks": [],
+    "rewardHistory": [],
+    "referralData": {
+      "referredBy": null,
+      "referrals": []
+    },
+    "tasks": {
+      "task_channel": {
+        "verified": false,
+        "claimed": false
+      },
+      "task_group": {
+        "verified": false,
+        "claimed": false
+      },
+      "task_payout": {
+        "verified": false,
+        "claimed": false
+      }
+    }
+  },
   "test_user_persisted_1791019338774": {
     "userId": "test_user_persisted_1791019338774",
     "balance": 0,
@@ -56,6 +85,104 @@
         "taskId": "task_payout",
         "amount": 0.01,
         "claimedAt": 1791019359199
+      }
+    ],
+    "referralData": {
+      "referredBy": null,
+      "referrals": []
+    },
+    "tasks": {
+      "task_channel": {
+        "verified": true,
+        "claimed": true
+      },
+      "task_group": {
+        "verified": true,
+        "claimed": true
+      },
+      "task_payout": {
+        "verified": true,
+        "claimed": true
+      }
+    }
+  },
+  "zenivora:user:7788991122": {
+    "userId": "7788991122",
+    "balance": 0.03,
+    "totalEarned": 0.03,
+    "totalReferrals": 0,
+    "miningPower": 0,
+    "wallet": null,
+    "createdAt": 1791039178145,
+    "claimedTasks": [
+      "task_channel",
+      "task_group",
+      "task_payout"
+    ],
+    "rewardHistory": [
+      {
+        "taskId": "task_channel",
+        "amount": 0.01,
+        "claimedAt": 1791039178167
+      },
+      {
+        "taskId": "task_group",
+        "amount": 0.01,
+        "claimedAt": 1791039178174
+      },
+      {
+        "taskId": "task_payout",
+        "amount": 0.01,
+        "claimedAt": 1791039178177
+      }
+    ],
+    "referralData": {
+      "referredBy": null,
+      "referrals": []
+    },
+    "tasks": {
+      "task_channel": {
+        "verified": true,
+        "claimed": true
+      },
+      "task_group": {
+        "verified": true,
+        "claimed": true
+      },
+      "task_payout": {
+        "verified": true,
+        "claimed": true
+      }
+    }
+  },
+  "7788991122": {
+    "userId": "7788991122",
+    "balance": 0.03,
+    "totalEarned": 0.03,
+    "totalReferrals": 0,
+    "miningPower": 0,
+    "wallet": null,
+    "createdAt": 1791039178145,
+    "claimedTasks": [
+      "task_channel",
+      "task_group",
+      "task_payout"
+    ],
+    "rewardHistory": [
+      {
+        "taskId": "task_channel",
+        "amount": 0.01,
+        "claimedAt": 1791039178167
+      },
+      {
+        "taskId": "task_group",
+        "amount": 0.01,
+        "claimedAt": 1791039178174
+      },
+      {
+        "taskId": "task_payout",
+        "amount": 0.01,
+        "claimedAt": 1791039178177
       }
     ],
     "referralData": {

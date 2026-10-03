@@ -153,32 +153,46 @@ try {
   console.warn('Could not load user_store_db.json:', e.message);
 }
 
-function persistUserStore() {
-  try {
-    const obj = {};
-    for (const [k, v] of userStore.entries()) {
-      obj[k] = v;
+// Canonical KV key format: zenivora:user:<telegramUserId>
+function getCanonicalUserKey(userId) {
+  const cleanId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  return `zenivora:user:${cleanId}`;
+}
+
+function loadDiskStore() {
+  if (fs.existsSync(DB_FILE)) {
+    try {
+      const raw = fs.readFileSync(DB_FILE, 'utf8');
+      return JSON.parse(raw) || {};
+    } catch (e) {
+      console.warn('Could not read user_store_db.json:', e.message);
     }
-    fs.writeFileSync(DB_FILE, JSON.stringify(obj, null, 2), 'utf8');
+  }
+  return {};
+}
+
+function writeDiskStore(data) {
+  try {
+    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf8');
   } catch (e) {
     console.error('Failed to write user_store_db.json:', e.message);
+    throw new Error('Failed to persist user state to disk');
   }
 }
 
 function getUserState(userId) {
-  const id = String(userId || 'anonymous').trim().replace(/^tg_/, '').replace(/_tg$/, '');
-  if (fs.existsSync(DB_FILE)) {
-    try {
-      const raw = fs.readFileSync(DB_FILE, 'utf8');
-      const parsed = JSON.parse(raw);
-      if (parsed && parsed[id]) {
-        userStore.set(id, parsed[id]);
-      }
-    } catch (e) {}
+  const cleanId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  if (!cleanId || cleanId === 'anonymous' || cleanId === 'undefined' || cleanId === 'null') {
+    throw new Error('INVALID_USER_ID: Valid Telegram user ID is required.');
   }
-  if (!userStore.has(id)) {
-    const defaultState = {
-      userId: id,
+
+  const kvKey = getCanonicalUserKey(cleanId);
+  const disk = loadDiskStore();
+
+  let state = disk[kvKey] || disk[cleanId];
+  if (!state) {
+    state = {
+      userId: cleanId,
       balance: 0.00,
       totalEarned: 0.00,
       totalReferrals: 0,
@@ -194,13 +208,39 @@ function getUserState(userId) {
         task_payout: { verified: false, claimed: false }
       }
     };
-    userStore.set(id, defaultState);
-    persistUserStore();
+    disk[kvKey] = state;
+    writeDiskStore(disk);
   }
-  const state = userStore.get(id);
+
   if (!Array.isArray(state.claimedTasks)) state.claimedTasks = [];
   if (typeof state.totalEarned !== 'number') state.totalEarned = state.balance || 0.00;
   return state;
+}
+
+function saveUserState(userId, state) {
+  const cleanId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  if (!cleanId || cleanId === 'anonymous' || cleanId === 'undefined' || cleanId === 'null') {
+    throw new Error('INVALID_USER_ID: Valid Telegram user ID is required.');
+  }
+
+  const kvKey = getCanonicalUserKey(cleanId);
+  const disk = loadDiskStore();
+
+  if (!state.userId) state.userId = cleanId;
+  if (!state.createdAt) state.createdAt = Date.now();
+  if (typeof state.balance !== 'number') state.balance = parseFloat(state.balance) || 0.00;
+  if (typeof state.totalEarned !== 'number') state.totalEarned = parseFloat(state.totalEarned) || state.balance;
+  if (!Array.isArray(state.claimedTasks)) {
+    state.claimedTasks = [];
+    ['task_channel', 'task_group', 'task_payout'].forEach(tId => {
+      if (state.tasks?.[tId]?.claimed) state.claimedTasks.push(tId);
+    });
+  }
+
+  disk[kvKey] = state;
+  // Also store cleanId for backward compat
+  disk[cleanId] = state;
+  writeDiskStore(disk);
 }
 
 // Task Status Route
@@ -258,7 +298,7 @@ app.post('/api/user/wallet', (req, res) => {
     }
     const state = getUserState(userId);
     state.wallet = trimmed;
-    persistUserStore();
+    saveUserState(userId, state);
     res.json({
       ok: true,
       wallet: state.wallet,
@@ -318,7 +358,7 @@ app.post('/api/tasks/verify', async (req, res) => {
 
     if (result.status === 'SUCCESS' && result.joined) {
       state.tasks[targetKey].verified = true;
-      persistUserStore();
+      saveUserState(userId, state);
       return res.json({
         ok: true,
         success: true,
@@ -454,7 +494,7 @@ app.post('/api/tasks/claim', (req, res) => {
       claimedAt: Date.now()
     });
 
-    persistUserStore();
+    saveUserState(userId, state);
 
     res.json({
       ok: true,

@@ -4170,15 +4170,10 @@ async function saveWalletAddress() {
     saveBtn.textContent = "Saving...";
   }
 
-  let activeUid = "anonymous";
-  if (typeof getActiveTelegramUserId === "function") {
-    activeUid = getActiveTelegramUserId();
-  } else {
-    activeUid = localStorage.getItem("zenivora_uid") || "363361802";
-  }
+  let activeUid = (typeof getActiveTelegramUserId === "function") ? getActiveTelegramUserId() : (localStorage.getItem("zenivora_uid") || "");
 
   try {
-    const res = await fetch("/api/user/wallet", {
+    const res = await fetch(`${API_BASE}/api/user/wallet`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId: activeUid, wallet: raw })
@@ -4234,18 +4229,15 @@ function showWalletError(msg) {
     updateProfileWalletUI(saved);
   }
   try {
-    let activeUid = "anonymous";
-    if (typeof getActiveTelegramUserId === "function") {
-      activeUid = getActiveTelegramUserId();
-    } else {
-      activeUid = localStorage.getItem("zenivora_uid") || "363361802";
-    }
-    const res = await fetch(`/api/user/wallet?userId=${encodeURIComponent(activeUid)}`);
-    if (res.ok) {
-      const data = await res.json();
-      if (data.ok && data.wallet) {
-        localStorage.setItem("zenivora_wallet", data.wallet);
-        updateProfileWalletUI(data.wallet);
+    let activeUid = (typeof getActiveTelegramUserId === "function") ? getActiveTelegramUserId() : (localStorage.getItem("zenivora_uid") || "");
+    if (activeUid) {
+      const res = await fetch(`${API_BASE}/api/user/wallet?userId=${encodeURIComponent(activeUid)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.ok && data.wallet) {
+          localStorage.setItem("zenivora_wallet", data.wallet);
+          updateProfileWalletUI(data.wallet);
+        }
       }
     }
   } catch(e) {}
@@ -4479,6 +4471,18 @@ let currentBalanceVal = (function () {
   return "0.00";
 })();
 let currentUsdVal = currentBalanceVal;
+
+// Immediately display restored balance on screen without waiting for fetch
+(function syncInitialBalanceToDOM() {
+  try {
+    const balanceEl = document.getElementById("balance");
+    const usdEl = document.getElementById("usdBalance");
+    if (balanceEl) balanceEl.textContent = currentBalanceVal;
+    if (usdEl) usdEl.textContent = currentUsdVal;
+    const profBalEl = document.getElementById("profileWithdrawBalance");
+    if (profBalEl) profBalEl.textContent = "$" + currentBalanceVal;
+  } catch (e) {}
+})();
 
 function toggleBalanceVisibility() {
   balanceVisible = !balanceVisible;
@@ -4720,6 +4724,10 @@ function renderTaskUI(taskId) {
     <button class="task-btn-join" onclick="openTelegramTask('${task.url}')">JOIN</button>
     <button class="task-btn-verify" id="btn-verify-${taskId}" onclick="startTaskVerification('${taskId}')">VERIFY</button>
   `;
+  if (msgEl) {
+    msgEl.className = "task-msg-box";
+    msgEl.innerHTML = "";
+  }
 }
 
 async function fetchTaskStatuses() {
@@ -5120,6 +5128,10 @@ function populateProfileData() {
     if (refInput && activeUid) {
       refInput.value = "https://t.me/ZenivoraBot?start=" + activeUid;
     }
+    const refLinkEl = document.getElementById("refLink");
+    if (refLinkEl && activeUid) {
+      refLinkEl.textContent = "https://t.me/ZenivoraBot?start=" + activeUid;
+    }
 
     const isVerified = Boolean((tgUser && tgUser.is_verified) || localStorage.getItem("zenivora_verified") === "true" || (!tgUser));
     const vBadge = document.getElementById("profileVerifiedBadge");
@@ -5173,7 +5185,11 @@ function switchTab(tab, pushToHistory = true) {
   setActiveNav(tab);
 
   // 3. Tab-specific initializations
-  if (tab === "task") {
+  if (tab === "farm") {
+    if (typeof updateDisplayedBalance === "function") {
+      updateDisplayedBalance(currentBalanceVal);
+    }
+  } else if (tab === "task") {
     if (typeof fetchTaskStatuses === "function") fetchTaskStatuses();
   } else if (tab === "profile") {
     populateProfileData();

@@ -7,9 +7,6 @@ const TASK_CHANNELS = {
   task_payout: '@ZenivoraWithdraw'
 };
 
-// In-memory fallback cache (used if KV is momentarily unavailable)
-const memoryUserCache = new Map();
-
 function getKV(env) {
   if (env) {
     if (env.ZENIVORA_KV && typeof env.ZENIVORA_KV.get === 'function') return env.ZENIVORA_KV;
@@ -25,8 +22,13 @@ function getKV(env) {
   return null;
 }
 
-function createDefaultUserState(userId) {
-  const cleanId = String(userId || 'anonymous').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+// Canonical KV key format: zenivora:user:<telegramUserId>
+function getCanonicalUserKey(userId) {
+  const cleanId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  return `zenivora:user:${cleanId}`;
+}
+
+function createDefaultUserState(cleanId) {
   return {
     userId: cleanId,
     balance: 0.00,
@@ -49,75 +51,98 @@ function createDefaultUserState(userId) {
   };
 }
 
-// Persistent user state reader via Cloudflare KV (ZENIVORA_KV)
-async function getWorkerUserState(userId, env) {
-  const cleanId = String(userId || 'anonymous').trim().replace(/^tg_/, '').replace(/_tg$/, '');
-  const kvKey = `zenivora:user:${cleanId}`;
+// Canonical persistent user state reader via Cloudflare KV (ZENIVORA_KV)
+async function getUserState(userId, env) {
+  const cleanId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  if (!cleanId || cleanId === 'anonymous' || cleanId === 'undefined' || cleanId === 'null') {
+    throw new Error('INVALID_USER_ID: A valid Telegram user ID is required.');
+  }
+
+  const kvKey = getCanonicalUserKey(cleanId);
   const kv = getKV(env);
 
-  if (kv) {
-    try {
-      const raw = await kv.get(kvKey);
-      if (raw) {
-        const data = typeof raw === 'string' ? JSON.parse(raw) : raw;
-        if (data && typeof data === 'object') {
-          const claimedTasks = Array.isArray(data.claimedTasks) ? [...data.claimedTasks] : [];
+  if (!kv) {
+    console.error('[CRITICAL] ZENIVORA_KV binding is missing in environment.');
+    throw new Error('KV_NOT_BOUND: Cloudflare KV binding ZENIVORA_KV is unavailable.');
+  }
 
-          const tasks = {
-            task_channel: {
-              verified: Boolean(data.tasks?.task_channel?.verified || claimedTasks.includes('task_channel')),
-              claimed: Boolean(data.tasks?.task_channel?.claimed || claimedTasks.includes('task_channel'))
-            },
-            task_group: {
-              verified: Boolean(data.tasks?.task_group?.verified || claimedTasks.includes('task_group')),
-              claimed: Boolean(data.tasks?.task_group?.claimed || claimedTasks.includes('task_group'))
-            },
-            task_payout: {
-              verified: Boolean(data.tasks?.task_payout?.verified || claimedTasks.includes('task_payout')),
-              claimed: Boolean(data.tasks?.task_payout?.claimed || claimedTasks.includes('task_payout'))
-            }
-          };
+  let raw;
+  try {
+    raw = await kv.get(kvKey);
+  } catch (err) {
+    console.error(`[CRITICAL KV READ ERROR for ${cleanId}]:`, err);
+    throw new Error(`KV_READ_ERROR: Failed to read persistent user data from KV: ${err.message}`);
+  }
 
-          ['task_channel', 'task_group', 'task_payout'].forEach(tId => {
-            if (tasks[tId].claimed && !claimedTasks.includes(tId)) {
-              claimedTasks.push(tId);
-            }
-          });
+  // Brand-new user: key does not exist yet in KV
+  if (!raw) {
+    return createDefaultUserState(cleanId);
+  }
 
-          const userState = {
-            userId: cleanId,
-            balance: typeof data.balance === 'number' ? data.balance : (parseFloat(data.balance) || 0.00),
-            totalEarned: typeof data.totalEarned === 'number' ? data.totalEarned : (parseFloat(data.totalEarned) || (typeof data.balance === 'number' ? data.balance : 0.00)),
-            totalReferrals: typeof data.totalReferrals === 'number' ? data.totalReferrals : (parseInt(data.totalReferrals) || 0),
-            miningPower: typeof data.miningPower === 'number' ? data.miningPower : (parseFloat(data.miningPower) || 0.00),
-            wallet: data.wallet || null,
-            createdAt: data.createdAt || data.created_at || null,
-            claimedTasks: claimedTasks,
-            rewardHistory: Array.isArray(data.rewardHistory) ? data.rewardHistory : [],
-            referralData: data.referralData || { referredBy: null, referrals: [] },
-            tasks: tasks
-          };
+  let data;
+  try {
+    data = typeof raw === 'string' ? JSON.parse(raw) : raw;
+  } catch (parseErr) {
+    console.error(`[CRITICAL KV JSON CORRUPT for ${cleanId}]:`, parseErr);
+    throw new Error('KV_DATA_CORRUPT: Failed to parse user data from KV.');
+  }
 
-          memoryUserCache.set(cleanId, userState);
-          return userState;
-        }
-      }
-    } catch (kvErr) {
-      console.warn('[ZENIVORA_KV Read Warning]:', kvErr.message);
+  if (!data || typeof data !== 'object') {
+    throw new Error('KV_DATA_INVALID: Unexpected data structure in KV.');
+  }
+
+  const claimedTasks = Array.isArray(data.claimedTasks) ? [...data.claimedTasks] : [];
+
+  const tasks = {
+    task_channel: {
+      verified: Boolean(data.tasks?.task_channel?.verified || claimedTasks.includes('task_channel')),
+      claimed: Boolean(data.tasks?.task_channel?.claimed || claimedTasks.includes('task_channel'))
+    },
+    task_group: {
+      verified: Boolean(data.tasks?.task_group?.verified || claimedTasks.includes('task_group')),
+      claimed: Boolean(data.tasks?.task_group?.claimed || claimedTasks.includes('task_group'))
+    },
+    task_payout: {
+      verified: Boolean(data.tasks?.task_payout?.verified || claimedTasks.includes('task_payout')),
+      claimed: Boolean(data.tasks?.task_payout?.claimed || claimedTasks.includes('task_payout'))
     }
-  }
+  };
 
-  // Graceful fallback to memory cache if KV has not loaded or is uninitialized
-  if (!memoryUserCache.has(cleanId)) {
-    memoryUserCache.set(cleanId, createDefaultUserState(cleanId));
-  }
-  return memoryUserCache.get(cleanId);
+  ['task_channel', 'task_group', 'task_payout'].forEach(tId => {
+    if (tasks[tId].claimed && !claimedTasks.includes(tId)) {
+      claimedTasks.push(tId);
+    }
+  });
+
+  return {
+    userId: cleanId,
+    balance: typeof data.balance === 'number' ? data.balance : (parseFloat(data.balance) || 0.00),
+    totalEarned: typeof data.totalEarned === 'number' ? data.totalEarned : (parseFloat(data.totalEarned) || (typeof data.balance === 'number' ? data.balance : 0.00)),
+    totalReferrals: typeof data.totalReferrals === 'number' ? data.totalReferrals : (parseInt(data.totalReferrals) || 0),
+    miningPower: typeof data.miningPower === 'number' ? data.miningPower : (parseFloat(data.miningPower) || 0.00),
+    wallet: data.wallet || null,
+    createdAt: data.createdAt || data.created_at || Date.now(),
+    claimedTasks: claimedTasks,
+    rewardHistory: Array.isArray(data.rewardHistory) ? data.rewardHistory : [],
+    referralData: data.referralData || { referredBy: null, referrals: [] },
+    tasks: tasks
+  };
 }
 
-// Persistent user state writer via Cloudflare KV (ZENIVORA_KV)
-async function saveWorkerUserState(userId, state, env) {
-  const cleanId = String(userId || 'anonymous').trim().replace(/^tg_/, '').replace(/_tg$/, '');
-  const kvKey = `zenivora:user:${cleanId}`;
+// Canonical persistent user state writer via Cloudflare KV (ZENIVORA_KV)
+async function saveUserState(userId, state, env) {
+  const cleanId = String(userId || '').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  if (!cleanId || cleanId === 'anonymous' || cleanId === 'undefined' || cleanId === 'null') {
+    throw new Error('INVALID_USER_ID: A valid Telegram user ID is required.');
+  }
+
+  const kvKey = getCanonicalUserKey(cleanId);
+  const kv = getKV(env);
+
+  if (!kv) {
+    console.error('[CRITICAL] ZENIVORA_KV binding is missing in environment.');
+    throw new Error('KV_NOT_BOUND: Cloudflare KV binding ZENIVORA_KV is unavailable.');
+  }
 
   if (!state.userId) state.userId = cleanId;
   if (!state.createdAt) state.createdAt = Date.now();
@@ -130,17 +155,8 @@ async function saveWorkerUserState(userId, state, env) {
     });
   }
 
-  // Keep memory cache in sync
-  memoryUserCache.set(cleanId, state);
-
-  const kv = getKV(env);
-  if (kv) {
-    try {
-      await kv.put(kvKey, JSON.stringify(state));
-    } catch (kvErr) {
-      console.error('[ZENIVORA_KV Write Error]:', kvErr.message);
-    }
-  }
+  // Atomically await PUT directly: response must NOT return before write succeeds
+  await kv.put(kvKey, JSON.stringify(state));
 }
 
 const corsHeaders = {
@@ -267,8 +283,29 @@ export default {
 
       // 2. GET /api/tasks/status
       if (pathname === '/api/tasks/status' && request.method === 'GET') {
-        const userId = url.searchParams.get('userId') || 'anonymous';
-        const state = await getWorkerUserState(userId, env);
+        const userId = url.searchParams.get('userId');
+        if (!userId || String(userId).trim() === '' || String(userId).trim() === 'anonymous') {
+          return jsonResponse({
+            success: false,
+            ok: false,
+            error: 'INVALID_USER_ID',
+            message: 'Valid Telegram user ID is required.'
+          }, 400);
+        }
+
+        let state;
+        try {
+          state = await getUserState(userId, env);
+        } catch (err) {
+          console.error('[Status Route Error]:', err);
+          return jsonResponse({
+            success: false,
+            ok: false,
+            error: 'STORAGE_ERROR',
+            message: `Failed to load user state: ${err.message}`
+          }, 500);
+        }
+
         return jsonResponse({
           success: true,
           ok: true,
@@ -286,8 +323,16 @@ export default {
 
       // 2b. GET /api/user/wallet
       if (pathname === '/api/user/wallet' && request.method === 'GET') {
-        const userId = url.searchParams.get('userId') || 'anonymous';
-        const state = await getWorkerUserState(userId, env);
+        const userId = url.searchParams.get('userId');
+        if (!userId || String(userId).trim() === '' || String(userId).trim() === 'anonymous') {
+          return jsonResponse({ ok: false, error: 'INVALID_USER_ID', message: 'Valid Telegram user ID is required.' }, 400);
+        }
+        let state;
+        try {
+          state = await getUserState(userId, env);
+        } catch (err) {
+          return jsonResponse({ ok: false, error: 'STORAGE_ERROR', message: err.message }, 500);
+        }
         return jsonResponse({
           ok: true,
           wallet: state.wallet || null,
@@ -304,9 +349,17 @@ export default {
         if (!wallet || typeof wallet !== 'string') {
           return jsonResponse({ ok: false, error: 'Invalid wallet address' }, 400);
         }
-        const state = await getWorkerUserState(userId, env);
-        state.wallet = wallet.trim();
-        await saveWorkerUserState(userId, state, env);
+        if (!userId || String(userId).trim() === '' || String(userId).trim() === 'anonymous') {
+          return jsonResponse({ ok: false, error: 'INVALID_USER_ID', message: 'Valid Telegram user ID is required.' }, 400);
+        }
+        let state;
+        try {
+          state = await getUserState(userId, env);
+          state.wallet = wallet.trim();
+          await saveUserState(userId, state, env);
+        } catch (err) {
+          return jsonResponse({ ok: false, error: 'STORAGE_ERROR', message: err.message }, 500);
+        }
         return jsonResponse({
           ok: true,
           wallet: state.wallet,
@@ -340,7 +393,27 @@ export default {
           }, 400);
         }
 
-        const state = await getWorkerUserState(userId, env);
+        if (!userId || String(userId).trim() === '' || String(userId).trim() === 'anonymous') {
+          return jsonResponse({
+            success: false,
+            joined: false,
+            error: 'INVALID_USER_ID',
+            message: 'Valid Telegram user ID is required.'
+          }, 400);
+        }
+
+        let state;
+        try {
+          state = await getUserState(userId, env);
+        } catch (err) {
+          return jsonResponse({
+            success: false,
+            joined: false,
+            error: 'STORAGE_ERROR',
+            message: `Failed to load user state: ${err.message}`
+          }, 500);
+        }
+
         // If already verified or claimed, return success immediately
         if (state.tasks[targetKey].verified || state.tasks[targetKey].claimed || (Array.isArray(state.claimedTasks) && state.claimedTasks.includes(targetKey))) {
           return jsonResponse({
@@ -358,7 +431,11 @@ export default {
 
         if (result.status === 'SUCCESS' && result.joined) {
           state.tasks[targetKey].verified = true;
-          await saveWorkerUserState(userId, state, env);
+          try {
+            await saveUserState(userId, state, env);
+          } catch (writeErr) {
+            console.error('[Verify write error]:', writeErr);
+          }
           return jsonResponse({
             success: true,
             joined: true,
@@ -432,7 +509,27 @@ export default {
           }, 400);
         }
 
-        const state = await getWorkerUserState(userId, env);
+        if (!userId || String(userId).trim() === '' || String(userId).trim() === 'anonymous') {
+          return jsonResponse({
+            success: false,
+            claimed: false,
+            error: 'INVALID_USER_ID',
+            message: 'Valid Telegram user ID is required to claim rewards.'
+          }, 400);
+        }
+
+        let state;
+        try {
+          state = await getUserState(userId, env);
+        } catch (err) {
+          console.error('[Claim getUserState error]:', err);
+          return jsonResponse({
+            success: false,
+            claimed: false,
+            error: 'STORAGE_ERROR',
+            message: `Could not retrieve user state: ${err.message}`
+          }, 500);
+        }
 
         // Strict duplicate claim protection: NEVER allow double claim
         if (state.tasks[targetKey].claimed || (Array.isArray(state.claimedTasks) && state.claimedTasks.includes(targetKey))) {
@@ -464,10 +561,9 @@ export default {
           state.tasks[targetKey].verified = true;
         }
 
-        // Atomically grant reward and persist to KV
+        // Atomically prepare reward update
         state.tasks[targetKey].claimed = true;
         state.tasks[targetKey].verified = true;
-        if (!Array.isArray(state.claimedTasks)) state.claimedTasks = [];
         if (!state.claimedTasks.includes(targetKey)) {
           state.claimedTasks.push(targetKey);
         }
@@ -480,8 +576,18 @@ export default {
           claimedAt: Date.now()
         });
 
-        // Guaranteed persistent write to KV
-        await saveWorkerUserState(userId, state, env);
+        // The response MUST ONLY say credited after persistent write succeeds!
+        try {
+          await saveUserState(userId, state, env);
+        } catch (writeErr) {
+          console.error(`[CRITICAL KV WRITE FAILURE on claim for ${userId}]:`, writeErr);
+          return jsonResponse({
+            success: false,
+            claimed: false,
+            error: 'PERSISTENCE_FAILED',
+            message: 'Failed to write claim to persistent storage. Reward was not credited.'
+          }, 500);
+        }
 
         return jsonResponse({
           success: true,
