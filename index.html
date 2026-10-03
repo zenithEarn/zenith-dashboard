@@ -3374,7 +3374,7 @@ button:active {
             <line x1="8" y1="2" x2="8" y2="6"></line>
             <line x1="3" y1="10" x2="21" y2="10"></line>
           </svg>
-          <span>Member since <span id="profileMemberDate">Sep 2026</span></span>
+          <span id="profileMemberSinceText">Joined on <span id="profileMemberDate">2 Oct 2026</span></span>
         </div>
       </div>
     </div>
@@ -3703,6 +3703,117 @@ button:active {
    ZENIVORA PROFILE FUNCTIONS
    ================================ */
 
+function formatFullJoinDate(dateInput) {
+  if (!dateInput) return "";
+  let d = null;
+  if (typeof dateInput === "number") {
+    d = new Date(dateInput < 10000000000 ? dateInput * 1000 : dateInput);
+  } else if (typeof dateInput === "string") {
+    const trimmed = dateInput.trim();
+    if (/^\d+$/.test(trimmed)) {
+      const num = Number(trimmed);
+      d = new Date(num < 10000000000 ? num * 1000 : num);
+    } else {
+      d = new Date(trimmed);
+    }
+  } else if (dateInput instanceof Date) {
+    d = dateInput;
+  }
+  if (!d || isNaN(d.getTime())) return "";
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = d.getDate();
+  const month = months[d.getMonth()];
+  const year = d.getFullYear();
+  return `${day} ${month} ${year}`;
+}
+
+function getOrInitUserJoinDate(userId, backendCreatedAt) {
+  let cleanId = "";
+  if (userId) {
+    cleanId = String(userId).trim().replace(/^tg_/, "").replace(/_tg$/, "");
+  }
+  if (!cleanId || cleanId === "anonymous") {
+    if (typeof getActiveTelegramUserId === "function") {
+      cleanId = String(getActiveTelegramUserId() || "").trim();
+    }
+  }
+  if (!cleanId) cleanId = "default";
+
+  const storageKeyTs = "zenivora_join_ts_" + cleanId;
+  const storageKeyDate = "zenivora_join_date_" + cleanId;
+
+  // 1. If backend returned a valid timestamp, save and format it:
+  if (backendCreatedAt) {
+    const formatted = formatFullJoinDate(backendCreatedAt);
+    if (formatted) {
+      try {
+        localStorage.setItem(storageKeyTs, String(backendCreatedAt));
+        localStorage.setItem(storageKeyDate, formatted);
+        localStorage.setItem("zenivora_join_date", formatted);
+      } catch (e) {}
+      return formatted;
+    }
+  }
+
+  // 2. Check if this specific user already has a saved timestamp:
+  const savedTs = localStorage.getItem(storageKeyTs);
+  if (savedTs) {
+    const formatted = formatFullJoinDate(savedTs);
+    if (formatted) return formatted;
+  }
+
+  // 3. Check Telegram WebApp auth_date for the real user creation / session start:
+  try {
+    let authDate = null;
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe) {
+      authDate = window.Telegram.WebApp.initDataUnsafe.auth_date;
+    }
+    if (!authDate) {
+      authDate = localStorage.getItem("zenivora_auth_date");
+    }
+    if (authDate) {
+      const authMs = Number(authDate) * 1000;
+      const formatted = formatFullJoinDate(authMs);
+      if (formatted) {
+        localStorage.setItem(storageKeyTs, String(authMs));
+        localStorage.setItem(storageKeyDate, formatted);
+        localStorage.setItem("zenivora_join_date", formatted);
+        return formatted;
+      }
+    }
+  } catch (e) {}
+
+  // 4. Check if a valid full date is already saved in localStorage:
+  const savedDateStr = localStorage.getItem(storageKeyDate) || localStorage.getItem("zenivora_join_date");
+  if (savedDateStr && savedDateStr !== "Sep 2026" && savedDateStr !== "null" && savedDateStr !== "undefined") {
+    if (/^\d{1,2}\s+[A-Za-z]{3}\s+\d{4}$/.test(savedDateStr.trim())) {
+      return savedDateStr.trim();
+    }
+    const formatted = formatFullJoinDate(savedDateStr);
+    if (formatted) return formatted;
+  }
+
+  // 5. If this is an existing user whose previous join date was the "Sep 2026" placeholder:
+  if (savedDateStr === "Sep 2026") {
+    const legacySepDate = "28 Sep 2026";
+    try {
+      localStorage.setItem(storageKeyDate, legacySepDate);
+      localStorage.setItem("zenivora_join_date", legacySepDate);
+    } catch (e) {}
+    return legacySepDate;
+  }
+
+  // 6. Otherwise this is a new user joining right now:
+  const now = Date.now();
+  const formattedNow = formatFullJoinDate(now);
+  try {
+    localStorage.setItem(storageKeyTs, String(now));
+    localStorage.setItem(storageKeyDate, formattedNow);
+    localStorage.setItem("zenivora_join_date", formattedNow);
+  } catch (e) {}
+  return formattedNow;
+}
+
 (function () {
 
   /* Telegram user information */
@@ -3833,12 +3944,7 @@ button:active {
 
     const memberDateElement = document.getElementById("profileMemberDate");
     if (memberDateElement) {
-      let savedDate = localStorage.getItem("zenivora_join_date");
-      if (!savedDate) {
-        savedDate = "Sep 2026";
-        localStorage.setItem("zenivora_join_date", savedDate);
-      }
-      memberDateElement.textContent = savedDate;
+      memberDateElement.textContent = getOrInitUserJoinDate(activeUid);
     }
 
   } catch (error) {
@@ -4357,8 +4463,22 @@ if (window.Telegram && window.Telegram.WebApp) {
 
 // Balance Mask Toggle
 let balanceVisible = true;
-let currentBalanceVal = "0.00";
-let currentUsdVal = "0.00";
+let currentBalanceVal = (function () {
+  try {
+    const raw = (window.location.search || "") + "&" + (window.location.hash.replace(/^#/, "") || "");
+    const q = new URLSearchParams(raw);
+    const u = q.get("userId") || q.get("uid") || localStorage.getItem("zenivora_uid");
+    if (u) {
+      const clean = String(u).trim().replace(/^tg_/, "").replace(/_tg$/, "");
+      const b = localStorage.getItem("zenivora_balance_" + clean);
+      if (b !== null && b !== undefined && b !== "") return b;
+    }
+    const generic = localStorage.getItem("zenivora_balance");
+    if (generic !== null && generic !== undefined && generic !== "") return generic;
+  } catch (e) {}
+  return "0.00";
+})();
+let currentUsdVal = currentBalanceVal;
 
 function toggleBalanceVisibility() {
   balanceVisible = !balanceVisible;
@@ -4490,12 +4610,24 @@ function updateDisplayedBalance(newBalance) {
   const formatted = num.toFixed(2);
   currentBalanceVal = formatted;
   currentUsdVal = formatted;
+
   const balanceEl = document.getElementById("balance");
   const usdEl = document.getElementById("usdBalance");
   if (balanceVisible) {
     if (balanceEl) balanceEl.textContent = formatted;
     if (usdEl) usdEl.textContent = formatted;
   }
+
+  const profBalEl = document.getElementById("profileWithdrawBalance");
+  if (profBalEl) {
+    profBalEl.textContent = "$" + formatted;
+  }
+
+  try {
+    const uid = (typeof getActiveTelegramUserId === "function") ? getActiveTelegramUserId() : (localStorage.getItem("zenivora_uid") || "anonymous");
+    localStorage.setItem("zenivora_balance_" + uid, formatted);
+    localStorage.setItem("zenivora_balance", formatted);
+  } catch (e) {}
 }
 
 function getActiveTelegramUserId() {
@@ -4519,6 +4651,16 @@ function getActiveTelegramUserId() {
           }
         }
       }
+    }
+
+    // Check query params and hash
+    const raw = (window.location.search || "") + "&" + (window.location.hash.replace(/^#/, "") || "");
+    const qParams = new URLSearchParams(raw);
+    const urlUid = qParams.get("userId") || qParams.get("uid") || qParams.get("id");
+    if (urlUid && /^\d+$/.test(urlUid.trim())) {
+      const cleanUrlUid = urlUid.trim();
+      localStorage.setItem("zenivora_uid", cleanUrlUid);
+      return cleanUrlUid;
     }
   } catch (e) {
     console.warn("Could not read Telegram WebApp user id:", e);
@@ -4582,20 +4724,94 @@ function renderTaskUI(taskId) {
 
 async function fetchTaskStatuses() {
   const userId = getActiveTelegramUserId();
+
+  // 1. Instant local restore to prevent 0.00 or uncompleted flicker while server loads
+  try {
+    const cachedTasks = localStorage.getItem("zenivora_tasks_" + userId);
+    if (cachedTasks) {
+      const parsed = JSON.parse(cachedTasks);
+      Object.keys(TELEGRAM_TASKS).forEach(taskId => {
+        if (parsed[taskId]) {
+          taskClientState[taskId] = parsed[taskId];
+          renderTaskUI(taskId);
+        }
+      });
+    }
+    const cachedBal = localStorage.getItem("zenivora_balance_" + userId);
+    if (cachedBal !== null && cachedBal !== undefined && cachedBal !== "") {
+      updateDisplayedBalance(cachedBal);
+    }
+  } catch (e) {}
+
+  // 2. Authoritative server restore from Cloudflare KV / backend
   try {
     const res = await fetch(`${API_BASE}/api/tasks/status?userId=` + encodeURIComponent(userId));
     if (res.ok) {
       const data = await res.json();
-      if (data && data.ok && data.tasks) {
-        Object.keys(TELEGRAM_TASKS).forEach(taskId => {
-          if (data.tasks[taskId]) {
-            taskClientState[taskId] = data.tasks[taskId];
-            renderTaskUI(taskId);
-          }
-        });
-      }
-      if (typeof data.balance === "number" && data.balance > 0) {
-        updateDisplayedBalance(data.balance);
+      if (data && (data.ok || data.success)) {
+        if (data.tasks) {
+          Object.keys(TELEGRAM_TASKS).forEach(taskId => {
+            if (data.tasks[taskId]) {
+              taskClientState[taskId] = data.tasks[taskId];
+              renderTaskUI(taskId);
+            }
+          });
+          try {
+            localStorage.setItem("zenivora_tasks_" + userId, JSON.stringify(taskClientState));
+          } catch (e) {}
+        }
+        if (Array.isArray(data.claimedTasks)) {
+          data.claimedTasks.forEach(taskId => {
+            if (taskClientState[taskId]) {
+              taskClientState[taskId].verified = true;
+              taskClientState[taskId].claimed = true;
+              renderTaskUI(taskId);
+            }
+          });
+          try {
+            localStorage.setItem("zenivora_tasks_" + userId, JSON.stringify(taskClientState));
+          } catch (e) {}
+        }
+        if (typeof data.balance === "number") {
+          updateDisplayedBalance(data.balance);
+        }
+        if (typeof data.totalEarned === "number") {
+          try {
+            localStorage.setItem("zenivora_total_earned_" + userId, data.totalEarned.toFixed(2));
+            localStorage.setItem("zenivora_total_earned", data.totalEarned.toFixed(2));
+            const earnedEl = document.getElementById("profileTotalEarned");
+            if (earnedEl) earnedEl.textContent = "$" + data.totalEarned.toFixed(2);
+          } catch (e) {}
+        }
+        if (typeof data.totalReferrals === "number") {
+          try {
+            localStorage.setItem("zenivora_referrals_count", String(data.totalReferrals));
+            const refEl = document.getElementById("profileTotalReferrals");
+            if (refEl) refEl.textContent = String(data.totalReferrals);
+          } catch (e) {}
+        }
+        if (typeof data.miningPower === "number") {
+          try {
+            localStorage.setItem("zenivora_mining_power", data.miningPower.toFixed(2));
+            const mpEl = document.getElementById("profileMiningPower");
+            if (mpEl) mpEl.textContent = data.miningPower.toFixed(2);
+          } catch (e) {}
+        }
+        if (data.wallet) {
+          try {
+            localStorage.setItem("zenivora_wallet", data.wallet);
+            if (typeof updateProfileWalletUI === "function") {
+              updateProfileWalletUI(data.wallet);
+            }
+          } catch (e) {}
+        }
+        if (data.createdAt) {
+          try {
+            const formatted = getOrInitUserJoinDate(userId, data.createdAt);
+            const mEl = document.getElementById("profileMemberDate");
+            if (mEl && formatted) mEl.textContent = formatted;
+          } catch (e) {}
+        }
       }
     }
   } catch (err) {
@@ -4762,11 +4978,34 @@ async function claimTaskReward(taskId) {
       taskClientState[taskId].verified = true;
       renderTaskUI(taskId);
 
+      // Persist task state locally
+      try {
+        localStorage.setItem("zenivora_tasks_" + userId, JSON.stringify(taskClientState));
+      } catch (e) {}
+
       if (typeof data.newBalance === "number") {
         updateDisplayedBalance(data.newBalance);
       } else {
         const cur = parseFloat(currentBalanceVal) || 0;
         updateDisplayedBalance(cur + 0.01);
+      }
+
+      if (typeof data.totalEarned === "number") {
+        try {
+          localStorage.setItem("zenivora_total_earned_" + userId, data.totalEarned.toFixed(2));
+          localStorage.setItem("zenivora_total_earned", data.totalEarned.toFixed(2));
+          const earnedEl = document.getElementById("profileTotalEarned");
+          if (earnedEl) earnedEl.textContent = "$" + data.totalEarned.toFixed(2);
+        } catch (e) {}
+      } else {
+        const curEarned = parseFloat(localStorage.getItem("zenivora_total_earned_" + userId) || localStorage.getItem("zenivora_total_earned") || currentBalanceVal) || 0;
+        const newEarned = (curEarned + 0.01).toFixed(2);
+        try {
+          localStorage.setItem("zenivora_total_earned_" + userId, newEarned);
+          localStorage.setItem("zenivora_total_earned", newEarned);
+          const earnedEl = document.getElementById("profileTotalEarned");
+          if (earnedEl) earnedEl.textContent = "$" + newEarned;
+        } catch (e) {}
       }
 
       if (msgEl) {
@@ -4859,7 +5098,8 @@ function populateProfileData() {
     }
     const earnedEl = document.getElementById("profileTotalEarned");
     if (earnedEl) {
-      const savedEarned = localStorage.getItem("zenivora_total_earned") || (typeof currentBalanceVal !== "undefined" ? currentBalanceVal : "0.00");
+      const activeUidForEarned = getActiveTelegramUserId();
+      const savedEarned = localStorage.getItem("zenivora_total_earned_" + activeUidForEarned) || localStorage.getItem("zenivora_total_earned") || (typeof currentBalanceVal !== "undefined" ? currentBalanceVal : "0.00");
       earnedEl.textContent = "$" + (parseFloat(savedEarned) || 0).toFixed(2);
     }
     const refCountEl = document.getElementById("profileTotalReferrals");

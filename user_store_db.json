@@ -1,0 +1,80 @@
+{
+  "test_user_persisted_1791019338774": {
+    "userId": "test_user_persisted_1791019338774",
+    "balance": 0,
+    "totalEarned": 0,
+    "totalReferrals": 0,
+    "miningPower": 0,
+    "wallet": null,
+    "createdAt": 1791019338790,
+    "claimedTasks": [],
+    "rewardHistory": [],
+    "referralData": {
+      "referredBy": null,
+      "referrals": []
+    },
+    "tasks": {
+      "task_channel": {
+        "verified": true,
+        "claimed": false
+      },
+      "task_group": {
+        "verified": true,
+        "claimed": false
+      },
+      "task_payout": {
+        "verified": true,
+        "claimed": false
+      }
+    }
+  },
+  "test_user_persisted_1791019359155": {
+    "userId": "test_user_persisted_1791019359155",
+    "balance": 0.03,
+    "totalEarned": 0.03,
+    "totalReferrals": 0,
+    "miningPower": 0,
+    "wallet": null,
+    "createdAt": 1791019359170,
+    "claimedTasks": [
+      "task_channel",
+      "task_group",
+      "task_payout"
+    ],
+    "rewardHistory": [
+      {
+        "taskId": "task_channel",
+        "amount": 0.01,
+        "claimedAt": 1791019359190
+      },
+      {
+        "taskId": "task_group",
+        "amount": 0.01,
+        "claimedAt": 1791019359195
+      },
+      {
+        "taskId": "task_payout",
+        "amount": 0.01,
+        "claimedAt": 1791019359199
+      }
+    ],
+    "referralData": {
+      "referredBy": null,
+      "referrals": []
+    },
+    "tasks": {
+      "task_channel": {
+        "verified": true,
+        "claimed": true
+      },
+      "task_group": {
+        "verified": true,
+        "claimed": true
+      },
+      "task_payout": {
+        "verified": true,
+        "claimed": true
+      }
+    }
+  }
+}

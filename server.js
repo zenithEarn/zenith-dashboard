@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 // Load .env file automatically in Node.js 22 if present
@@ -132,23 +133,74 @@ async function verifyTelegramMembership(channelUsername, userId) {
   }
 }
 
-// In-memory user state store (data layer fallback)
+// Persistent user state store with disk backup
+const DB_FILE = path.join(__dirname, 'user_store_db.json');
+
 const userStore = new Map();
 
+// Initialize from DB file if exists
+try {
+  if (fs.existsSync(DB_FILE)) {
+    const raw = fs.readFileSync(DB_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed === 'object') {
+      Object.keys(parsed).forEach(uid => {
+        userStore.set(uid, parsed[uid]);
+      });
+    }
+  }
+} catch (e) {
+  console.warn('Could not load user_store_db.json:', e.message);
+}
+
+function persistUserStore() {
+  try {
+    const obj = {};
+    for (const [k, v] of userStore.entries()) {
+      obj[k] = v;
+    }
+    fs.writeFileSync(DB_FILE, JSON.stringify(obj, null, 2), 'utf8');
+  } catch (e) {
+    console.error('Failed to write user_store_db.json:', e.message);
+  }
+}
+
 function getUserState(userId) {
-  const id = String(userId || 'anonymous');
+  const id = String(userId || 'anonymous').trim().replace(/^tg_/, '').replace(/_tg$/, '');
+  if (fs.existsSync(DB_FILE)) {
+    try {
+      const raw = fs.readFileSync(DB_FILE, 'utf8');
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed[id]) {
+        userStore.set(id, parsed[id]);
+      }
+    } catch (e) {}
+  }
   if (!userStore.has(id)) {
-    userStore.set(id, {
+    const defaultState = {
+      userId: id,
       balance: 0.00,
+      totalEarned: 0.00,
+      totalReferrals: 0,
+      miningPower: 0.00,
       wallet: null,
+      createdAt: Date.now(),
+      claimedTasks: [],
+      rewardHistory: [],
+      referralData: { referredBy: null, referrals: [] },
       tasks: {
         task_channel: { verified: false, claimed: false },
         task_group: { verified: false, claimed: false },
         task_payout: { verified: false, claimed: false }
       }
-    });
+    };
+    userStore.set(id, defaultState);
+    persistUserStore();
   }
-  return userStore.get(id);
+  const state = userStore.get(id);
+  if (!Array.isArray(state.claimedTasks)) state.claimedTasks = [];
+  if (typeof state.totalEarned !== 'number') state.totalEarned = state.balance || 0.00;
+  return state;
 }
 
 // Task Status Route
@@ -158,9 +210,16 @@ app.get('/api/tasks/status', (req, res) => {
     const state = getUserState(userId);
     res.json({
       ok: true,
+      success: true,
+      userId: state.userId,
       tasks: state.tasks,
       balance: state.balance,
-      wallet: state.wallet || null
+      totalEarned: state.totalEarned,
+      totalReferrals: state.totalReferrals || 0,
+      miningPower: state.miningPower || 0.00,
+      wallet: state.wallet || null,
+      createdAt: state.createdAt || null,
+      claimedTasks: state.claimedTasks || []
     });
   } catch (err) {
     res.status(500).json({ ok: false, error: 'Internal server error' });
@@ -174,7 +233,10 @@ app.get('/api/user/wallet', (req, res) => {
     const state = getUserState(userId);
     res.json({
       ok: true,
-      wallet: state.wallet || null
+      wallet: state.wallet || null,
+      balance: state.balance,
+      totalEarned: state.totalEarned,
+      createdAt: state.createdAt || null
     });
   } catch (err) {
     res.status(500).json({ ok: false, error: 'Internal server error' });
@@ -196,9 +258,13 @@ app.post('/api/user/wallet', (req, res) => {
     }
     const state = getUserState(userId);
     state.wallet = trimmed;
+    persistUserStore();
     res.json({
       ok: true,
-      wallet: state.wallet
+      wallet: state.wallet,
+      balance: state.balance,
+      totalEarned: state.totalEarned,
+      createdAt: state.createdAt || null
     });
   } catch (err) {
     res.status(500).json({ ok: false, error: 'Failed to save wallet address' });
@@ -252,12 +318,13 @@ app.post('/api/tasks/verify', async (req, res) => {
 
     if (result.status === 'SUCCESS' && result.joined) {
       state.tasks[targetKey].verified = true;
+      persistUserStore();
       return res.json({
         ok: true,
         success: true,
         verified: true,
         joined: true,
-        claimed: state.tasks[targetKey].claimed
+        claimed: Boolean(state.tasks[targetKey].claimed)
       });
     }
 
@@ -359,25 +426,44 @@ app.post('/api/tasks/claim', (req, res) => {
     }
 
     // Already claimed -> return current balance without duplicate crediting
-    if (state.tasks[targetKey].claimed) {
+    if (state.tasks[targetKey].claimed || (Array.isArray(state.claimedTasks) && state.claimedTasks.includes(targetKey))) {
       return res.json({
         ok: true,
         success: true,
         claimed: true,
         alreadyClaimed: true,
-        newBalance: state.balance
+        newBalance: state.balance,
+        totalEarned: state.totalEarned,
+        tasks: state.tasks,
+        claimedTasks: state.claimedTasks
       });
     }
 
     state.tasks[targetKey].claimed = true;
     state.tasks[targetKey].verified = true;
+    if (!Array.isArray(state.claimedTasks)) state.claimedTasks = [];
+    if (!state.claimedTasks.includes(targetKey)) {
+      state.claimedTasks.push(targetKey);
+    }
     state.balance = parseFloat((state.balance + 0.01).toFixed(2));
+    state.totalEarned = parseFloat(((state.totalEarned || 0) + 0.01).toFixed(2));
+    if (!Array.isArray(state.rewardHistory)) state.rewardHistory = [];
+    state.rewardHistory.push({
+      taskId: targetKey,
+      amount: 0.01,
+      claimedAt: Date.now()
+    });
+
+    persistUserStore();
 
     res.json({
       ok: true,
       success: true,
       claimed: true,
-      newBalance: state.balance
+      newBalance: state.balance,
+      totalEarned: state.totalEarned,
+      tasks: state.tasks,
+      claimedTasks: state.claimedTasks
     });
   } catch (err) {
     console.error('[Claim Route Error]:', err);
